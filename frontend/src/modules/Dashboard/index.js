@@ -9,6 +9,8 @@ import ItemsTab from 'modules/Items/itemsTab.js'
 import NetworkingTab from 'modules/Networking/networkingTab.js'
 import TravelTab from 'modules/Travel/travelTab.js'
 import FlightOverlay from 'modules/Travel/flightOverlay.js'
+import CitadelTab from 'modules/Citadel/citadelTab.js'
+import CitadelOverlay from 'modules/Citadel/citadelOverlay.js'
 import UserProfileModal from 'modules/Dashboard/userProfile.js'
 import { request, formatMoney } from 'modules/Base'
 import Footer from 'modules/Home/footer'
@@ -19,6 +21,9 @@ export const UserPreviewCtx = createContext()
 
 // Tabs that are blocked while the user is in-flight
 const FLIGHT_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items']
+
+// Tabs that are blocked while the user is inside the Citadel
+const CITADEL_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items', 'travel']
 
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('dashboard')
@@ -71,6 +76,11 @@ function Dashboard() {
             'label': 'Travel',
             'props': {}
         },
+        'citadel': {
+            'component': CitadelTab,
+            'label': 'Citadel',
+            'props': {}
+        },
         'networking': {
             'component': NetworkingTab,
             'label': 'Networking',
@@ -87,6 +97,7 @@ function Dashboard() {
 
     const isInFlight = userPreviewData?.in_flight || false
     const flightData = userPreviewData?.flight_data || null
+    const isInCitadel = userPreviewData?.in_citadel || false
 
     return (
         <div className="dashboard-wrapper" data-city={userPreviewData?.city}>
@@ -100,6 +111,7 @@ function Dashboard() {
                     userPreviewData={userPreviewData}
                     isInFlight={isInFlight}
                     flightData={flightData}
+                    isInCitadel={isInCitadel}
                 />
             </div>
 
@@ -113,6 +125,7 @@ function Dashboard() {
                         activeTab={activeTab}
                         isInFlight={isInFlight}
                         flightData={flightData}
+                        isInCitadel={isInCitadel}
                         setUserProfileData={setUserProfileData}
                     />
 
@@ -163,19 +176,25 @@ function GameDash({
     activeTab,
     isInFlight,
     flightData,
+    isInCitadel,
     setUserProfileData,
     setShowUserProfileModal
 }) {
     const isBlockedByFlight = isInFlight && FLIGHT_BLOCKED_TABS.includes(activeTab)
+    const isBlockedByCitadel = isInCitadel && CITADEL_BLOCKED_TABS.includes(activeTab)
 
     return (
         <div
-            key={isBlockedByFlight ? 'flight-overlay' : activeTab}
+            key={isBlockedByFlight ? 'flight-overlay'
+                : isBlockedByCitadel ? 'citadel-overlay'
+                : activeTab}
             className='central-panel glass-panel'
             style={{ position: 'relative' }}
         >
             {isBlockedByFlight ? (
                 <FlightOverlay />
+            ) : isBlockedByCitadel ? (
+                <CitadelOverlay />
             ) : (
                 React.createElement(tabComponents[activeTab].component,
                     tabComponents[activeTab].props)
@@ -313,7 +332,7 @@ function FlightRouteIndicator({ flightData }) {
 }
 
 
-const UserPreview = memo(({ userPreviewData, isInFlight, flightData }) => {
+const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel }) => {
     return (
         <div className="user-preview-bar glass-panel">
             {userPreviewData ? (
@@ -324,7 +343,12 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData }) => {
                         {isInFlight && flightData ? (
                             <FlightRouteIndicator flightData={flightData} />
                         ) : (
-                            <span className="user-preview-city">{userPreviewData.city.toUpperCase()}</span>
+                            <span className="user-preview-city">
+                                {userPreviewData.city.toUpperCase()}
+                                {isInCitadel && (
+                                    <span className="user-preview-citadel-badge">🏛 CITADEL</span>
+                                )}
+                            </span>
                         )}
 
                         <span className="user-preview-money"><AnimatedMoney value={userPreviewData.money_cash} /></span>

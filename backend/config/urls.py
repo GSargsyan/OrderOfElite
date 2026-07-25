@@ -23,5 +23,6 @@ urlpatterns = [
     path('', include('ooe.items.urls')),
     path('', include('ooe.black_market.urls')),
     path('', include('ooe.travel.urls')),
+    path('', include('ooe.citadel.urls')),
     # path('', include('ooe.cities.urls')),
 ]

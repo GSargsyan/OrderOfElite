@@ -41,6 +41,35 @@ class User(AbstractBaseUser):
     class Meta:
         db_table = 'ooe_users'
 
+    def get_stat_multipliers(self):
+        """
+        Combines per-stat multipliers from every modifier source
+        multiplicatively. New sources (houses, cars, guns, ...) plug in
+        by appending to the sources list.
+        """
+        from ooe.citadel.controllers import CitadelController
+
+        sources = [
+            CitadelController.get_stat_multipliers(self),
+        ]
+
+        multipliers = {'attack': 1.0, 'defense': 1.0, 'driving': 1.0}
+        for source in sources:
+            for stat, value in source.items():
+                multipliers[stat] *= value
+
+        return multipliers
+
+    def get_effective_stats(self):
+        """Base skill points with all active multipliers applied."""
+        multipliers = self.get_stat_multipliers()
+
+        return {
+            'attack': int(self.attack_points * multipliers['attack']),
+            'defense': int(self.defense_points * multipliers['defense']),
+            'driving': int(self.driving_points * multipliers['driving']),
+        }
+
     def get_rank_progress(self):
         if self.rank + 1 not in RANK_EXPS:
             return 100.0
@@ -57,7 +86,11 @@ class User(AbstractBaseUser):
 
     def get_preview_data(self):
         from ooe.travel.controllers import TravelController
+        from ooe.citadel.controllers import CitadelController
         TravelController.check_and_complete_active_flight(self)
+
+        active_stay = CitadelController.get_active_stay(self)
+        effective_stats = self.get_effective_stats()
 
         res = {
             'username': self.username,
@@ -65,11 +98,16 @@ class User(AbstractBaseUser):
             'money_cash': self.money_cash,
             'rank': self.rank,
             'rank_progress': self.get_rank_progress(),
-            'attack_points': self.attack_points,
-            'defense_points': self.defense_points,
-            'driving_points': self.driving_points,
+            'attack_points': effective_stats['attack'],
+            'defense_points': effective_stats['defense'],
+            'driving_points': effective_stats['driving'],
             'in_flight': False,
             'flight_data': None,
+            'in_citadel': active_stay is not None,
+            'citadel_data': {
+                'entered_at': active_stay.entered_at.timestamp(),
+                'stay_until': active_stay.scheduled_until.timestamp(),
+            } if active_stay else None,
         }
 
         # Include active flight data if the user is currently in flight

@@ -3,7 +3,7 @@ from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from ooe.base.utils import auth_by_token
+from ooe.base.utils import auth_by_token, blocked_in_citadel
 from ooe.base.exceptions import OOEException
 from ooe.travel.controllers import TravelController
 
@@ -19,6 +19,7 @@ def get_travel_tab_data(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def initiate_travel(request):
     try:

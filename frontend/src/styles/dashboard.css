@@ -3506,4 +3506,456 @@ button {
   transform: translateY(-50%);
   font-size: 0.7rem;
   opacity: 0.7;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   CITADEL TAB
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Notice Banner ── */
+.citadel-notice {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  background: rgba(212, 168, 75, 0.04);
+  border: 1px solid rgba(212, 168, 75, 0.12);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-bottom: 24px;
+  letter-spacing: 0.2px;
+  line-height: 1.5;
+}
+
+.citadel-section {
+  margin-bottom: 24px;
+}
+
+.citadel-section-title {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ── Duration Presets ── */
+.citadel-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.citadel-preset-chip {
+  padding: 8px 18px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-med);
+}
+
+.citadel-preset-chip:hover {
+  border-color: rgba(212, 168, 75, 0.25);
+  background: var(--bg-panel-hover);
+  color: var(--text-primary);
+}
+
+.citadel-preset-chip.selected {
+  border-color: rgba(212, 168, 75, 0.5);
+  background: rgba(212, 168, 75, 0.08);
+  color: var(--accent-gold);
+  box-shadow: var(--glow-gold);
+}
+
+/* ── Duration Inputs ── */
+.citadel-duration-inputs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.citadel-duration-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.citadel-duration-field input {
+  width: 84px;
+  padding: 10px 12px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.citadel-duration-field input:focus {
+  border-color: rgba(212, 168, 75, 0.5);
+  box-shadow: var(--glow-gold);
+}
+
+.citadel-duration-field input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.citadel-duration-unit {
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.citadel-duration-sep {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.citadel-until-line {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.2px;
+}
+
+.citadel-until-time {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+/* ── Terms Box ── */
+.citadel-terms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  background: rgba(212, 168, 75, 0.04);
+  border: 1px solid rgba(212, 168, 75, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.citadel-terms-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.citadel-terms-label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.citadel-terms-value {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  letter-spacing: 0.3px;
+}
+
+/* ── Error ── */
+.citadel-error {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--accent-red);
+  background: rgba(239, 83, 80, 0.08);
+  border: 1px solid rgba(239, 83, 80, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+/* ── Enter Button ── */
+.btn-citadel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: linear-gradient(135deg, var(--accent-gold-dim), var(--accent-gold));
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-med);
+  border: none;
+  box-shadow: 0 4px 16px rgba(212, 168, 75, 0.25);
+}
+
+.btn-citadel:hover:not(:disabled) {
+  filter: brightness(1.12);
+  box-shadow: 0 6px 24px rgba(212, 168, 75, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-citadel:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Inside Panel ── */
+.citadel-inside-panel {
+  text-align: center;
+  padding: 40px 24px;
+  border: 1px solid rgba(212, 168, 75, 0.25);
+  border-radius: var(--radius-lg);
+  background: rgba(212, 168, 75, 0.04);
+  animation: citadelPulse 5s ease-in-out infinite;
+}
+
+@keyframes citadelPulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(212, 168, 75, 0); }
+  50% { box-shadow: 0 0 24px rgba(212, 168, 75, 0.12); }
+}
+
+.citadel-inside-icon {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.citadel-inside-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--accent-gold);
+  text-shadow: var(--glow-gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.citadel-inside-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  max-width: 380px;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+}
+
+.citadel-inside-countdown {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 3px;
+  margin-bottom: 6px;
+}
+
+.citadel-inside-countdown-label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+/* ── Cooldown Panel ── */
+.citadel-cooldown-panel {
+  text-align: center;
+  padding: 32px 20px;
+  border: 1px solid rgba(212, 168, 75, 0.2);
+  border-radius: var(--radius-lg);
+  background: rgba(212, 168, 75, 0.04);
+}
+
+.citadel-cooldown-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.citadel-cooldown-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.citadel-cooldown-remaining {
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* ── Leave Button ── */
+.citadel-leave-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-citadel-leave {
+  padding: 10px 28px;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: transparent;
+  border: 1px solid rgba(212, 168, 75, 0.4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-med);
+}
+
+.btn-citadel-leave:hover:not(:disabled) {
+  background: rgba(212, 168, 75, 0.08);
+  border-color: rgba(212, 168, 75, 0.6);
+}
+
+.btn-citadel-leave.confirming {
+  color: var(--accent-red);
+  border-color: rgba(239, 83, 80, 0.5);
+  background: rgba(239, 83, 80, 0.06);
+}
+
+.btn-citadel-leave.confirming:hover:not(:disabled) {
+  background: rgba(239, 83, 80, 0.12);
+  border-color: rgba(239, 83, 80, 0.7);
+}
+
+.btn-citadel-leave:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.citadel-leave-hint {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  min-height: 1em;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   CITADEL OVERLAY (central panel, blocked tabs)
+   ═══════════════════════════════════════════════════════════ */
+.citadel-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(ellipse at center, rgba(212, 168, 75, 0.05), transparent 70%),
+    rgba(5, 7, 10, 0.92);
+  z-index: 5;
+}
+
+.citadel-overlay-info {
+  position: relative;
+  z-index: 6;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 36px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(212, 168, 75, 0.25);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(6px);
+}
+
+.citadel-overlay-icon {
+  font-size: 2.5rem;
+}
+
+.citadel-overlay-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--accent-gold);
+  text-shadow: var(--glow-gold);
+  text-transform: uppercase;
+}
+
+.citadel-overlay-eta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.citadel-overlay-eta-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.citadel-overlay-eta-value {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+}
+
+.citadel-overlay-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  max-width: 280px;
+  line-height: 1.5;
+  margin: 4px 0 12px;
+}
+
+/* ── Header bar badge ── */
+.user-preview-citadel-badge {
+  margin-left: 10px;
+  padding: 2px 8px;
+  font-family: var(--font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent-gold);
+  border: 1px solid rgba(212, 168, 75, 0.4);
+  border-radius: var(--radius-sm);
+  background: rgba(212, 168, 75, 0.08);
 }

@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
-from ooe.base.utils import auth_by_token
+from ooe.base.utils import auth_by_token, blocked_in_citadel
 
 from ooe.base.exceptions import OOEException
 from ooe.users.models import User
@@ -73,6 +73,7 @@ def add_review(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def start_skill_practice(request, skill_name):
     try:

@@ -20,3 +20,23 @@ def auth_by_token(view_func):
         return view_func(request, *args, **kwargs)
 
     return _wrapped_view
+
+
+def blocked_in_citadel(view_func):
+    """
+    Rejects the request if the user is inside the Citadel.
+    Must be applied below auth_by_token (needs request.user).
+    """
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        from ooe.citadel.controllers import CitadelController
+
+        if CitadelController.get_active_stay(request.user):
+            return Response({
+                'status': 'error',
+                'message': 'No business shall be conducted on Citadel grounds.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return view_func(request, *args, **kwargs)
+
+    return _wrapped_view

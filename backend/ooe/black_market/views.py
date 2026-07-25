@@ -2,7 +2,7 @@ from django.db import transaction
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ooe.base.utils import auth_by_token
+from ooe.base.utils import auth_by_token, blocked_in_citadel
 
 from ooe.base.exceptions import OOEException
 from ooe.black_market.controllers import BlackMarketController
@@ -18,6 +18,7 @@ def get_tab_data(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def buy_precursor(request):
     try:
@@ -41,6 +42,7 @@ def buy_precursor(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def assign_professional(request):
     try:
@@ -59,6 +61,7 @@ def assign_professional(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def remove_professional(request):
     try:
@@ -77,6 +80,7 @@ def remove_professional(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def sell_stash(request):
     try:

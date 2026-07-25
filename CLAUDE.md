@@ -9,6 +9,7 @@ I sometimes forget to update the README.md, so don't rely on that unless I tell 
 specific part is finilized.
 I'm building this with the help of AI, especially for the UI/UX, because I'm bad at
 style/design so you do your best matching the existing styles and design.
+For any text, try to keep it formal. Although some texts right now do not adhere those rules, but when including new phrasing/text/words, we keep it formal, but somewhat cool - (Excommunicado, Continental, Marker, this kind of style). I don't want traditional game-like, creative, fantasy stories and texts or even button names. 
 
 ## Architecture
 

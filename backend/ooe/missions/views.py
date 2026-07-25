@@ -3,7 +3,7 @@ from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from ooe.base.utils import auth_by_token
+from ooe.base.utils import auth_by_token, blocked_in_citadel
 from ooe.base.exceptions import OOEException
 from ooe.missions.controllers import MissionsController, Mission, ExtractionController
 
@@ -18,6 +18,7 @@ def get_missions_tab_data(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 # @transaction.atomic
 def start_mission(request, mission_name):
     try:
@@ -33,6 +34,7 @@ def start_mission(request, mission_name):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 def extraction_action(request, action):
     controller = ExtractionController(request.user)
 

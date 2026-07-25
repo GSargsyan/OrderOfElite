@@ -2,7 +2,7 @@ from django.db import transaction
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from ooe.base.utils import auth_by_token
+from ooe.base.utils import auth_by_token, blocked_in_citadel
 
 from ooe.base.exceptions import OOEException
 from ooe.items.controllers import ItemsController
@@ -18,6 +18,7 @@ def get_user_houses(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def buy_house(request):
     try:
@@ -36,6 +37,7 @@ def buy_house(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def sell_house(request):
     try:
@@ -62,6 +64,7 @@ def get_user_cars(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def buy_car(request):
     try:
@@ -80,6 +83,7 @@ def buy_car(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def sell_car(request):
     try:
@@ -106,6 +110,7 @@ def get_user_guns(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def buy_gun(request):
     try:
@@ -124,6 +129,7 @@ def buy_gun(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def sell_gun(request):
     try:
@@ -150,6 +156,7 @@ def get_user_airplanes(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def buy_airplane(request):
     try:
@@ -168,6 +175,7 @@ def buy_airplane(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
 @transaction.atomic
 def sell_airplane(request):
     try:

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'ooe.items',
     'ooe.black_market',
     'ooe.travel',
+    'ooe.citadel',
     'django_celery_beat',
 ]
 
