@@ -5,16 +5,31 @@ from django.db.models import Q
 from django.utils import timezone
 
 from ooe.base.exceptions import OOEException
+from ooe.base.events import emit_event, EventTypes
 from ooe.citadel.models import CitadelStay
 from ooe.citadel.constants import (
     CITADEL_MIN_STAY_MINUTES,
     CITADEL_MAX_STAY_MINUTES,
     CITADEL_REENTRY_COOLDOWN_MINUTES,
+    PNG_REENTRY_COOLDOWN_MINUTES,
+    PNG_MAX_STAY_MINUTES,
     CITADEL_DEFENSE_MULTIPLIER,
 )
 
 
 class CitadelController:
+
+    @staticmethod
+    def get_reentry_cooldown_minutes(user):
+        if user.is_persona_non_grata():
+            return PNG_REENTRY_COOLDOWN_MINUTES
+        return CITADEL_REENTRY_COOLDOWN_MINUTES
+
+    @staticmethod
+    def get_max_stay_minutes(user):
+        if user.is_persona_non_grata():
+            return PNG_MAX_STAY_MINUTES
+        return CITADEL_MAX_STAY_MINUTES
 
     @staticmethod
     def check_and_complete_expired_stay(user):
@@ -31,8 +46,10 @@ class CitadelController:
         if expired_stay:
             expired_stay.left_at = expired_stay.scheduled_until
             expired_stay.cooldown_until = expired_stay.scheduled_until + \
-                timedelta(minutes=CITADEL_REENTRY_COOLDOWN_MINUTES)
+                timedelta(minutes=CitadelController.get_reentry_cooldown_minutes(user))
             expired_stay.save(update_fields=['left_at', 'cooldown_until'])
+
+            emit_event(EventTypes.LEFT_CITADEL, actor=user, city=user.city)
 
     @staticmethod
     def get_active_stay(user):
@@ -72,6 +89,7 @@ class CitadelController:
     def get_tab_data(user):
         active_stay = CitadelController.get_active_stay(user)
         cooldown_until = CitadelController.get_cooldown_until(user)
+        is_png = user.is_persona_non_grata()
 
         return {
             'in_citadel': active_stay is not None,
@@ -79,9 +97,11 @@ class CitadelController:
             'stay_until': active_stay.scheduled_until.timestamp() if active_stay else 0,
             'cooldown_until': cooldown_until.timestamp() if cooldown_until else 0,
             'min_stay_minutes': CITADEL_MIN_STAY_MINUTES,
-            'max_stay_minutes': CITADEL_MAX_STAY_MINUTES,
-            'cooldown_minutes': CITADEL_REENTRY_COOLDOWN_MINUTES,
+            'max_stay_minutes': CitadelController.get_max_stay_minutes(user),
+            'cooldown_minutes': CitadelController.get_reentry_cooldown_minutes(user),
             'defense_multiplier': CITADEL_DEFENSE_MULTIPLIER,
+            'persona_non_grata': is_png,
+            'png_until': user.png_until.timestamp() if is_png and user.png_until else 0,
         }
 
     @staticmethod
@@ -100,9 +120,10 @@ class CitadelController:
             raise OOEException('The Citadel does not admit guests for less than '
                 f'{CITADEL_MIN_STAY_MINUTES} minutes.')
 
-        if minutes > CITADEL_MAX_STAY_MINUTES:
+        max_stay_minutes = CitadelController.get_max_stay_minutes(user)
+        if minutes > max_stay_minutes:
             raise OOEException('Sanctuary is granted for at most '
-                f'{CITADEL_MAX_STAY_MINUTES // 60} hours.')
+                f'{max_stay_minutes // 60} hours.')
 
         if CitadelController.get_active_stay(user):
             raise OOEException('You are already within the Citadel walls.')
@@ -130,6 +151,8 @@ class CitadelController:
             scheduled_until=now + timedelta(minutes=minutes),
         )
 
+        emit_event(EventTypes.ENTERED_CITADEL, actor=user, city=user.city)
+
         return CitadelController.get_tab_data(user)
 
     @staticmethod
@@ -142,7 +165,9 @@ class CitadelController:
         now = timezone.now()
         active_stay.left_at = now
         active_stay.cooldown_until = now + \
-            timedelta(minutes=CITADEL_REENTRY_COOLDOWN_MINUTES)
+            timedelta(minutes=CitadelController.get_reentry_cooldown_minutes(user))
         active_stay.save(update_fields=['left_at', 'cooldown_until'])
+
+        emit_event(EventTypes.LEFT_CITADEL, actor=user, city=user.city)
 
         return CitadelController.get_tab_data(user)

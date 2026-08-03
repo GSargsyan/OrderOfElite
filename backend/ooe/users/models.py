@@ -32,6 +32,12 @@ class User(AbstractBaseUser):
     attack_points = models.IntegerField(default=0)
     defense_points = models.IntegerField(default=0)
     driving_points = models.IntegerField(default=0)
+    is_premium = models.BooleanField(default=False)
+    premium_since = models.DateTimeField(null=True, blank=True)
+    # Persona non grata: active while png_until is in the future
+    png_until = models.DateTimeField(null=True, blank=True)
+    # Permanent dossier mark: has broken a Seal at least once
+    seal_breaker = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -70,6 +76,10 @@ class User(AbstractBaseUser):
             'driving': int(self.driving_points * multipliers['driving']),
         }
 
+    def is_persona_non_grata(self):
+        from django.utils import timezone
+        return self.png_until is not None and self.png_until > timezone.now()
+
     def get_rank_progress(self):
         if self.rank + 1 not in RANK_EXPS:
             return 100.0
@@ -91,10 +101,15 @@ class User(AbstractBaseUser):
 
         active_stay = CitadelController.get_active_stay(self)
         effective_stats = self.get_effective_stats()
+        is_png = self.is_persona_non_grata()
 
         res = {
             'username': self.username,
             'city': self.city.name,
+            'is_premium': self.is_premium,
+            'persona_non_grata': is_png,
+            'png_until': self.png_until.timestamp() if is_png else 0,
+            'seal_breaker': self.seal_breaker,
             'money_cash': self.money_cash,
             'rank': self.rank,
             'rank_progress': self.get_rank_progress(),
@@ -171,6 +186,8 @@ class User(AbstractBaseUser):
             'reviews_count': count,
             'reviews': serialized_reviews,
             'cooldown_seconds': cooldown_seconds,
+            'persona_non_grata': self.is_persona_non_grata(),
+            'seal_breaker': self.seal_breaker,
         }
 
         return res

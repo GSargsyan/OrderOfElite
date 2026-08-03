@@ -5,6 +5,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from ooe.base.exceptions import OOEException
+from ooe.base.events import emit_event, EventTypes
 from ooe.base.constants import TRAVEL_ROUTES, TRAVEL_TIME_REDUCER
 from ooe.items.constants import AIRPLANES
 from ooe.cities.models import City
@@ -267,3 +268,13 @@ class TravelController:
         ).first()
         if new_city_room:
             new_city_room.users.add(user)
+
+        emit_event(
+            EventTypes.TRAVELED_TO_CITY,
+            actor=user,
+            city=destination_city,
+            metadata={
+                'origin_city': flight_log.origin_city.name,
+                'airplane': flight_log.airplane,
+            },
+        )

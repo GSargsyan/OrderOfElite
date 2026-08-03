@@ -5,6 +5,7 @@ from django.db.models import F
 
 from ooe.users.models import User, UserReview
 from ooe.base.exceptions import OOEException
+from ooe.base.events import emit_event, EventTypes
 from ooe.base.constants import SKILLS, SKILL_COOLDOWNS
 
 
@@ -64,6 +65,13 @@ class SkillsController:
         )
 
         self.user.add_exp(skill['exp_reward'])
+
+        emit_event(EventTypes.SKILL_TRAINED, actor=self.user, city=self.user.city, metadata={
+            'skill': skill['users_field'].replace('_points', ''),
+            'points_gained': points_gained,
+            'points_after': getattr(self.user, skill['users_field']),
+            'is_paid': not is_free,
+        })
 
         cooldown_sec = SKILL_COOLDOWNS["free" if is_free else "pro"]
         cd = int(time.time()) + cooldown_sec

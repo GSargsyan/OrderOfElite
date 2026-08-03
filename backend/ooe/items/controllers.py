@@ -6,6 +6,7 @@ from django.db.models import F
 
 from ooe.users.models import User
 from ooe.base.exceptions import OOEException
+from ooe.base.events import emit_event, EventTypes
 from ooe.items.constants import \
     HOUSES, \
     HOUSE_SELL_PERCENT, \
@@ -63,6 +64,12 @@ class ItemsController:
             city=user.city,
         )
 
+        emit_event(EventTypes.ITEM_BOUGHT, actor=user, city=user.city, metadata={
+            'item_type': 'house',
+            'item_key': house_name,
+            'price': HOUSES[house_name]['price'],
+        })
+
         return {
             'status': 'success',
             'message': 'House bought',
@@ -80,6 +87,12 @@ class ItemsController:
         user.save()
 
         user.houses.filter(house=house_name, city=user.city).delete()
+
+        emit_event(EventTypes.ITEM_SOLD, actor=user, city=user.city, metadata={
+            'item_type': 'house',
+            'item_key': house_name,
+            'price': int(HOUSES[house_name]['price'] * HOUSE_SELL_PERCENT),
+        })
 
         return {
             'status': 'success',
@@ -130,6 +143,12 @@ class ItemsController:
             price=CARS[car_name]['price'],
         )
 
+        emit_event(EventTypes.ITEM_BOUGHT, actor=user, city=user.city, metadata={
+            'item_type': 'car',
+            'item_key': car_name,
+            'price': CARS[car_name]['price'],
+        })
+
         return {
             'status': 'success',
             'message': 'Car bought',
@@ -158,6 +177,12 @@ class ItemsController:
             action=CarTransaction.SELL,
             price=sell_price,
         )
+
+        emit_event(EventTypes.ITEM_SOLD, actor=user, city=user.city, metadata={
+            'item_type': 'car',
+            'item_key': car_name,
+            'price': sell_price,
+        })
 
         return {
             'status': 'success',
@@ -203,6 +228,12 @@ class ItemsController:
             airplane=airplane_name,
         )
 
+        emit_event(EventTypes.ITEM_BOUGHT, actor=user, city=user.city, metadata={
+            'item_type': 'airplane',
+            'item_key': airplane_name,
+            'price': AIRPLANES[airplane_name]['price'],
+        })
+
         return {
             'status': 'success',
             'message': 'Airplane bought',
@@ -223,6 +254,12 @@ class ItemsController:
         user.save()
 
         user.airplanes.filter(airplane=airplane_name).delete()
+
+        emit_event(EventTypes.ITEM_SOLD, actor=user, city=user.city, metadata={
+            'item_type': 'airplane',
+            'item_key': airplane_name,
+            'price': int(AIRPLANES[airplane_name]['price'] * AIRPLANE_SELL_PERCENT),
+        })
 
         return {
             'status': 'success',

@@ -11,6 +11,10 @@ import TravelTab from 'modules/Travel/travelTab.js'
 import FlightOverlay from 'modules/Travel/flightOverlay.js'
 import CitadelTab from 'modules/Citadel/citadelTab.js'
 import CitadelOverlay from 'modules/Citadel/citadelOverlay.js'
+import AssassinationTab from 'modules/Assassination/assassinationTab.js'
+import GrandCouncilTab from 'modules/GrandCouncil/grandCouncilTab.js'
+import SealsTab from 'modules/Seals/sealsTab.js'
+import PremiumTab from 'modules/Premium/premiumTab.js'
 import UserProfileModal from 'modules/Dashboard/userProfile.js'
 import { request, formatMoney } from 'modules/Base'
 import Footer from 'modules/Home/footer'
@@ -20,10 +24,10 @@ import 'styles/dashboard.css'
 export const UserPreviewCtx = createContext()
 
 // Tabs that are blocked while the user is in-flight
-const FLIGHT_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items']
+const FLIGHT_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items', 'assassination']
 
 // Tabs that are blocked while the user is inside the Citadel
-const CITADEL_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items', 'travel']
+const CITADEL_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items', 'travel', 'assassination']
 
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('dashboard')
@@ -76,9 +80,31 @@ function Dashboard() {
             'label': 'Travel',
             'props': {}
         },
+        'assassination': {
+            'component': AssassinationTab,
+            'label': 'Assassination',
+            'props': {}
+        },
         'citadel': {
             'component': CitadelTab,
             'label': 'Citadel',
+            'props': {}
+        },
+        'grand_council': {
+            'component': GrandCouncilTab,
+            'label': 'Grand Council',
+            'props': {}
+        },
+        'seals': {
+            'component': SealsTab,
+            'label': userPreviewData?.is_premium
+                ? 'Seals'
+                : <>Seals <span className="menu-premium-mark" title="Reserved for members">✦</span></>,
+            'props': {}
+        },
+        'premium': {
+            'component': PremiumTab,
+            'label': 'Premium',
             'props': {}
         },
         'networking': {
@@ -338,7 +364,17 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
             {userPreviewData ? (
                 <>
                     <div className="user-preview-top">
-                        <span className="user-preview-username">{userPreviewData.username}</span>
+                        <span className="user-preview-username">
+                            {userPreviewData.username}
+                            {userPreviewData.is_premium && (
+                                <span className="user-preview-premium-mark" title="Member of standing">✦</span>
+                            )}
+                            {userPreviewData.persona_non_grata && (
+                                <span className="user-preview-png-badge" title="Persona non grata">
+                                    PERSONA NON GRATA
+                                </span>
+                            )}
+                        </span>
 
                         {isInFlight && flightData ? (
                             <FlightRouteIndicator flightData={flightData} />

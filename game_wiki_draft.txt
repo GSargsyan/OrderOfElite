@@ -1,0 +1,922 @@
+﻿DRAFT
+
+
+Yellow marks the ideas, features or entities that will not be implemented for the initial launch.
+
+
+Tip: Set CLAUDE_CODE_USE_POWERSHELL_TOOL=1 to enable the PowerShell tool (preview)
+
+
+Ideas:
+* Cities: Add specifics to each city. E.g. Drug production in Mexico is cheaper
+* Anonymous messages, costing Elite coins.
+* Kill Transcripts
+* Dossier Card - a shareable player card with info like kills, wealth and more.
+* Debut contract during onboarding - kill an npc within x hours.
+* Contracts: Players can open contracts on other players offering a bounty.
+   * Maybe contracts could have scope of city or international.
+   * Maybe if a player takes a contract others can’t.
+* Missions: Add 1 or 2 more missions, that require Gun or Car or both.
+* Last Will: A message published to all players when the player dies. Filled in profile settings.
+* Gathering continuous intel and scramblers to block them.
+* Think of 1 more major feature, where players can EARN or INTERRACT.
+* Add tags that players can gather in their profile like:
+   * Surgical - if killed 10 players without failure
+   * Cockroach - survived 10 assassination attempts
+   * …
+* There is also a raw idea to add Cards to the game, that players can play a specific card in general or against an elite.
+
+
+TODO List
+* Implement Traveling (separate tab).
+* Design and Implement Extraction Mission
+* Design and Implement Citadel.
+* Design and Implement the Grand Council.
+* Design and Implement Chairman of the Citadel.
+* Design and Implement Kill mechanics.
+* Design and Implement Seals.
+* Design and Implement Syndicates.
+* Design and Implement contents of the Dashboard.
+* Design and Implement High-Profile Assassination Mission.
+* Design and Implement Solo Assassination Missions.
+
+
+
+
+
+
+Order of Elites is an online text-based PBBG (Persistent Browser-Based Game). The virtual world is a John Wick inspired universe, players are elite assassins, living under strict code, can earn money through missions, can kill each other (perma-death), can chat/DM each other etc.. The website will be imitated in luxury, neo-noir style. 
+
+
+Key Design Features:
+Glassmorphism panels — Semi-transparent backgrounds with backdrop-filter: blur and subtle border glow on hover. Neon accents — Cyan glow on interactive elements via box-shadow and text-shadow Full-bleed background — AI-generated Continental office scene, fixed with vignette overlay Micro-animations — Fade-in, slide-up for modals; pulse for loading states; smooth hover transitions on all interactive elements Progress bar — Animated rank progress with glowing dot indicator Server clock — Live UTC clock in Orbitron font with cyan glow
+
+
+General Terms
+* Players are called Elites
+* The safehouse hotel is called The Citadel.
+* The head of the Citadel in each city is called the Chairman of the Citadel
+* Syndicates are clans of Elites with shared budgets and goals.
+* The ruling body of the Elites is the Grand Council, which consists of 5 members, rotated each month.
+* The Order of Elites is a set of rules written by the Grand Council and is enforced by the Chairmans of the Citadels.
+* Chairmans of the Citadels are assigned by the Grand Council.
+* If a player breaks any rule of the Order of Elite, they are automatically Blacklisted or tagged as Persona non-grata.
+* Seals are promises between players, automatically enforced by the game.
+
+
+Grand Council
+* The Grand Council consists of 5 members serving a term.
+* The Grand Council members.
+   * Can chat in separate chat dedicated for them and the Chairman of the Citadel
+   * Do not have cooldown entering/leaving the Citadel
+   * Cannot do missions
+   * Cannot assassinate players
+   * Assign the Chairman of the Citadels
+   * Get protection skills boost
+   * Can Blacklist players or tag them as Persona non-grata
+* Members of the Grand Council are rotated every week, 00:00 UTC
+* Members create and publish the Order of the Elites - a message and ruleset for all players
+* Order of the Elites is written and sent to review by one of the members, and needs to be accepted by at least 3 other members.
+
+
+Chairman of the Citadel
+* Any player above the required Rank can be assigned to be the Chairman of the Citadel by the Grand Council.
+* The Chairman can Blacklist players or tag them as Persona non-grata.
+
+
+Syndicate
+* An Syndicate can be created by any player above the required Rank
+* Syndicates have Presidents (initially the creator), upon death of whom the role of leader will be transferred to the Vice President of the Syndicate
+* The 3rd hierarchical position of the Syndicate is Manager, the others are Soldiers
+* All members of Syndicate can contribute to the budget of the Syndicate.
+* The President and Vice President can promote a Soldier to Manager.
+* Managers are allowed to review applications, invite other members to the Syndicate.
+* Syndicates have a list of top contributors in budget and total kill number
+* Players get access to chat exclusively for the Syndicate
+* Syndicates can declare war on, or ally with other Syndicates.
+* War declarations are shown on the Syndicate page, but allies are shown only if both parties accept it. Any alliance request or war declaration is shown on Syndicate chat.
+* Syndicate may have up to 20 members
+* Syndicate may put head price on any member of another Syndicate which has been declared war on.
+* Syndicates have name and optionally a motto
+
+
+Citadel
+* When a Player is inside the Citadel they get 10x defense boost, so it’s practically impossible for others to kill them, unless the attacker is very high ranked and extremely more powerful.
+* Maximum time player can stay in Citadel is 12 hours
+* Leaving the Citadel sets a 2 hour cooldown before it can be reentered.
+* If in the Citadel, a player is unable to do actions other than messaging and chatting.
+* Citadel has a global budget called the Treasury, which is filled by all players paying x% commission fee on any transaction.
+* Chairman can tag Players as Persona Non Grata, increasing the cooldown of Citadel reentering by 6 hours (total 8 hours) and reducing the time player can stay in the Citadel by 4 hours (total 8 hours).
+
+
+Signup
+* Players are required to fill the following fields to sign up:
+   * Unique username of consisting of letters and underscores
+   * Password
+   * Email address for account recovery
+* Players may also choose Play as a Guest option, which automatically assigns a username starting with “guest_”. Guests will have limited functionality allowed.
+* Players spawn in a random city.
+* If they had previous account that has been killed, they can re-register from the dead account to gain the following advantages:
+   * They may set their old nickname to be visible on their new profile.
+   * The experience earned is 2x multiplied until they reach the experience of their previous account.
+   * 40% of the money from their previous account is transferred to the new account.
+Gameplay
+* When player registers in game they have
+   * $0 money
+   * 0 Elite coins
+   * 0 attack skills
+   * 0 driving skills
+   * 0 protection skills
+* Players have 3 levels of health indicator (Well, Injured, Critically hurt), but under the hood health is a 0-100 decimal.
+* Players have status of location - In Citadel, In Apartment, Driving.
+* Players can do Missions and Assassination Missions to earn money, rank and Elite coins.
+* Players can train any of their skills for free and with a paid service.
+* Players can send money to other players paying a 1% transaction fee to the Treasury.
+* Players can attempt a kill on another player (9 hours cooldown if succeeded, otherwise 3 hours).
+* Players can rate other players 1 to 5 stars and leave a review.
+* Players can travel to other countries - travel times being realistic considering the distance, but scaled down.
+Messaging
+* Public chat will accessible by all players which is per city, messages in the chat will be visible to all those who are in the same city
+* Players can DM each other
+Kill
+* Player can search another player location and status using Elite coins with the following prices:
+   * 1 Elite Coin - Check if player is in the same city you are.
+   * 1 Elite Coin - Get the status of the player in the current city (Driving/Inside Citadel/In the House, on the Airplane).
+   * 5 Elite Coins - Find the city the player is in.
+* Players may also do a blind assassination attempt by guessing the other player’s city and status.
+* Players can get shot/killed at any rank, but for the attacker there is a minimum rank requirement.
+* If the attack is successful and the other player is killed:
+   * 5% of their money is transferred to the killer
+   * 35% of their money is transferred to their new account.
+* If the attack is not successful and the other player survives:
+   * The attacked player will lose $10,000 for each percent of health they lost.
+   * Both the attacker and survivor may lose health, their equipped weapons and cars.
+* There are 3 ways in which Elites can make an attempt on another’s life.
+   * Regular Assassination attempt
+      * Offers the highest chance of succeeding among the 3 types, but also the attacker has significant risk of getting backfired and shot themselves.
+   * Drive-by Assassination attempt
+      * Moderate chances of killing with moderate chances of getting killed
+   * Sniping attempt
+      * Low chances of killing with low chances of getting killed.
+      * Can be used by multiple attackers to gradually lower the health of the target, eventually taking out either by Sniping itself or by the other 2 types of attempts.
+* The following factors affect the outcome of the attempt:
+   * Operational Budget - money amount dedicated, chosen by the attacker. The more money the better their chances.
+   * The attackers Attack skill points
+   * The defenders Defending skill points.
+   * If the Defender is in the Citadel they get a big protection boost.
+   * The currently equipped gun and car of the attacker.
+   * The currently equipped house and car of the defender.
+* The formula by which the success is decided:
+   * Total Defense Score = Defense Score * House Defense Multiplier * Car Defense Multiplier * Citadel Multiplier (if in Citadel)
+   * Total Defense Score = Attack Score * Gun Attack Multiplier * Car Attack Multiplier 
+   * Rank Factor = 1.15 ^ (Attacker Rank - Defender Rank) 
+   * Budget Factor = 1 + ( Operational Budget / (Operational Budget + 250,000) ) 
+   * Success Chance % = (Rank Factor * Budget Factor) * Attack Score / (Attack Score + Defense Score) 
+* Once the attack is over and the target survives, the roles are reversed and the backfire process happens, with the same factor and formulas, except the chances of killing are lower in this case.
+Seal
+* Available to pro players only
+* A Seal is a sharable contract (a promise) between 2 players
+* A player writes the conditions in a free text field, mentioning what they do for the player, and what the other player will do for them.
+* The Seal is then sent to the 2nd player to sign. 
+* Once the Seal is signed, it’s bound, the 2nd player is obliged to do whatever the set by player 1 is.
+* LLM API call will take game logs of the 2 players and verify if the conditions are satisfied.
+
+
+Bank
+* Players can deposit money into bank with the following benefits:
+   * Upon death 35% of the bank money is lost, 65% is saved to be sent to their new account, as opposed to cash money where 100% of the money is lost.
+   * Players get .5% compound interest bonus each day money is kept in the bank
+* Doing Bank action (depositing, cashing out) will set a 12 hour cooldown, before they can do another action.
+
+
+Missions
+* There are 4 types of main missions
+   * Stakeout
+      * Solo basic mission available from Rank 1
+   * Recon Op
+      * Solo mission offering a little higher exp and money.
+   * Extraction
+      * This is a 2 player mission, 
+      * 2 players must work together, one is the driver, the other is the initiator.
+      * Both should be in the same city.
+      * Driver should own a car.
+      * The amount of money earned depends on the driver's skills.
+      * The initiator earns a random amount of money ranging $40,000 - $100,000 and should share with the other player.
+   * High-Profile Assassination
+      * 4 players must work together, be in the same city
+      * 2 of the players must have required amount of Assassination skills
+      * 1 of the players must have required amount of Driving skills 
+      * Initiator earns a random amount of money ranging $500,000 - $2,000,000 and should share with the other players.
+      * The amount of money earned depends on required skills of the players
+* Players can also take Solo Assassination Missions (cross city) that may involve traveling to 1 or more countries.
+   * Players can choose from number of missions each with different price tags and city of mission
+   * Upon successfully killing they will earn the money, Rank experience, assassination skill but kill count will not increase.
+Mission
+	Cooldown
+	Exp
+	Earns
+	
+
+	Random Range
+	Max profit rank
+	
+
+	
+
+	
+
+	min
+	max
+	
+
+	
+
+	Stakeout
+	6m
+	6
+	$100
+	$2,000
+	$200
+	7
+	Recon Op
+	20m
+	25
+	$1,000
+	$10,000
+	$500
+	12
+	TODO: Add 1 or 2 more solo missions here, requiring a gun or car or traveling or combination of those.
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	Extraction
+	2h
+	150
+	$10,000
+	$20,000
+	
+
+	
+
+	High-Profile Assassination
+	8h
+	480
+	$500,000
+	$2,000,000
+	
+
+	
+
+	Assassination MIssion / Elite Assassination
+	9h / 3h
+	500
+	$100,000
+	$5,000,000
+	
+
+	
+
+	Black Market
+* Black Market can be used to earn money and experience through drug and alcohol production.
+* Drug production is a chain of material productions. There are 4 types of products to produce and sell, each unlocked at different ranks:
+   * Alcohol
+      * Precursor: Grains
+      * Grains -> Brewer -> Alcohol
+         * Consumes 7 kg grain per hour
+         * Makes 4 liter alcohol per hour
+      * Alcohol -> Distributors -> Money
+         * Sells 11 liter alcohol per hour
+         * Base price $100/l
+   * Cannabis
+      * Precursor: Seed
+      * Seed -> Botanist -> Leaves
+      * Leaves -> Trimmer -> Cannabis
+      * Cannabis -> Dealer -> Money
+   * Methamphetamine
+      * Precursor: Meth Precursors, Gasoline
+      * Precursor Chemicals -> Chemist -> Solution
+      * Solution -> Cook -> Meth Oil
+      * Meth Oil -> Crystalizer -> Crystal Meth
+      * Crystal Meth -> Dealers -> Money
+   * Cocaine
+      * Precursor: Coca Leaves, Cocaine Precursors, Gasoline
+      * Coca Leaves -> Picker -> Raw Crop
+      * Raw Crop -> Paste Maker -> Paste
+      * Paste -> Refiner -> Coke Bricks
+      * Coke Bricks -> Dealer -> Money
+
+
+
+
+
+
+Drug
+	Precursor price
+	Base selling price
+	Supply absorber
+	Intermediate 1 consume/produce ratio
+	Intermediate 2 consume/produce ratio
+	Intermediate 3 consume/produce ratio
+	Seller consume/produce ratio
+	Alcohol
+	$400
+	$1,000
+	50
+	7 / 4
+	
+
+	
+
+	11
+	Cannabis
+	$1,000
+	$8,000
+	10
+	3 / 13
+	7 / 4
+	
+
+	9
+	Methamphetamine
+	$5,000
+	$20,000
+	5
+	
+
+	
+
+	
+
+	
+
+	Cocaine
+	$15,000
+	$40,000
+	3
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+* Money made through the Black Market must be Reclaimed/Withdrawed, requiring the player to be in the city where the drug is sold at.
+* Drugs can also be shipped/smuggled to another city for higher returns.
+* Players initially have 10 professionals available, increased by 5 per rank (max 160).
+* Professionals are assigned to a specific role such as Brewer, which requires time to train - initially 1 hour.
+* Once trained, the player can purchase precursor items by 1 click, which professionals will consume gradually increasing the result product/money.
+* Black Market follows a supply and demand model, which affects the most for Meth and Cocaine. Alcohol price is the least driven by the number of other players selling the product, then comes Cannabis. Meth and Coke selling prices are most affected by how much the supply is in the current city.
+* Units sold in the last 24 hour affect the price of the drug, however newly sold drugs and smoothly applied.
+* When a player sells a huge amount of drug, for the next 1 hour, (1 minute ticks) the price starts to drop and converges at 60 min.  
+* Players may see a histogram of who sells what and what percent of the market they own.
+* Below is the formula on how drug prices are calculated in each city.
+
+
+Price per unit = B * [ (P * A) / ( (P * A) + S ) ] * R
+
+
+R -> Random noise between 0.92 and 1.08
+S -> Current supply (units sold in the last 24 hours)
+A -> Market price fluctuation absorber: Higher value means supply/demand barely affect the price.
+B -> Base price of the drug
+P -> Population (last 24 hour log ins) 
+
+
+Example Cannabis:
+P = 100
+A = 50
+B = $800
+R = 1
+S = 500
+
+
+Price = 800 * ( (100 * 50) / ( (100 * 50) + 500) =  $727 per unit
+
+
+Example Meth:
+P = 100
+A = 10
+B = $5,000
+R = 1
+S = 500
+
+
+Price = 5000 * ( 100 * 10) / ( ( 100 * 10 ) + 500 ) = $3,333 per unit
+
+
+
+
+
+
+Businesses:
+* When players purchase items, the owner of the business of that particular item gets percent of the money. The amount depends on what percent of businesses in the city they own.
+* Each city has 1000 units of each business type available.
+* When the owner is killed, businesses become available for purchase.
+* Players get profit from business based on how many shares of that product in that city they own. (Example: player 1 owns 500 gas stations in NY, player 2 owns 100, $10 sale of gasoline in NY gives $5 to player 1, and $1 to player 2)
+* Players can buy the following types of businesses:
+   * Alcohol Grain Silo
+      * Profit when others purchase Grain for alcohol production.
+   * Oil Refinery:
+      * Profit when players purchase Gasoline.
+   * Cannabis Greenhouse
+      * Profit when others purchase Seed for Cannabis production.
+   * Chemical Lab
+      * Profit when others purchase Precursor Chemicals for meth AND cocaine production.
+   * Coca Plantation
+      * Profit when others purchase Coca Leaves for Cocaine production.
+   * Hospital
+      * Profit when other players get hurt and spend money on healing.
+   * Airport
+      * Profit on the travel fees for private aircrafts or when players use commercial flights.
+   * Arsenal
+      * Profit a small fee when players purchase a gun.
+   * Real Estate Agency
+      * Profit a small fee when players purchase a house.
+   * Car Factory
+      * Profit a small fee when players purchase a car.
+* The prices will be decided by a cron task running every day, checking the profitability for the last 24 hours and choosing a number so that players can generate the base price and start earning profits approximately after 10 days. Prices will be rounded like so:
+   * $65,000
+   * $70,000
+   * $75,000
+   * …
+   * $150,000
+   * $200,000
+   * $250,000
+   * …
+   * $1,000,000
+   * $1,500,000
+   * $2,000,000
+Skills
+* There are 3 skills players can improve of theirs:
+   * Attack
+      * Improves chances of Assassination in missions or real players
+      * Improves chances of successful backfire
+   * Driving
+      * Greatly improves the outcome of missions as a driver.
+      * Slightly improves chances of backfire escaping when attacked by another player by a drive-by.
+   * Defense
+      * Main affecting factor when being attacked.
+
+
+Training
+	Cooldown
+	Exp
+	Price
+	Points gains
+	Attack
+	3m
+	3
+	$0
+	1
+	Defense
+	3m
+	3
+	$0
+	1
+	Driving
+	3m
+	3
+	$0
+	1
+	Paid Attack
+	10m
+	10
+	$10,000
+	5
+	Paid Driving
+	10m
+	10
+	$10,000
+	5
+	Paid Defense
+	10m
+	10
+	$5,000
+	5
+	
+
+Ranks
+* There are 30 ranks and their corresponding cumulative abilities
+* Unmentioned functionalities are available at Rank 1
+
+
+Ranks
+	Exp needed
+	Days needed
+	Unlocks
+	Rank 1
+	0
+	0
+	Stakeout mission, Alcohol production
+	Rank 2
+	296
+	1
+	Recon Op mission
+	Rank 3
+	1,000
+	2
+	
+
+	Rank 4
+	2,228
+	5
+	Rate/Review other Elites
+	Rank 5
+	4,630
+	
+
+	Extraction mission - initiator or driver, 
+	Rank 6
+	8,000
+	10
+	Cannabis production
+	Rank 7
+	12,533
+	
+
+	Syndicates
+	Rank 8
+	18,328
+	
+
+	High-Profile Assassination as Initiator/Driver.
+	Rank 9
+	25,481
+	20
+	Be assassinated, enter Citadel, join a Syndicate, Meth/Coke production
+	Rank 10
+	34,080
+	
+
+	Assassinate Elites, 
+	Rank 11
+	44,213
+	30
+	
+
+	Rank 12
+	55,968
+	
+
+	Meth production
+	Rank 13
+	69,433
+	
+
+	Coke Production
+	Rank 14
+	84,696
+	
+
+	
+
+	Rank 15
+	101,845
+	60
+	Can create a Syndicate
+	Rank 16
+	120,968
+	
+
+	
+
+	Rank 17
+	142,153
+	
+
+	
+
+	Rank 18
+	165,488
+	
+
+	
+
+	Rank 19
+	191,061
+	
+
+	
+
+	Rank 20
+	218,960
+	120
+	Can become the Chairman of Pavilion
+	Rank 21
+	249,273
+	
+
+	
+
+	Rank 22
+	282,088
+	
+
+	
+
+	Rank 23
+	317,493
+	
+
+	
+
+	Rank 24
+	355,576
+	
+
+	
+
+	Rank 25
+	396,425
+	210
+	
+
+	Rank 26
+	440,128
+	
+
+	
+
+	Rank 27
+	486,773
+	
+
+	
+
+	Rank 28
+	536,448
+	
+
+	
+
+	Rank 29
+	589,241
+	
+
+	
+
+	Rank 30
+	645,240
+	365
+	Can become member of the Grand Council
+	
+
+Weapons
+* Guns used in missions or assassination attempts are consumed.
+* All weapons can be sold for 90% of the original value.
+
+
+Real world inspiration
+	Gun
+	Price
+	Attack points multiplier
+	Weapon usage cost
+	Beretta 92FS
+	B-92
+	$5,000
+	1x
+	$1,000
+	Glock 19
+	G19-C 
+	$10,000
+	1.2x
+	$2,000
+	AK-47
+	Krasny 47
+	$40,000
+	1.5x
+	$8,000
+	AR-15
+	Apex-15
+	$100,000
+	2x
+	$20,000
+	Steyr AUG
+	A1 Augmented 
+	$200,000
+	2.5x
+	$40,000
+	Dragunov SVD
+	Markov SVM
+	$400,000
+	2.8x
+	$80,000
+	VSS
+	Whisper
+	$650,000
+	3.3x
+	$130,000
+	CheyTac Intervention M200
+	Intervention 
+	$1,000,000
+	4x
+	$200,000
+	
+
+Cars
+
+
+All cars can be sold for 90% of the original value
+
+
+Real world inspiration
+	Car
+	Price
+	Driving points
+	Defense points
+	Attack points
+	Honda Civic
+	Apex Type-C200
+	$20,000
+	1x
+	1x
+	1x
+	Jeep Wrangler Unlimited Rubicon
+	Overlander
+	$50,000
+	1x
+	2x
+	1x
+	BMW M4 GTS
+	Falken GTS
+	$100,000
+	1.5x
+	1.5x
+	1.5x
+	G63 (Armored)
+	Vanguard 
+	$250,000
+	1.2x
+	3x
+	1.2x
+	Aston Martin Valkyrie
+	Banshee
+	$600,000
+	2.5x
+	1.7x
+	1.7x
+	Rolls-Royce Phantom (Armored)
+	Imperium-R Armored
+	$2,000,000
+	1.5x
+	3.5x
+	2.5x
+	Bugatti La Voiture Noire
+	Bordeaux V16
+	$12,000,000
+	4x
+	2.5x
+	3.5x
+	
+
+
+
+Houses
+
+
+All Houses can be sold for 90% of the original value
+
+
+Houses
+	Price
+	Defense
+	Garage capacity
+	Maint. cost per day
+	Studio Apartment
+	$100,000
+	1.5x
+	1
+	$1,000
+	Luxury Condo
+	$1,000,000
+	3x
+	2
+	$10,000
+	Mansion Estate
+	$20,000,000
+	5x
+	4
+	$100,000
+	
+
+Traveling
+* Players can travel city to city for the following reasons
+   * To do drug production and selling.
+   * Smuggle drugs to sell for higher prices.
+   * Escape assassination attempts
+   * Do Extraction or High Profile assassination missions with other players.
+   * Chase a target to assassinate
+* Players may travel starting from Rank 1 using the Commercial Flight option if they don’t own an airplane.
+
+
+
+
+1. New York
+2. Mexico City
+3. Moscow
+4. Rome
+Airplanes:
+
+
+Real world inspiration
+	Airplane
+	Price
+	Speed multiplier
+	Price per km
+	Cooldown
+	Boeing
+	Commercial Flight
+	$0
+	1x
+	$1
+	3h
+	Embraer Phenom 300, Learjet 75
+	Corvus
+	$7,500,000
+	2.5x
+	$2
+	1h 45m
+	Gulfstream G650ER
+	Mach IV
+	$50,000,000
+	5x
+	$5
+	45m
+	Concorde
+	Sentinelle
+	$200,000,000
+	10x
+	$20
+	15m
+	
+
+Travel Times & Costs
+
+
+From City
+	To City
+	Distance (km)
+	Default flight Time
+	
+
+	Price - km rounded
+	
+
+	
+
+	
+
+	hours
+	minutes
+	
+
+	New York
+	Moscow
+	7510
+	7
+	30
+	7500
+	New York
+	Mexico City
+	3359
+	3
+	20
+	3300
+	New York
+	Rome
+	6890
+	6
+	55
+	6900
+	Moscow
+	Mexico City
+	10719
+	10
+	45
+	10750
+	Moscow
+	Rome
+	2376
+	2
+	25
+	2400
+	Mexico City
+	Rome
+	10240
+	10
+	15
+	10250

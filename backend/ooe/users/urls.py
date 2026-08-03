@@ -8,9 +8,13 @@ from .views import \
     find_by_username, \
     get_homepage_stats, \
     get_top_elites, \
-    add_review
+    add_review, \
+    subscribe_premium, \
+    cancel_premium
 
 urlpatterns = [
+    path('api/users/subscribe_premium', subscribe_premium, name='subscribe_premium'),
+    path('api/users/cancel_premium', cancel_premium, name='cancel_premium'),
     path('api/users/signup', signup_user, name='signup_user'),
     path('api/users/login', login_user, name='login_user'),
     path('api/users/get_preview', get_preview, name='get_preview'),

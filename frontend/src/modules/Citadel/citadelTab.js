@@ -139,19 +139,23 @@ function CitadelTab() {
         return () => clearInterval(interval)
     }, [stayCountdown, cooldownCountdown, loadTabData, updateUserPreviewData])
 
+    const maxStayHours = tabData
+        ? Math.floor(tabData.max_stay_minutes / 60)
+        : 12
+
     const handleHoursChange = (value) => {
         let h = parseInt(value, 10)
         if (isNaN(h)) h = 0
-        h = Math.min(12, Math.max(0, h))
+        h = Math.min(maxStayHours, Math.max(0, h))
         setStayHours(h)
-        if (h === 12) setStayMinutes(0)
+        if (h === maxStayHours) setStayMinutes(0)
     }
 
     const handleMinutesChange = (value) => {
         let m = parseInt(value, 10)
         if (isNaN(m)) m = 0
         m = Math.min(59, Math.max(0, m))
-        if (stayHours === 12) m = 0
+        if (stayHours === maxStayHours) m = 0
         setStayMinutes(m)
     }
 
@@ -233,6 +237,16 @@ function CitadelTab() {
             ) : (
                 /* ── Entry form ── */
                 <>
+                    {tabData.persona_non_grata && (
+                        <div className="citadel-png-notice">
+                            ⚠ PERSONA NON GRATA — The Citadel's hospitality is
+                            curtailed. Sanctuary is limited
+                            to {Math.floor(tabData.max_stay_minutes / 60)} hours, and
+                            departure sets
+                            a {Math.floor(tabData.cooldown_minutes / 60)}-hour
+                            reentry restriction.
+                        </div>
+                    )}
                     <div className="citadel-notice">
                         🏛 Within the Citadel walls, sanctuary is absolute. No business may be
                         conducted — Missions, Items, Black Market, Skills and Travel are
@@ -244,7 +258,7 @@ function CitadelTab() {
                         <div className="citadel-section-title">DURATION OF STAY</div>
 
                         <div className="citadel-presets">
-                            {STAY_PRESETS.map(preset => (
+                            {STAY_PRESETS.filter(p => p.minutes <= tabData.max_stay_minutes).map(preset => (
                                 <button
                                     key={preset.minutes}
                                     className={`citadel-preset-chip ${totalMinutes === preset.minutes ? 'selected' : ''}`}
@@ -260,7 +274,7 @@ function CitadelTab() {
                                 <input
                                     type="number"
                                     min="0"
-                                    max="12"
+                                    max={maxStayHours}
                                     value={stayHours}
                                     onChange={e => handleHoursChange(e.target.value)}
                                 />
@@ -273,7 +287,7 @@ function CitadelTab() {
                                     min="0"
                                     max="59"
                                     value={stayMinutes}
-                                    disabled={stayHours === 12}
+                                    disabled={stayHours === maxStayHours}
                                     onChange={e => handleMinutesChange(e.target.value)}
                                 />
                                 <span className="citadel-duration-unit">MINUTES</span>

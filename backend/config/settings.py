@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'ooe.black_market',
     'ooe.travel',
     'ooe.citadel',
+    'ooe.seals',
     'django_celery_beat',
 ]
 
@@ -249,4 +250,13 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'ooe.missions.tasks.expire_extraction_invitations',
         'schedule': 60.0,  # every 60 seconds
     },
+    'check-seal-deadlines': {
+        'task': 'ooe.seals.tasks.check_seal_deadlines',
+        'schedule': 60.0,  # every 60 seconds
+    },
 }
+
+# ── Seals (LLM compiler) ──────────────────────────────────────
+# Key file is mounted read-only from the repo-level config/ directory.
+GEMINI_API_KEY_FILE = os.environ.get(
+    'GEMINI_API_KEY_FILE', '/opt/config/gemini_api_key')

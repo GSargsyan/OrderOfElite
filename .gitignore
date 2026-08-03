@@ -15,3 +15,8 @@ redis/data/
 # Node / React
 node_modules/
 frontend/build/
+
+# Secrets & Local Config
+config/gemini_api_key
+config/*.key
+

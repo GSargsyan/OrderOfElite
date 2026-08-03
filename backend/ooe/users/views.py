@@ -34,6 +34,49 @@ def get_preview(request):
 
 @api_view(['POST'])
 @auth_by_token
+def subscribe_premium(request):
+    user = request.user
+
+    if user.is_premium:
+        return Response({
+            'status': 'error',
+            'message': 'Your membership is already active.',
+        }, status=400)
+
+    user.is_premium = True
+    user.premium_since = timezone.now()
+    user.save(update_fields=['is_premium', 'premium_since'])
+
+    return Response({
+        'status': 'success',
+        'message': 'Membership confirmed. The privileges of the Order are now yours.',
+        'is_premium': True,
+    }, status=200)
+
+
+@api_view(['POST'])
+@auth_by_token
+def cancel_premium(request):
+    user = request.user
+
+    if not user.is_premium:
+        return Response({
+            'status': 'error',
+            'message': 'No active membership found.',
+        }, status=400)
+
+    user.is_premium = False
+    user.save(update_fields=['is_premium'])
+
+    return Response({
+        'status': 'success',
+        'message': 'Membership terminated.',
+        'is_premium': False,
+    }, status=200)
+
+
+@api_view(['POST'])
+@auth_by_token
 def get_skills_tab_data(request):
     return Response(SkillsController(request.user).get_skills_tab_data(), status=200)
 

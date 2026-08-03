@@ -125,6 +125,20 @@ function UserProfileModal({ userProfileData, onClose, onMessageClick }) {
                     <div className="profile-stats-card">
                         <p><strong>Username:</strong> {profileData.username}</p>
                         <p><strong>Rank:</strong> {profileData.rank}</p>
+                        {(profileData.persona_non_grata || profileData.seal_breaker) && (
+                            <p className="profile-marks">
+                                {profileData.persona_non_grata && (
+                                    <span className="user-preview-png-badge" style={{ marginLeft: 0 }}>
+                                        PERSONA NON GRATA
+                                    </span>
+                                )}
+                                {profileData.seal_breaker && (
+                                    <span className="user-preview-png-badge" title="Has broken a Seal">
+                                        SEAL-BREAKER
+                                    </span>
+                                )}
+                            </p>
+                        )}
                         <div className="profile-rating-overall">
                             <strong>Rating:</strong>
                             {profileData.overall_rating ? (
