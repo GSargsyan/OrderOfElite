@@ -4165,11 +4165,77 @@ button {
 
 .seals-note {
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-style: italic;
-  color: var(--text-muted);
-  line-height: 1.5;
+  color: var(--text-secondary);
+  line-height: 1.6;
   margin-bottom: 14px;
+}
+
+.seals-informal-desc {
+  margin-bottom: 20px;
+  max-width: 680px;
+  background: rgba(10, 14, 22, 0.4);
+  border-left: 3px solid rgba(212, 168, 75, 0.4);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.seals-informal-desc p {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+
+.seals-informal-desc p:last-child {
+  margin-bottom: 0;
+}
+
+.seals-informal-desc strong {
+  color: var(--accent-gold);
+  font-family: var(--font-ui);
+}
+
+.seals-informal-examples {
+  margin: 8px 0 12px 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seals-informal-examples li {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.seals-informal-examples li:hover {
+  background: rgba(212, 168, 75, 0.08);
+  border-color: rgba(212, 168, 75, 0.3);
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+
+.seals-informal-examples code {
+  color: var(--accent-cyan);
+  font-family: var(--font-ui);
+  font-weight: 500;
+}
+
+.seals-informal-note {
+  font-size: 0.78rem !important;
+  color: var(--text-muted) !important;
+  font-style: italic;
 }
 
 .seals-sign-warning {

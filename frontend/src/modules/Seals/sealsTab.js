@@ -58,9 +58,9 @@ function LockedSeals() {
             <div className="seals-locked-backdrop">
                 <div className="seals-section-title">FORGE A SEAL</div>
                 <p className="seals-note">
-                    A Seal is a binding contract between two Elites, enforced by
-                    the Order itself. State the terms, present it, and once signed
-                    it is bound — breach renders the offender persona non grata.
+                    Inspired by John Wick's Markers, Seals are sacred blood oaths between two Elites.
+                    State the terms, present it, and once signed it is bound by the High Table —
+                    breach renders the offender Persona Non Grata and permanently marks their record.
                 </p>
                 <div className="seal-card">
                     <div className="seal-card-parties">SIGNED — TWO PARTIES BOUND</div>
@@ -91,7 +91,6 @@ function LockedSeals() {
 
 function SealCard({ seal, username, onAction, busy }) {
     const statusClass = `seal-status-${seal.status}`
-    const otherParty = seal.is_creator ? seal.counterparty : seal.creator
 
     const annulLabel = () => {
         if (!seal.annul_requested_by) return 'REQUEST ANNULMENT'
@@ -316,7 +315,34 @@ function SealsTab() {
                     </div>
                 ) : (
                     <>
-                        <p className="seals-note">{tabData.help_text}</p>
+                        <div className="seals-informal-desc">
+                            <p>
+                                <strong>What are Seals?</strong> Seals are inspired by John Wick's Markers — binding contracts between two players. Once signed, the game automatically tracks and enforces the terms. If someone breaks a Seal, they get tagged as Persona Non Grata and permanently marked as a Seal-breaker.
+                            </p>
+                            <p>
+                                <strong>What can you write right now?</strong> Currently, the compiler supports actions around the <strong>Citadel</strong> (entering/leaving), <strong>City Travel & Bans</strong> (e.g. travel to a city or avoid a city), <strong>Items</strong> (buying/selling cars, houses, airplanes), and <strong>Skills</strong> (reaching target attack/defense/driving points).
+                            </p>
+                            <p>
+                                <strong>Examples of what you can write (click to fill):</strong>
+                            </p>
+                            <ul className="seals-informal-examples">
+                                <li onClick={() => setRawText("If I enter the Citadel, he must travel to Moscow.")}>
+                                    <code>"If I enter the Citadel, he must travel to Moscow."</code> — <em>(Citadel trigger + Travel obligation)</em>
+                                </li>
+                                <li onClick={() => setRawText("Should he arrive in Rome, he must not set foot in New York.")}>
+                                    <code>"Should he arrive in Rome, he must not set foot in New York."</code> — <em>(Travel trigger + City ban)</em>
+                                </li>
+                                <li onClick={() => setRawText("If I acquire a house, he must sell a car.")}>
+                                    <code>"If I acquire a house, he must sell a car."</code> — <em>(Asset purchase trigger + Asset sale)</em>
+                                </li>
+                                <li onClick={() => setRawText("Upon signing this Seal, he must raise his attack skill to 500 points.")}>
+                                    <code>"Upon signing this Seal, he must raise his attack skill to 500 points."</code> — <em>(Immediate trigger + Skill target)</em>
+                                </li>
+                            </ul>
+                            <p className="seals-informal-note">
+                                <em>(Note for testing: Combat/kills, extraction missions, and cash transfers will be supported once those features are wired into the game events).</em>
+                            </p>
+                        </div>
 
                         <div className="seals-form">
                             <div className="seals-form-row">
