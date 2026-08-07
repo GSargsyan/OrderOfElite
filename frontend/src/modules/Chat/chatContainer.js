@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import socketIOClient from "socket.io-client"
-import { CHAT_URL, CHAT_SOCKET_PATH } from 'modules/Base/constants.js'
+import { CHAT_SOCKET_PATH, chatSocketUrl } from 'modules/Base/constants.js'
 import { request } from 'modules/Base'
 import { ChatBoard, MessagesBoard } from 'modules/Chat/chatBoard.js'
 
@@ -24,7 +24,7 @@ const ChatContainer = memo(({ messageUser }) => {
     // Connect to notifications namespace for real-time DMs
     useEffect(() => {
         const token = localStorage.getItem('token')
-        const socket = socketIOClient(`${CHAT_URL}/notifications`, {
+        const socket = socketIOClient(chatSocketUrl('/notifications'), {
             path: CHAT_SOCKET_PATH,
             query: { token }
         })
