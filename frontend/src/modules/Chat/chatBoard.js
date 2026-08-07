@@ -50,7 +50,14 @@ export function ChatBoard({ chatRoomId, name }) {
         const token = localStorage.getItem('token')
         const newSocket = socketIOClient(chatSocketUrl(`/chat-${chatRoomId}`), {
             path: CHAT_SOCKET_PATH,
-            query: { token, room_id: chatRoomId }
+            query: { token, room_id: chatRoomId },
+            // socket.io-client multiplexes namespaces on the same host over
+            // one shared connection by default, and only the *first* such
+            // socket's `query` is ever actually sent in the handshake — the
+            // notifications socket (chatContainer.js) always connects first,
+            // so without forceNew this socket's room_id silently never
+            // reaches the server.
+            forceNew: true,
         })
 
         setSocket(newSocket)

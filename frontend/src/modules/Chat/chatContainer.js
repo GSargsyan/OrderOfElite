@@ -26,7 +26,11 @@ const ChatContainer = memo(({ messageUser }) => {
         const token = localStorage.getItem('token')
         const socket = socketIOClient(chatSocketUrl('/notifications'), {
             path: CHAT_SOCKET_PATH,
-            query: { token }
+            query: { token },
+            // See the matching comment in chatBoard.js — each namespace
+            // needs its own connection since query params don't carry over
+            // to sockets that reuse an existing shared one.
+            forceNew: true,
         })
 
         setNotifSocket(socket)
