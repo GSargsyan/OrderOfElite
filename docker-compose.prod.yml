@@ -12,6 +12,9 @@ services:
       - "80:80"
     networks:
       - ooe_network
+    depends_on:
+      - backend
+      - node
 
   psql:
     image: ooe_psql
