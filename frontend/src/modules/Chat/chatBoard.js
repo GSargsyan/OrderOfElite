@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import socketIOClient from "socket.io-client"
-import { CHAT_URL } from 'modules/Base/constants.js'
+import { CHAT_URL, CHAT_SOCKET_PATH } from 'modules/Base/constants.js'
 import { request } from 'modules/Base'
 
 
@@ -49,6 +49,7 @@ export function ChatBoard({ chatRoomId, name }) {
     useEffect(() => {
         const token = localStorage.getItem('token')
         const newSocket = socketIOClient(`${CHAT_URL}/chat-${chatRoomId}`, {
+            path: CHAT_SOCKET_PATH,
             query: { token, room_id: chatRoomId }
         })
 
