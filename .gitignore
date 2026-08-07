@@ -19,4 +19,9 @@ frontend/build/
 # Secrets & Local Config
 config/gemini_api_key
 config/*.key
+.env
+.env.*
+!frontend/.env.production
+!frontend/.env.development
+*.pem
 

@@ -7,12 +7,9 @@ services:
     build: ./nginx
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/certbot/www:/var/www/certbot
-      - ./nginx/certbot/conf:/etc/letsencrypt
       - ./frontend/build:/opt/frontend/build
     ports:
       - "80:80"
-      - "443:443"
     networks:
       - ooe_network
 
@@ -27,8 +24,6 @@ services:
       POSTGRES_USER: ooe
       POSTGRES_PASSWORD: ooe_pwd
     command: postgres -c max_connections=300
-    ports:
-      - "5432:5432"
     networks:
       - ooe_network
     healthcheck:
@@ -44,8 +39,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend/:/opt/backend/
-    ports:
-      - "8000:8000"
+      - ./config:/opt/config:ro
     networks:
       - ooe_network
     depends_on:
@@ -71,8 +65,6 @@ services:
     volumes:
       - ./redis/data:/data
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-    ports:
-      - "6379:6379"
     networks:
       - ooe_network
 
@@ -84,13 +76,37 @@ services:
     volumes:
       - ./node:/opt/node/
       - /opt/node/node_modules
-    ports:
-      - "4000:4000"
     networks:
       - ooe_network
     depends_on:
       psql:
         condition: service_healthy
+
+  celery_worker:
+    image: ooe_backend
+    container_name: ooe_celery_worker
+    command: celery -A config worker -l info
+    volumes:
+      - ./backend/:/opt/backend/
+    working_dir: /opt/backend
+    networks:
+      - ooe_network
+    depends_on:
+      - backend
+      - redis
+
+  celery_beat:
+    image: ooe_backend
+    container_name: ooe_celery_beat
+    command: celery -A config beat -l info
+    volumes:
+      - ./backend/:/opt/backend/
+    working_dir: /opt/backend
+    networks:
+      - ooe_network
+    depends_on:
+      - backend
+      - redis
 
 networks:
   ooe_network:

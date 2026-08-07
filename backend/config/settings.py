@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'orderofelites.com',
     'www.orderofelites.com',
+    '64.23.236.13',
     'backend',
     'localhost',
     '0.0.0.0:8000',
@@ -193,6 +194,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://0.0.0.0:8000",
     "https://orderofelites.com",
     "https://www.orderofelites.com",
+    "http://64.23.236.13",
 ]
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
@@ -201,7 +203,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://0.0.0.0:3000',
     'http://0.0.0.0:4000',
     'https://orderofelites.com',
-    'https://www.orderofelites.com'
+    'https://www.orderofelites.com',
+    'http://64.23.236.13',
 ]
 # CSRF_USE_SESSIONS = True
 
