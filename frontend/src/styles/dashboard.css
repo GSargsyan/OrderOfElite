@@ -346,7 +346,7 @@ button {
 .user-preview-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
+  gap: 6px 10px;
   align-items: center;
   font-family: var(--font-ui);
   font-size: 0.82rem;
@@ -354,26 +354,27 @@ button {
   color: var(--text-secondary);
 }
 
-.stat-item {
+.up-stat-rank {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 5px;
   white-space: nowrap;
 }
 
-.stat-item .stat-label {
+.up-stat-label {
   color: var(--text-muted);
   font-weight: 500;
   letter-spacing: 1px;
   font-size: 0.78rem;
 }
 
-.stat-item .stat-value {
-  color: var(--text-primary);
-  font-weight: 600;
+.up-stat-value {
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 0.92rem;
 }
 
-.stat-progress {
+.up-stat-progress {
   color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 400;
@@ -381,10 +382,41 @@ button {
 }
 
 /* Separator pipe */
-.stat-sep {
+.up-stat-sep {
   color: var(--text-muted);
-  opacity: 0.4;
+  opacity: 0.35;
   user-select: none;
+}
+
+/* ── Skill readouts (icon, hover reveals name via title) ── */
+.up-skill-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(140, 165, 185, 0.05);
+  border: 1px solid rgba(140, 165, 185, 0.09);
+  transition: all var(--transition-fast);
+  cursor: default;
+}
+
+.up-skill-stat:hover {
+  background: rgba(91, 147, 176, 0.1);
+  border-color: rgba(91, 147, 176, 0.3);
+}
+
+.up-skill-icon {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.up-skill-value {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 /* Progress bar under stats */
@@ -1995,6 +2027,15 @@ button {
   border-radius: var(--radius-md);
   object-fit: contain;
   background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--glass-border);
+  flex-shrink: 0;
+}
+
+.gun-image {
+  width: 284px;
+  height: 160px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
   border: 1px solid var(--glass-border);
   flex-shrink: 0;
 }

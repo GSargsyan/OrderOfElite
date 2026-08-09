@@ -41,6 +41,22 @@ class CarTransaction(models.Model):
         db_table = 'ooe_car_transactions'
 
 
+class GunTransaction(models.Model):
+    BUY = 'buy'
+    SELL = 'sell'
+    ACTION_CHOICES = [(BUY, 'Buy'), (SELL, 'Sell')]
+
+    user = models.ForeignKey('users.User', related_name='gun_transactions', on_delete=models.CASCADE)
+    gun = models.CharField(max_length=50)
+    city = models.ForeignKey('cities.City', related_name='gun_transactions', on_delete=models.CASCADE)
+    action = models.CharField(max_length=4, choices=ACTION_CHOICES)
+    price = models.BigIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ooe_gun_transactions'
+
+
 class UserGun(models.Model):
     user = models.ForeignKey('users.User', related_name='guns', on_delete=models.CASCADE)
     gun = models.CharField(max_length=50)

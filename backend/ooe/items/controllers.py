@@ -12,10 +12,12 @@ from ooe.items.constants import \
     HOUSE_SELL_PERCENT, \
     CARS, \
     CAR_SELL_PERCENT, \
+    GUNS, \
+    GUN_SELL_PERCENT, \
     AIRPLANES, \
     AIRPLANE_SELL_PERCENT
 
-from ooe.items.models import CarTransaction
+from ooe.items.models import CarTransaction, GunTransaction
 
 
 class ItemsController:
@@ -187,6 +189,94 @@ class ItemsController:
         return {
             'status': 'success',
             'message': 'Car sold',
+        }
+
+    @staticmethod
+    def get_user_guns(user: object):
+        user_guns = user.guns.filter(city=user.city)
+        # Count how many of each gun type the player owns in the current city
+        counts = {}
+        for ug in user_guns:
+            counts[ug.gun] = counts.get(ug.gun, 0) + 1
+
+        return {
+            key: {
+                'name': gun['name'],
+                'price': gun['price'],
+                'attack_multiplier': gun['attack_multiplier'],
+                'count_in_current_city': counts.get(key, 0),
+            }
+            for key, gun in GUNS.items()
+        }
+
+    @staticmethod
+    def buy_gun(user: object, gun_name: str):
+        if gun_name not in GUNS:
+            raise OOEException('Invalid gun name')
+
+        if user.money_cash < GUNS[gun_name]['price']:
+            raise OOEException('Not enough money')
+
+        user.money_cash = F('money_cash') - GUNS[gun_name]['price']
+        user.save()
+
+        user.guns.create(
+            gun=gun_name,
+            city=user.city,
+        )
+
+        GunTransaction.objects.create(
+            user=user,
+            gun=gun_name,
+            city=user.city,
+            action=GunTransaction.BUY,
+            price=GUNS[gun_name]['price'],
+        )
+
+        emit_event(EventTypes.ITEM_BOUGHT, actor=user, city=user.city, metadata={
+            'item_type': 'gun',
+            'item_key': gun_name,
+            'price': GUNS[gun_name]['price'],
+        })
+
+        return {
+            'status': 'success',
+            'message': 'Gun bought',
+        }
+
+    @staticmethod
+    def sell_gun(user: object, gun_name: str):
+        if gun_name not in GUNS:
+            raise OOEException('Invalid gun name')
+
+        # Find the oldest owned unit of this gun in the current city (FIFO)
+        gun_to_sell = user.guns.filter(gun=gun_name, city=user.city).order_by('id').first()
+        if not gun_to_sell:
+            raise OOEException('Does not own this gun in the current city')
+
+        sell_price = int(GUNS[gun_name]['price'] * GUN_SELL_PERCENT)
+        user.money_cash = F('money_cash') + sell_price
+        user.save()
+
+        gun_to_sell.delete()
+
+        GunTransaction.objects.create(
+            user=user,
+            gun=gun_name,
+            city=user.city,
+            action=GunTransaction.SELL,
+            price=sell_price,
+        )
+
+        emit_event(EventTypes.ITEM_SOLD, actor=user, city=user.city, metadata={
+            'item_type': 'gun',
+            'item_key': gun_name,
+            'price': sell_price,
+        })
+
+        return {
+            'status': 'success',
+            'message': 'Gun sold',
         }
 
     @staticmethod

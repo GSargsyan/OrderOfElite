@@ -398,25 +398,23 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                     </div>
 
                     <div className="user-preview-stats" style={{ marginTop: '6px' }}>
-                        <span className="stat-item">
-                            <span className="stat-label">RANK</span>
-                            <span className="stat-value">{userPreviewData.rank}</span>
-                            <span className="stat-progress">({Math.floor(userPreviewData.rank_progress)}%)</span>
+                        <span className="up-stat-rank">
+                            <span className="up-stat-label">RANK</span>
+                            <span className="up-stat-value">{userPreviewData.rank}</span>
+                            <span className="up-stat-progress">({Math.floor(userPreviewData.rank_progress)}%)</span>
                         </span>
-                        <span className="stat-sep">|</span>
-                        <span className="stat-item">
-                            <span className="stat-label">ATTACK</span>
-                            <span className="stat-value">{userPreviewData.attack_points}</span>
+                        <span className="up-stat-sep">|</span>
+                        <span className="up-skill-stat" title="Attack">
+                            <span className="up-skill-icon">⚔</span>
+                            <span className="up-skill-value">{userPreviewData.attack_points}</span>
                         </span>
-                        <span className="stat-sep">|</span>
-                        <span className="stat-item">
-                            <span className="stat-label">DEFENSE</span>
-                            <span className="stat-value">{userPreviewData.defense_points}</span>
+                        <span className="up-skill-stat" title="Defense">
+                            <span className="up-skill-icon">🛡</span>
+                            <span className="up-skill-value">{userPreviewData.defense_points}</span>
                         </span>
-                        <span className="stat-sep">|</span>
-                        <span className="stat-item">
-                            <span className="stat-label">DRIVING</span>
-                            <span className="stat-value">{userPreviewData.driving_points}</span>
+                        <span className="up-skill-stat" title="Driving">
+                            <span className="up-skill-icon">🏎</span>
+                            <span className="up-skill-value">{userPreviewData.driving_points}</span>
                         </span>
                     </div>
                 </>

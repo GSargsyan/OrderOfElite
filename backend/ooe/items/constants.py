@@ -62,6 +62,49 @@ AIRPLANES = {
     },
 }
 
+GUNS = {
+    'b_92': {
+        'name': 'B-92',
+        'price': 5000,
+        'attack_multiplier': 1,
+    },
+    'g19_c': {
+        'name': 'G19-C',
+        'price': 10000,
+        'attack_multiplier': 1.2,
+    },
+    'krasny_47': {
+        'name': 'Krasny 47',
+        'price': 40000,
+        'attack_multiplier': 1.5,
+    },
+    'apex_15': {
+        'name': 'Apex-15',
+        'price': 100000,
+        'attack_multiplier': 2,
+    },
+    'a1_augmented': {
+        'name': 'A1 Augmented',
+        'price': 200000,
+        'attack_multiplier': 2.5,
+    },
+    'markov_svm': {
+        'name': 'Markov SVM',
+        'price': 400000,
+        'attack_multiplier': 2.8,
+    },
+    'whisper': {
+        'name': 'Whisper',
+        'price': 650000,
+        'attack_multiplier': 3.3,
+    },
+    'intervention': {
+        'name': 'Intervention',
+        'price': 1000000,
+        'attack_multiplier': 4,
+    },
+}
+
 CARS = {
     'apex_type_c200': {
         'name': 'Apex Type-C200',
