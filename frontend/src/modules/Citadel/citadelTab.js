@@ -317,7 +317,7 @@ function CitadelTab() {
                     {error && <div className="citadel-error">{error}</div>}
 
                     <button
-                        className="btn-citadel"
+                        className="btn-primary-action"
                         disabled={!isDurationValid || isSubmitting}
                         onClick={handleEnter}
                     >

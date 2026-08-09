@@ -1,5 +1,5 @@
 """
-ASGI config for orderofelites project.
+ASGI config for orderofelite project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

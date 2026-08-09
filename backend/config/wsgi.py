@@ -1,5 +1,5 @@
 """
-WSGI config for orderofelites project.
+WSGI config for orderofelite project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

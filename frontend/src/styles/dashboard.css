@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   ORDER OF ELITES — Dashboard Theme
+   ORDER OF ELITE — Dashboard Theme
    Dark luxury / John Wick Continental style
    ═══════════════════════════════════════════════════════════ */
 
@@ -14,16 +14,17 @@
   --bg-card: rgba(12, 18, 30, 0.80);
 
   /* Glass */
-  --glass-border: rgba(100, 180, 255, 0.12);
-  --glass-shine: rgba(100, 180, 255, 0.04);
+  --glass-border: rgba(140, 165, 185, 0.14);
+  --glass-shine: rgba(150, 170, 190, 0.05);
 
   /* Accent colours */
-  --accent-cyan: #4fc3f7;
-  --accent-cyan-dim: #2a7ea8;
+  --accent-cyan: #5b93b0;
+  --accent-cyan-dim: #365164;
   --accent-gold: #d4a84b;
   --accent-gold-dim: #8a6a2e;
   --accent-green: #66bb6a;
-  --accent-red: #ef5350;
+  --accent-red: #b8383a;
+  --accent-red-dim: #6e2325;
   --accent-magenta: #e040a0;
 
   /* Text */
@@ -32,8 +33,10 @@
   --text-muted: #556677;
 
   /* Glow */
-  --glow-cyan: 0 0 5px rgba(79, 195, 247, 0.25);
+  --glow-cyan: 0 0 4px rgba(91, 147, 176, 0.18);
   --glow-gold: 0 0 15px rgba(212, 168, 75, 0.2);
+  --glow-red: 0 0 12px rgba(184, 56, 58, 0.22);
+  --glow-green: 0 0 10px rgba(102, 187, 106, 0.18);
 
   /* Typography */
   --font-display: 'Orbitron', sans-serif;
@@ -135,11 +138,48 @@ button {
 }
 
 .glass-panel:hover {
-  border-color: rgba(100, 180, 255, 0.22);
+  border-color: rgba(150, 175, 195, 0.24);
   box-shadow:
     inset 0 1px 0 var(--glass-shine),
     0 8px 32px rgba(0, 0, 0, 0.5),
     var(--glow-cyan);
+}
+
+
+/* ── Primary Action Button ──────────────────────────────────
+   Reserved for the single highest-stakes action on a tab
+   (Travel, Enter Citadel, Forge Seal, etc.) — gold stays rare
+   and meaningful, not the default button treatment. ──────── */
+.btn-primary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--bg-deep);
+  background: linear-gradient(135deg, var(--accent-gold-dim), var(--accent-gold));
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-med);
+  border: none;
+  box-shadow: 0 4px 16px rgba(212, 168, 75, 0.25);
+}
+
+.btn-primary-action:hover:not(:disabled) {
+  filter: brightness(1.12);
+  box-shadow: 0 6px 24px rgba(212, 168, 75, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary-action:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 
@@ -164,8 +204,8 @@ button {
   letter-spacing: 2px;
   color: var(--text-primary);
   text-shadow:
-    0 0 30px rgba(79, 195, 247, 0.3),
-    0 0 60px rgba(79, 195, 247, 0.1);
+    0 0 24px rgba(212, 168, 75, 0.18),
+    0 0 48px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
   flex-shrink: 0;
   grid-column: 1;
@@ -173,7 +213,8 @@ button {
 }
 
 .game-title .accent {
-  color: var(--accent-cyan);
+  color: var(--accent-gold);
+  font-weight: 400;
 }
 
 /* Server clock */
@@ -241,9 +282,10 @@ button {
 }
 
 .user-preview-money {
-  color: #ffffff;
+  color: var(--accent-gold);
   font-size: 18px;
   margin-left: auto;
+  font-weight: 700;
 }
 
 .animated-money-container {
@@ -271,13 +313,11 @@ button {
 }
 
 .diff-positive {
-  color: #4ade80;
-  /* Green */
+  color: var(--accent-green);
 }
 
 .diff-negative {
-  color: #f87171;
-  /* Red */
+  color: var(--accent-red);
 }
 
 @keyframes fadeUpOut {
@@ -362,7 +402,7 @@ button {
   background: linear-gradient(90deg, var(--accent-cyan-dim), var(--accent-cyan));
   border-radius: 2px;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 8px rgba(79, 195, 247, 0.5);
+  box-shadow: 0 0 6px rgba(91, 147, 176, 0.4);
   position: relative;
 }
 
@@ -397,8 +437,8 @@ button {
    CHAT PANEL (Left)
    ═══════════════════════════════════════════════════════════ */
 .chat-panel {
-  width: 280px;
-  min-width: 240px;
+  width: 340px;
+  min-width: 300px;
   max-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
@@ -491,7 +531,7 @@ button {
   flex-direction: column;
   gap: 4px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(79, 195, 247, 0.2) transparent;
+  scrollbar-color: rgba(91, 147, 176, 0.25) transparent;
 }
 
 .chat-messages-area::-webkit-scrollbar {
@@ -503,7 +543,7 @@ button {
 }
 
 .chat-messages-area::-webkit-scrollbar-thumb {
-  background: rgba(79, 195, 247, 0.2);
+  background: rgba(91, 147, 176, 0.25);
   border-radius: 2px;
 }
 
@@ -653,7 +693,7 @@ button {
   font-size: 0.8rem;
   color: var(--text-primary);
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(100, 180, 255, 0.1);
+  border: 1px solid rgba(140, 165, 185, 0.14);
   border-radius: var(--radius-sm);
   outline: none;
   transition: border-color var(--transition-fast);
@@ -666,7 +706,7 @@ button {
 
 .chat-input-field:focus {
   border-color: var(--accent-cyan-dim);
-  box-shadow: 0 0 8px rgba(79, 195, 247, 0.15);
+  box-shadow: 0 0 8px rgba(91, 147, 176, 0.15);
 }
 
 .chat-send-btn {
@@ -700,7 +740,7 @@ button {
   flex: 1;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(79, 195, 247, 0.2) transparent;
+  scrollbar-color: rgba(91, 147, 176, 0.25) transparent;
 }
 
 .dm-conversation-row {
@@ -711,7 +751,7 @@ button {
 }
 
 .dm-conversation-row:hover {
-  background: rgba(79, 195, 247, 0.05);
+  background: rgba(91, 147, 176, 0.06);
 }
 
 .dm-conv-top-row {
@@ -801,7 +841,7 @@ button {
 }
 
 .dm-back-btn:hover {
-  background: rgba(79, 195, 247, 0.1);
+  background: rgba(91, 147, 176, 0.12);
   color: var(--text-primary);
 }
 
@@ -843,8 +883,8 @@ button {
 
 .dm-message-bubble.dm-sent {
   align-self: flex-end;
-  background: rgba(79, 195, 247, 0.12);
-  border: 1px solid rgba(79, 195, 247, 0.15);
+  background: rgba(91, 147, 176, 0.14);
+  border: 1px solid rgba(91, 147, 176, 0.18);
   border-bottom-right-radius: 2px;
 }
 
@@ -877,6 +917,7 @@ button {
    ═══════════════════════════════════════════════════════════ */
 .central-panel {
   flex: 1;
+  max-width: 900px;
   min-height: 500px;
   padding: 24px;
   overflow-y: auto;
@@ -890,7 +931,7 @@ button {
   color: var(--accent-cyan);
   letter-spacing: 1px;
   margin-bottom: 8px;
-  text-shadow: 0 0 15px rgba(79, 195, 247, 0.2);
+  text-shadow: 0 0 12px rgba(91, 147, 176, 0.18);
 }
 
 .central-panel p {
@@ -989,7 +1030,7 @@ button {
   text-transform: uppercase;
   color: var(--text-primary);
   background: transparent;
-  border: 1px solid rgba(79, 195, 247, 0.3);
+  border: 1px solid rgba(91, 147, 176, 0.35);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-med);
@@ -998,13 +1039,13 @@ button {
 .btn-mission-start:hover:not(:disabled) {
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
-  box-shadow: 0 0 15px rgba(79, 195, 247, 0.2);
+  box-shadow: var(--glow-cyan);
 }
 
 .btn-mission-start:disabled {
   opacity: 0.35;
   cursor: not-allowed;
-  border-color: rgba(100, 180, 255, 0.1);
+  border-color: rgba(140, 165, 185, 0.12);
 }
 
 /* Extraction mission (2-player, wider card) */
@@ -1106,7 +1147,7 @@ button {
   text-transform: uppercase;
   color: var(--text-primary);
   background: transparent;
-  border: 1px solid rgba(79, 195, 247, 0.3);
+  border: 1px solid rgba(91, 147, 176, 0.35);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-med);
@@ -1118,7 +1159,7 @@ button {
 }
 
 .btn-extraction-danger {
-  border-color: rgba(239, 83, 80, 0.3);
+  border-color: rgba(184, 56, 58, 0.35);
 }
 
 .btn-extraction-danger:hover {
@@ -1234,7 +1275,7 @@ button {
 .menu-btn:hover {
   color: var(--text-primary);
   background: var(--bg-panel-hover);
-  border-color: rgba(100, 180, 255, 0.25);
+  border-color: rgba(150, 175, 195, 0.25);
   box-shadow: var(--glow-cyan);
   transform: translateX(-2px);
 }
@@ -1247,7 +1288,7 @@ button {
   color: var(--accent-cyan);
   font-weight: 600;
   background: var(--bg-panel-hover);
-  border-color: rgba(79, 195, 247, 0.3);
+  border-color: rgba(91, 147, 176, 0.3);
   box-shadow: var(--glow-cyan);
 }
 
@@ -1276,13 +1317,13 @@ button {
   max-width: 95vw;
   max-height: 85vh;
   padding: 24px;
-  border: 1px solid rgba(79, 195, 247, 0.2);
+  border: 1px solid rgba(91, 147, 176, 0.2);
   border-radius: var(--radius-xl);
   background: rgba(8, 11, 18, 0.96);
   backdrop-filter: blur(25px);
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(100, 180, 255, 0.1);
+    inset 0 1px 0 rgba(140, 165, 185, 0.1);
   animation: slideUp 300ms cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
@@ -1296,7 +1337,7 @@ button {
   text-transform: uppercase;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(79, 195, 247, 0.15);
+  border-bottom: 1px solid rgba(91, 147, 176, 0.15);
   flex-shrink: 0;
 }
 
@@ -1309,7 +1350,7 @@ button {
 
 .profile-stats-card {
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(100, 180, 255, 0.07);
+  border: 1px solid rgba(140, 165, 185, 0.09);
   border-radius: var(--radius-lg);
   padding: 16px;
   margin-bottom: 16px;
@@ -1409,7 +1450,7 @@ button {
 
 .review-item {
   background: rgba(12, 18, 30, 0.5);
-  border: 1px solid rgba(100, 180, 255, 0.05);
+  border: 1px solid rgba(140, 165, 185, 0.06);
   border-radius: var(--radius-md);
   padding: 12px;
   display: flex;
@@ -1454,7 +1495,7 @@ button {
 
 /* Write Review Styles */
 .write-review-section {
-  border-top: 1px solid rgba(79, 195, 247, 0.15);
+  border-top: 1px solid rgba(91, 147, 176, 0.15);
   padding-top: 16px;
   margin-bottom: 16px;
   flex-shrink: 0;
@@ -1493,7 +1534,7 @@ button {
   font-size: 0.85rem;
   color: var(--text-primary);
   background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(100, 180, 255, 0.15);
+  border: 1px solid rgba(140, 165, 185, 0.17);
   border-radius: var(--radius-md);
   outline: none;
   resize: none;
@@ -1542,7 +1583,7 @@ button {
   display: flex;
   gap: 10px;
   flex-shrink: 0;
-  border-top: 1px solid rgba(79, 195, 247, 0.1);
+  border-top: 1px solid rgba(91, 147, 176, 0.1);
   padding-top: 14px;
 }
 
@@ -1575,7 +1616,7 @@ button {
 
 .btn-profile.ghost {
   background: transparent;
-  border: 1px solid rgba(100, 180, 255, 0.2);
+  border: 1px solid rgba(140, 165, 185, 0.2);
   color: var(--text-secondary);
 }
 
@@ -1651,36 +1692,54 @@ button {
 .skills-container {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
-/* ── Skill Card ─────────────────────────────────────────── */
-.skill-card {
+.skills-intro-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 620px;
+}
+
+/* ── Training Panel ─────────────────────────────────────── */
+.training-panel {
   padding: 22px 24px;
   background: var(--bg-card);
   border: 1px solid var(--glass-border);
+  border-left: 2px solid rgba(91, 147, 176, 0.4);
   border-radius: var(--radius-lg);
   transition: all var(--transition-med);
 }
 
-.skill-card:hover {
-  border-color: rgba(100, 180, 255, 0.22);
-  box-shadow: 0 0 24px rgba(79, 195, 247, 0.04);
+.training-panel:hover {
+  border-color: var(--glass-border);
+  border-left-color: var(--accent-cyan);
+  box-shadow: 0 0 24px rgba(91, 147, 176, 0.05);
 }
 
-.skill-header {
+.training-panel.pro {
+  border-left-color: rgba(212, 168, 75, 0.5);
+}
+
+.training-panel.pro:hover {
+  border-left-color: var(--accent-gold);
+  box-shadow: 0 0 24px rgba(212, 168, 75, 0.06);
+}
+
+.training-panel-header {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(200, 210, 230, 0.06);
 }
 
-.skill-icon {
-  font-size: 1.15rem;
-  line-height: 1;
-}
-
-.skill-card h3 {
+.training-panel h3 {
   font-family: var(--font-display);
   font-size: 0.95rem;
   color: var(--accent-cyan);
@@ -1689,67 +1748,14 @@ button {
   margin: 0;
 }
 
-.skill-description {
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-  margin-bottom: 16px;
-  max-width: 540px;
+.training-panel.pro h3 {
+  color: var(--accent-gold);
 }
 
-/* ── Training Subsections ───────────────────────────────── */
-.training-subsection {
-  background: rgba(8, 12, 22, 0.55);
-  border: 1px solid rgba(100, 180, 255, 0.07);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
-  margin-bottom: 10px;
-  transition: border-color var(--transition-med);
-}
-
-.training-subsection:last-child {
-  margin-bottom: 0;
-}
-
-.training-subsection:hover {
-  border-color: rgba(100, 180, 255, 0.14);
-}
-
-.training-subsection.pro {
-  border-color: rgba(212, 168, 75, 0.12);
-}
-
-.training-subsection.pro:hover {
-  border-color: rgba(212, 168, 75, 0.22);
-}
-
-.training-label {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-}
-
-.training-subsection.pro .training-label {
-  color: var(--accent-gold-dim);
-}
-
-/* ── Training Row ───────────────────────────────────────── */
-.training-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.training-info {
+.training-panel-meta {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .training-cost {
@@ -1759,7 +1765,7 @@ button {
   color: var(--text-primary);
 }
 
-.training-subsection.pro .training-cost {
+.training-panel.pro .training-cost {
   color: var(--accent-gold);
 }
 
@@ -1789,67 +1795,127 @@ button {
   font-size: 0.72rem;
 }
 
-/* ── Train Buttons ──────────────────────────────────────── */
-.btn-train {
-  padding: 7px 22px;
-  min-width: 82px;
+/* ── Skill Selector (segmented) ─────────────────────────── */
+.skill-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.skill-select-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: rgba(8, 12, 22, 0.55);
+  border: 1px solid rgba(140, 165, 185, 0.1);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.skill-select-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.skill-select-label {
   font-family: var(--font-ui);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.skill-select-value {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.skill-select-btn:hover {
+  border-color: rgba(91, 147, 176, 0.3);
+  background: var(--bg-panel-hover);
+}
+
+.skill-select-btn.active {
+  border-color: var(--accent-cyan);
+  background: rgba(91, 147, 176, 0.08);
+  box-shadow: var(--glow-cyan);
+}
+
+.skill-select-btn.active .skill-select-label,
+.skill-select-btn.active .skill-select-value {
+  color: var(--text-primary);
+}
+
+.skill-select-btn.pro:hover {
+  border-color: rgba(212, 168, 75, 0.35);
+}
+
+.skill-select-btn.pro.active {
+  border-color: var(--accent-gold);
+  background: rgba(212, 168, 75, 0.08);
+  box-shadow: var(--glow-gold);
+}
+
+.skill-description {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 18px;
+  max-width: 540px;
+}
+
+/* ── Train Button ────────────────────────────────────────── */
+.btn-train-main {
+  width: 100%;
+  padding: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
   text-transform: uppercase;
   border-radius: var(--radius-md);
   transition: all var(--transition-med);
   cursor: pointer;
   text-align: center;
-  flex-shrink: 0;
 }
 
-/* Free train button */
-.btn-train.free {
+.btn-train-main.free {
   color: var(--accent-cyan);
   background: transparent;
-  border: 1px solid rgba(79, 195, 247, 0.3);
+  border: 1px solid rgba(91, 147, 176, 0.35);
 }
 
-.btn-train.free:hover:not(:disabled) {
-  background: rgba(79, 195, 247, 0.08);
+.btn-train-main.free:hover:not(:disabled) {
+  background: rgba(91, 147, 176, 0.1);
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 16px rgba(79, 195, 247, 0.15);
+  box-shadow: var(--glow-cyan);
 }
 
-/* Pro train button — gold premium accent */
-.btn-train.pro {
+.btn-train-main.pro {
   color: var(--accent-gold);
   background: transparent;
-  border: 1px solid rgba(212, 168, 75, 0.3);
+  border: 1px solid rgba(212, 168, 75, 0.35);
 }
 
-.btn-train.pro:hover:not(:disabled) {
+.btn-train-main.pro:hover:not(:disabled) {
   background: rgba(212, 168, 75, 0.08);
   border-color: var(--accent-gold);
-  box-shadow: 0 0 16px rgba(212, 168, 75, 0.18);
+  box-shadow: var(--glow-gold);
 }
 
-/* Cooldown state */
-.btn-train.cooldown {
+.btn-train-main.cooldown {
   pointer-events: none;
+  opacity: 0.5;
 }
 
-.btn-train.cooldown.free {
-  color: var(--accent-cyan-dim);
-  border-color: rgba(79, 195, 247, 0.15);
-  background: rgba(79, 195, 247, 0.03);
-}
-
-.btn-train.cooldown.pro {
-  color: var(--accent-gold-dim);
-  border-color: rgba(212, 168, 75, 0.15);
-  background: rgba(212, 168, 75, 0.03);
-}
-
-/* Disabled state (other skills in tier) */
-.btn-train:disabled {
+.btn-train-main:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
@@ -1881,13 +1947,13 @@ button {
 
 .items-sub-tab:hover {
   color: var(--text-primary);
-  border-color: rgba(100, 180, 255, 0.25);
+  border-color: rgba(150, 175, 195, 0.25);
 }
 
 .items-sub-tab.active {
   color: var(--accent-cyan);
   background: var(--bg-panel-hover);
-  border-color: rgba(79, 195, 247, 0.3);
+  border-color: rgba(91, 147, 176, 0.35);
 }
 
 .item-card {
@@ -1902,7 +1968,7 @@ button {
 }
 
 .item-card:hover {
-  border-color: rgba(100, 180, 255, 0.2);
+  border-color: rgba(150, 175, 195, 0.22);
   transform: translateY(-1px);
 }
 
@@ -1984,7 +2050,7 @@ button {
 .btn-buy:hover {
   border-color: var(--accent-green);
   color: var(--accent-green);
-  box-shadow: 0 0 15px rgba(102, 187, 106, 0.2);
+  box-shadow: var(--glow-green);
 }
 
 .btn-sell {
@@ -2002,13 +2068,13 @@ button {
   align-self: flex-start;
   color: var(--text-primary);
   background: transparent;
-  border: 1px solid rgba(239, 83, 80, 0.3);
+  border: 1px solid rgba(184, 56, 58, 0.35);
 }
 
 .btn-sell:hover {
   border-color: var(--accent-red);
   color: var(--accent-red);
-  box-shadow: 0 0 15px rgba(239, 83, 80, 0.2);
+  box-shadow: var(--glow-red);
 }
 
 
@@ -2042,7 +2108,7 @@ button {
   font-size: 0.88rem;
   color: var(--text-primary);
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(100, 180, 255, 0.15);
+  border: 1px solid rgba(140, 165, 185, 0.16);
   border-radius: var(--radius-md);
   outline: none;
   transition: border-color var(--transition-fast);
@@ -2054,7 +2120,7 @@ button {
 
 .search-input:focus {
   border-color: var(--accent-cyan-dim);
-  box-shadow: 0 0 10px rgba(79, 195, 247, 0.15);
+  box-shadow: 0 0 10px rgba(91, 147, 176, 0.18);
 }
 
 .btn-search {
@@ -2141,17 +2207,18 @@ button {
 .homepage-header {
   position: relative;
   z-index: 10;
-  padding: 28px 40px;
+  padding: 40px 40px 28px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   animation: homepageFadeIn 600ms ease both;
 }
 
 .game-title {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  letter-spacing: 5px;
+  letter-spacing: 7px;
   text-transform: uppercase;
   color: rgba(210, 210, 220, 0.9);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
@@ -2160,7 +2227,14 @@ button {
 .game-title .accent {
   font-weight: 400;
   color: rgba(210, 185, 140, 0.7);
-  letter-spacing: 3px;
+  letter-spacing: 5px;
+}
+
+.game-title-rule {
+  margin-top: 14px;
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 185, 140, 0.55), transparent);
 }
 
 /* ── Footer ──────────────────────────────────────────────── */
@@ -2297,7 +2371,7 @@ button {
 
 .highlight-text {
   color: var(--accent-cyan);
-  text-shadow: 0 0 6px rgba(79, 195, 247, 0.3);
+  text-shadow: 0 0 6px rgba(91, 147, 176, 0.3);
 }
 
 /* ── Elites Table ────────────────────────────────────────── */
@@ -2491,12 +2565,12 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(79, 195, 247, 0.15);
+  background: rgba(91, 147, 176, 0.15);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(79, 195, 247, 0.3);
+  background: rgba(91, 147, 176, 0.3);
 }
 
 
@@ -2597,7 +2671,7 @@ button {
 }
 
 .bm-drug-card:hover {
-  border-color: rgba(100, 180, 255, 0.18);
+  border-color: rgba(140, 165, 185, 0.2);
 }
 
 .bm-drug-title {
@@ -2607,7 +2681,7 @@ button {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--accent-cyan);
-  text-shadow: 0 0 12px rgba(79, 195, 247, 0.18);
+  text-shadow: 0 0 12px rgba(91, 147, 176, 0.18);
   margin-bottom: 18px;
 }
 
@@ -2619,7 +2693,7 @@ button {
   overflow-x: auto;
   padding-bottom: 4px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(79, 195, 247, 0.2) transparent;
+  scrollbar-color: rgba(91, 147, 176, 0.2) transparent;
 }
 
 .bm-chain {
@@ -2647,13 +2721,13 @@ button {
   gap: 6px;
   padding: 14px 10px;
   background: rgba(8, 12, 22, 0.55);
-  border: 1px solid rgba(100, 180, 255, 0.07);
+  border: 1px solid rgba(140, 165, 185, 0.09);
   border-radius: var(--radius-md);
   transition: border-color var(--transition-med), background var(--transition-med);
 }
 
 .bm-node:hover {
-  border-color: rgba(100, 180, 255, 0.16);
+  border-color: rgba(140, 165, 185, 0.18);
   background: rgba(10, 15, 26, 0.7);
 }
 
@@ -2662,7 +2736,7 @@ button {
   height: 132px;
   object-fit: cover;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(100, 180, 255, 0.1);
+  border: 1px solid rgba(140, 165, 185, 0.1);
   margin-bottom: 2px;
   filter: saturate(0.85);
 }
@@ -2712,17 +2786,17 @@ button {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--accent-cyan);
-  background: rgba(79, 195, 247, 0.06);
-  border: 1px solid rgba(79, 195, 247, 0.2);
+  background: rgba(91, 147, 176, 0.06);
+  border: 1px solid rgba(91, 147, 176, 0.2);
   border-radius: 50%;
   transition: all var(--transition-fast);
   line-height: 1;
 }
 
 .bm-step-btn:hover {
-  background: rgba(79, 195, 247, 0.15);
+  background: rgba(91, 147, 176, 0.15);
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 8px rgba(79, 195, 247, 0.25);
+  box-shadow: 0 0 8px rgba(91, 147, 176, 0.25);
 }
 
 .bm-step-count {
@@ -2925,8 +2999,8 @@ button {
   font-size: 0.8rem;
   font-style: italic;
   color: var(--text-muted);
-  background: rgba(79, 195, 247, 0.04);
-  border: 1px solid rgba(79, 195, 247, 0.1);
+  background: rgba(91, 147, 176, 0.04);
+  border: 1px solid rgba(91, 147, 176, 0.1);
   border-radius: var(--radius-md);
   padding: 10px 14px;
   margin-bottom: 24px;
@@ -2980,13 +3054,13 @@ button {
 }
 
 .travel-city-card:hover {
-  border-color: rgba(79, 195, 247, 0.25);
+  border-color: rgba(91, 147, 176, 0.25);
   background: var(--bg-panel-hover);
 }
 
 .travel-city-card.selected {
-  border-color: rgba(79, 195, 247, 0.5);
-  background: rgba(79, 195, 247, 0.06);
+  border-color: rgba(91, 147, 176, 0.4);
+  background: rgba(91, 147, 176, 0.06);
   box-shadow: var(--glow-cyan);
 }
 
@@ -3081,7 +3155,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(79, 195, 247, 0.08);
+  background: rgba(91, 147, 176, 0.08);
   border: 1px solid var(--glass-border);
   font-size: 1.8rem;
   color: var(--accent-cyan);
@@ -3162,46 +3236,15 @@ button {
   color: var(--accent-gold);
 }
 
-/* ── Travel Button ── */
-.btn-travel {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 32px;
-  font-family: var(--font-ui);
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--bg-deep);
-  background: linear-gradient(135deg, var(--accent-gold-dim), var(--accent-gold));
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-med);
-  border: none;
-  box-shadow: 0 4px 16px rgba(212, 168, 75, 0.25);
-}
-
-.btn-travel:hover:not(:disabled) {
-  filter: brightness(1.12);
-  box-shadow: 0 6px 24px rgba(212, 168, 75, 0.4);
-  transform: translateY(-1px);
-}
-
-.btn-travel:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
+/* ── Travel Button — uses shared .btn-primary-action (see Glass Panel Mixin section) ── */
 
 /* ── Error ── */
 .travel-error {
   font-family: var(--font-body);
   font-size: 0.82rem;
   color: var(--accent-red);
-  background: rgba(239, 83, 80, 0.08);
-  border: 1px solid rgba(239, 83, 80, 0.2);
+  background: rgba(184, 56, 58, 0.08);
+  border: 1px solid rgba(184, 56, 58, 0.25);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   margin-bottom: 12px;
@@ -3211,15 +3254,15 @@ button {
 .travel-active-flight {
   text-align: center;
   padding: 32px 20px;
-  border: 1px solid rgba(79, 195, 247, 0.2);
+  border: 1px solid rgba(91, 147, 176, 0.2);
   border-radius: var(--radius-lg);
-  background: rgba(79, 195, 247, 0.04);
+  background: rgba(91, 147, 176, 0.04);
   animation: flightPulse 4s ease-in-out infinite;
 }
 
 @keyframes flightPulse {
-  0%, 100% { box-shadow: 0 0 0 rgba(79, 195, 247, 0); }
-  50% { box-shadow: 0 0 20px rgba(79, 195, 247, 0.15); }
+  0%, 100% { box-shadow: 0 0 0 rgba(91, 147, 176, 0); }
+  50% { box-shadow: 0 0 20px rgba(91, 147, 176, 0.15); }
 }
 
 .travel-active-header {
@@ -3359,7 +3402,7 @@ button {
   gap: 8px;
   padding: 24px 32px;
   background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(79, 195, 247, 0.2);
+  border: 1px solid rgba(91, 147, 176, 0.2);
   border-radius: var(--radius-xl);
   backdrop-filter: blur(6px);
   pointer-events: none;
@@ -3474,14 +3517,14 @@ button {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(79, 195, 247, 0.18);
+  background: rgba(91, 147, 176, 0.18);
   transition: background 0.4s ease, box-shadow 0.4s ease;
   flex-shrink: 0;
 }
 
 .flight-route-dot--lit {
   background: var(--accent-cyan);
-  box-shadow: 0 0 6px rgba(79, 195, 247, 0.7);
+  box-shadow: 0 0 6px rgba(91, 147, 176, 0.6);
   animation: dotPulse 2s ease-in-out infinite;
 }
 
@@ -3685,45 +3728,14 @@ button {
   font-family: var(--font-body);
   font-size: 0.82rem;
   color: var(--accent-red);
-  background: rgba(239, 83, 80, 0.08);
-  border: 1px solid rgba(239, 83, 80, 0.2);
+  background: rgba(184, 56, 58, 0.08);
+  border: 1px solid rgba(184, 56, 58, 0.25);
   border-radius: var(--radius-sm);
   padding: 8px 12px;
   margin-bottom: 12px;
 }
 
-/* ── Enter Button ── */
-.btn-citadel {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 32px;
-  font-family: var(--font-ui);
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--bg-deep);
-  background: linear-gradient(135deg, var(--accent-gold-dim), var(--accent-gold));
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-med);
-  border: none;
-  box-shadow: 0 4px 16px rgba(212, 168, 75, 0.25);
-}
-
-.btn-citadel:hover:not(:disabled) {
-  filter: brightness(1.12);
-  box-shadow: 0 6px 24px rgba(212, 168, 75, 0.4);
-  transform: translateY(-1px);
-}
-
-.btn-citadel:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
+/* ── Enter Button — uses shared .btn-primary-action (see Glass Panel Mixin section) ── */
 
 /* ── Inside Panel ── */
 .citadel-inside-panel {
@@ -3845,13 +3857,14 @@ button {
 
 .btn-citadel-leave.confirming {
   color: var(--accent-red);
-  border-color: rgba(239, 83, 80, 0.5);
-  background: rgba(239, 83, 80, 0.06);
+  border-color: rgba(184, 56, 58, 0.5);
+  background: rgba(184, 56, 58, 0.08);
+  box-shadow: var(--glow-red);
 }
 
 .btn-citadel-leave.confirming:hover:not(:disabled) {
-  background: rgba(239, 83, 80, 0.12);
-  border-color: rgba(239, 83, 80, 0.7);
+  background: rgba(184, 56, 58, 0.16);
+  border-color: rgba(184, 56, 58, 0.75);
 }
 
 .btn-citadel-leave:disabled {
@@ -3985,12 +3998,12 @@ button {
   font-weight: 600;
   letter-spacing: 1.5px;
   color: var(--accent-red);
-  border: 1px solid rgba(239, 83, 80, 0.4);
+  border: 1px solid rgba(184, 56, 58, 0.4);
   border-radius: var(--radius-sm);
   padding: 2px 6px;
   margin-left: 10px;
   vertical-align: middle;
-  text-shadow: 0 0 8px rgba(239, 83, 80, 0.4);
+  text-shadow: 0 0 8px rgba(184, 56, 58, 0.4);
 }
 
 .premium-tab {
@@ -4076,7 +4089,7 @@ button {
   color: var(--text-secondary);
   line-height: 1.5;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(100, 180, 255, 0.06);
+  border-bottom: 1px solid rgba(140, 165, 185, 0.08);
 }
 
 .premium-privilege-mark {
@@ -4085,31 +4098,7 @@ button {
   font-size: 0.7rem;
 }
 
-.btn-premium-subscribe {
-  display: inline-block;
-  padding: 10px 34px;
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent-gold);
-  background: rgba(212, 168, 75, 0.08);
-  border: 1px solid rgba(212, 168, 75, 0.4);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all var(--transition-med);
-}
-
-.btn-premium-subscribe:hover:not(:disabled) {
-  border-color: var(--accent-gold);
-  box-shadow: var(--glow-gold);
-}
-
-.btn-premium-subscribe:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
+/* ── Subscribe Button — uses shared .btn-primary-action (see Glass Panel Mixin section) ── */
 
 .premium-active-note {
   font-family: var(--font-ui);
@@ -4136,7 +4125,7 @@ button {
 }
 
 .btn-premium-cancel:hover:not(:disabled) {
-  border-color: rgba(239, 83, 80, 0.4);
+  border-color: rgba(184, 56, 58, 0.4);
   color: var(--accent-red);
 }
 
@@ -4309,7 +4298,7 @@ button {
   font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--accent-red);
-  border: 1px solid rgba(239, 83, 80, 0.25);
+  border: 1px solid rgba(184, 56, 58, 0.3);
   border-radius: var(--radius-md);
   padding: 8px 12px;
 }
@@ -4352,8 +4341,8 @@ button {
 
 .seal-status-active { color: var(--accent-gold); border-color: rgba(212, 168, 75, 0.4); }
 .seal-status-fulfilled { color: var(--accent-green); border-color: rgba(102, 187, 106, 0.4); }
-.seal-status-breached { color: var(--accent-red); border-color: rgba(239, 83, 80, 0.4); }
-.seal-status-pending_signature { color: var(--accent-cyan); border-color: rgba(79, 195, 247, 0.4); }
+.seal-status-breached { color: var(--accent-red); border-color: rgba(184, 56, 58, 0.4); }
+.seal-status-pending_signature { color: var(--accent-cyan); border-color: rgba(91, 147, 176, 0.35); }
 
 .seal-card-text {
   font-family: var(--font-body);
@@ -4385,7 +4374,7 @@ button {
 
 .seal-clause-armed { color: var(--accent-gold); border-color: rgba(212, 168, 75, 0.35); }
 .seal-clause-fulfilled { color: var(--accent-green); border-color: rgba(102, 187, 106, 0.35); }
-.seal-clause-breached { color: var(--accent-red); border-color: rgba(239, 83, 80, 0.35); }
+.seal-clause-breached { color: var(--accent-red); border-color: rgba(184, 56, 58, 0.4); }
 
 .seal-card-actions {
   display: flex;
@@ -4416,8 +4405,8 @@ button {
 
 .btn-seal-primary.confirming {
   color: var(--accent-red);
-  border-color: rgba(239, 83, 80, 0.5);
-  background: rgba(239, 83, 80, 0.06);
+  border-color: rgba(184, 56, 58, 0.5);
+  background: rgba(184, 56, 58, 0.08);
 }
 
 .btn-seal-primary:disabled {
@@ -4442,12 +4431,12 @@ button {
 
 .btn-seal-secondary:hover:not(:disabled) {
   color: var(--text-primary);
-  border-color: rgba(100, 180, 255, 0.3);
+  border-color: rgba(140, 165, 185, 0.3);
 }
 
 .btn-seal-secondary.confirming {
   color: var(--accent-red);
-  border-color: rgba(239, 83, 80, 0.5);
+  border-color: rgba(184, 56, 58, 0.5);
 }
 
 .btn-seal-secondary:disabled {
@@ -4516,7 +4505,7 @@ button {
 }
 
 .seal-reading {
-  background: rgba(100, 180, 255, 0.03);
+  background: rgba(140, 165, 185, 0.04);
   border-left: 2px solid var(--glass-border);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
@@ -4621,6 +4610,8 @@ button {
   box-shadow: var(--glow-gold);
 }
 
+/* Red, not gold — the one CTA in the app that stays outside the gold
+   "important action" pattern on purpose: this is the kill action. */
 .btn-assassination {
   width: 100%;
   padding: 12px 32px;
@@ -4629,8 +4620,8 @@ button {
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--bg-deep);
-  background: linear-gradient(135deg, var(--accent-gold-dim), var(--accent-gold));
+  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--accent-red-dim), var(--accent-red));
   border-radius: var(--radius-md);
   border: none;
   cursor: not-allowed;
@@ -4643,8 +4634,8 @@ button {
   font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--accent-red);
-  background: rgba(239, 83, 80, 0.05);
-  border: 1px solid rgba(239, 83, 80, 0.25);
+  background: rgba(184, 56, 58, 0.07);
+  border: 1px solid rgba(184, 56, 58, 0.3);
   border-radius: var(--radius-md);
   padding: 10px 14px;
   margin-bottom: 14px;

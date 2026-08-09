@@ -1,6 +1,6 @@
-# Order of Elites [[orderofelites.com](https://orderofelites.com)]
+# Order of Elite [[orderofelite.com](https://orderofelite.com)]
 
-Order of Elites is an online text-based PBBG (Persistent Browser-Based Game). The virtual world is a John Wick-inspired universe where players are elite assassins living under a strict code. Players can earn money through missions, kill each other (featuring permanent death), chat, and send DMs. The website's aesthetic is designed to imitate a luxury, neo-noir style.
+Order of Elite is an online text-based PBBG (Persistent Browser-Based Game). The virtual world is a John Wick-inspired universe where players are elite assassins living under a strict code. Players can earn money through missions, kill each other (featuring permanent death), chat, and send DMs. The website's aesthetic is designed to imitate a luxury, neo-noir style.
 
 ## Key Design Features
 Glassmorphism panels — Semi-transparent backgrounds with backdrop-filter: blur and subtle border glow on hover.
@@ -29,7 +29,7 @@ Server clock — Live UTC clock in Orbitron font with cyan glow
 - The head of the Citadel in each city is called the **Chairman of the Citadel**.
 - **Syndicates** are clans of Elites with shared budgets and goals.
 - The ruling body of the Elites is the **Grand Council**, which consists of 5 members, rotated each month.
-- The **Order of Elites** is a set of rules written by the Grand Council and is enforced by the Chairmans of the Citadels.
+- The **Order of Elite** is a set of rules written by the Grand Council and is enforced by the Chairmans of the Citadels.
 - **Chairmans of the Citadels** are assigned by the Grand Council.
 - If a player breaks any rule of the Order of Elite, they are automatically **Blacklisted** or tagged as **Persona non-grata**.
 - **Seals** are promises between players, automatically enforced by the game.

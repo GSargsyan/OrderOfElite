@@ -276,7 +276,7 @@ function TravelTab() {
                     {error && <div className="travel-error">{error}</div>}
 
                     <button
-                        className="btn-travel"
+                        className="btn-primary-action"
                         disabled={!selectedCity || !selectedAirplane || isSubmitting}
                         onClick={handleTravel}
                     >

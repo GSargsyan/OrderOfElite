@@ -52,7 +52,8 @@ There is no repo-wide lint/format command configured — match existing style in
 
 ## Deployment authorization
 
-The production droplet is reachable over SSH using the local `~/.ssh/id_ed25519` key (already authorized on the server — no password needed). Claude is authorized to SSH into the droplet and take actions there (deploy, restart services, run remote commands, etc.) whenever the user asks for code to be shipped or for changes to be made in the prod environment. This is not a standing/autonomous permission — only act on prod when explicitly asked in a given request, not on Claude's own initiative.
+The production droplet is reachable over SSH using the local `~/.ssh/id_ed25519` key (already authorized on the server — no password needed). Claude is authorized to SSH into the droplet and take actions there (deploy, restart services, run remote commands, etc.) whenever the user asks for code to be shipped or for changes to be made in the prod environment. This is not a standing/autonomous permission — only act on prod when explicitly asked in a given request, not on Claude's own initiative. Here's the IP address: 64.23.236.13
+Username is standard root. 
 
 ## Verification
 

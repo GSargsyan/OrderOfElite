@@ -26,7 +26,7 @@ function Homepage() {
 
             <div className="homepage-content">
                 <div className="homepage-intro">
-                    <h1 className="homepage-tagline">Join the underworld in a text based assassins game.</h1>
+                    <h1 className="homepage-tagline">An exclusive society for the world's most accomplished assassins.</h1>
                 </div>
                 
                 <div className="homepage-grid">

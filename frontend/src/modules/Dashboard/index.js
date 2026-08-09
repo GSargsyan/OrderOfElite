@@ -130,7 +130,7 @@ function Dashboard() {
             {/* ── Header Bar ─────────────────────────── */}
             <div className="header-bar">
                 <h1 className="game-title">
-                    Order <span className="accent">of</span> Elites
+                    Order <span className="accent">of</span> Elite
                 </h1>
 
                 <UserPreview

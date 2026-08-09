@@ -22,18 +22,16 @@ const SKILL_CONFIG = {
 
 const SKILL_NAMES = ['attack', 'defense', 'driving']
 
-function TrainingRow({ label, isPro, cost, points, cooldownDuration, cooldownRemaining, isAvailable, isDisabled, onTrain }) {
+function TrainingPanel({ title, tier, selected, onSelect, cost, points, cooldownDuration, cooldownRemaining, isAvailable, currentStats, onTrain }) {
     const isCoolingDown = cooldownRemaining > 0
-    const buttonText = isCoolingDown ? formatSeconds(cooldownRemaining) : 'Train'
+    const config = SKILL_CONFIG[selected]
 
     return (
-        <div className={`training-subsection ${isPro ? 'pro' : 'free'}`}>
-            <div className="training-label">{label}</div>
-            <div className="training-row">
-                <div className="training-info">
-                    <span className="training-cost">
-                        {cost === 0 ? 'Free' : formatMoney(cost)}
-                    </span>
+        <div className={`training-panel ${tier}`}>
+            <div className="training-panel-header">
+                <h3>{title}</h3>
+                <div className="training-panel-meta">
+                    <span className="training-cost">{cost === 0 ? 'Free' : formatMoney(cost)}</span>
                     <span className="training-divider">·</span>
                     <span className="training-points">+{points} pt{points !== 1 ? 's' : ''}</span>
                     <span className="training-divider">·</span>
@@ -42,62 +40,40 @@ function TrainingRow({ label, isPro, cost, points, cooldownDuration, cooldownRem
                         {formatSeconds(cooldownDuration)}
                     </span>
                 </div>
-                <button
-                    className={`btn-train ${isPro ? 'pro' : 'free'} ${isCoolingDown ? 'cooldown' : ''}`}
-                    disabled={!isAvailable || isDisabled}
-                    onClick={onTrain}
-                >
-                    {buttonText}
-                </button>
             </div>
-        </div>
-    )
-}
 
-function SkillCard({ skillKey, skillsData, onTrain }) {
-    const config = SKILL_CONFIG[skillKey]
-    const freeKey = `${skillKey}_free`
-    const proKey = `${skillKey}_pro`
-
-    return (
-        <div className="skill-card">
-            <div className="skill-header">
-                <span className="skill-icon">{config.icon}</span>
-                <h3>{config.label}</h3>
+            <div className="skill-selector">
+                {SKILL_NAMES.map(key => (
+                    <button
+                        key={key}
+                        type="button"
+                        className={`skill-select-btn ${tier} ${selected === key ? 'active' : ''}`}
+                        onClick={() => onSelect(key)}
+                    >
+                        <span className="skill-select-icon">{SKILL_CONFIG[key].icon}</span>
+                        <span className="skill-select-label">{SKILL_CONFIG[key].label}</span>
+                        <span className="skill-select-value">{currentStats?.[`${key}_points`] ?? '—'}</span>
+                    </button>
+                ))}
             </div>
+
             <p className="skill-description">{config.description}</p>
 
-            <TrainingRow
-                label="Free Training"
-                isPro={false}
-                cost={0}
-                points={skillsData.free_points}
-                cooldownDuration={skillsData.free_cooldown}
-                cooldownRemaining={skillsData[`${freeKey}_cd`]}
-                isAvailable={skillsData[`${freeKey}_available`]}
-                isDisabled={!skillsData[`${freeKey}_available`] && skillsData[`${freeKey}_cd`] <= 0}
-                onTrain={() => onTrain(freeKey)}
-            />
-
-            <TrainingRow
-                label="Pro Training"
-                isPro={true}
-                cost={skillsData[`${skillKey}_pro_price`]}
-                points={skillsData.pro_points}
-                cooldownDuration={skillsData.pro_cooldown}
-                cooldownRemaining={skillsData[`${proKey}_cd`]}
-                isAvailable={skillsData[`${proKey}_available`]}
-                isDisabled={!skillsData[`${proKey}_available`] && skillsData[`${proKey}_cd`] <= 0}
-                onTrain={() => onTrain(proKey)}
-            />
+            <button
+                className={`btn-train-main ${tier} ${isCoolingDown ? 'cooldown' : ''}`}
+                disabled={!isAvailable}
+                onClick={onTrain}
+            >
+                {isCoolingDown ? formatSeconds(cooldownRemaining) : `Train ${config.label}`}
+            </button>
         </div>
     )
 }
 
 function SkillsTab() {
-    console.log('SkillsTab rendered')
-
     const [skillsData, setSkillsData] = useState(null)
+    const [freeSkill, setFreeSkill] = useState('attack')
+    const [proSkill, setProSkill] = useState('attack')
     const { userPreviewData, updateUserPreviewData } = useContext(UserPreviewCtx)
 
     useEffect(() => {
@@ -106,8 +82,6 @@ function SkillsTab() {
             'method': 'POST',
         })
         .then(response => {
-            console.log('users/get_skills_tab_data')
-
             setSkillsData({
                     ...response.data,
 
@@ -161,7 +135,6 @@ function SkillsTab() {
     }, [skillsData])
 
     const startPractice = (skillName) => {
-        console.log(`users/start_practice/${skillName}`)
         request({
             'url': `users/start_skill_practice/${skillName}`,
             'method': 'POST',
@@ -194,14 +167,37 @@ function SkillsTab() {
 
     return (
         <div className="skills-container">
-            {SKILL_NAMES.map(skillKey => (
-                <SkillCard
-                    key={skillKey}
-                    skillKey={skillKey}
-                    skillsData={skillsData}
-                    onTrain={startPractice}
-                />
-            ))}
+            <p className="skills-intro-text">
+                Training sharpens one discipline at a time. Free and professional instructors each accept a single assignment before they need to recover — choose carefully.
+            </p>
+
+            <TrainingPanel
+                title="Free Training"
+                tier="free"
+                selected={freeSkill}
+                onSelect={setFreeSkill}
+                cost={0}
+                points={skillsData.free_points}
+                cooldownDuration={skillsData.free_cooldown}
+                cooldownRemaining={skillsData[`${freeSkill}_free_cd`]}
+                isAvailable={skillsData[`${freeSkill}_free_available`]}
+                currentStats={userPreviewData}
+                onTrain={() => startPractice(`${freeSkill}_free`)}
+            />
+
+            <TrainingPanel
+                title="Professional Training"
+                tier="pro"
+                selected={proSkill}
+                onSelect={setProSkill}
+                cost={skillsData[`${proSkill}_pro_price`]}
+                points={skillsData.pro_points}
+                cooldownDuration={skillsData.pro_cooldown}
+                cooldownRemaining={skillsData[`${proSkill}_pro_cd`]}
+                isAvailable={skillsData[`${proSkill}_pro_available`]}
+                currentStats={userPreviewData}
+                onTrain={() => startPractice(`${proSkill}_pro`)}
+            />
         </div>
     )
 }

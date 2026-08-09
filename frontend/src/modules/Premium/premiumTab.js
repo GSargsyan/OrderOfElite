@@ -82,7 +82,7 @@ function PremiumTab() {
                     </>
                 ) : (
                     <button
-                        className="btn-premium-subscribe"
+                        className="btn-primary-action"
                         disabled={isSubmitting}
                         onClick={handleSubscribe}
                     >
