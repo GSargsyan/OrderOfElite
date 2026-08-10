@@ -108,7 +108,19 @@ button {
 }
 
 .dashboard-wrapper[data-city="New York"]::before {
-  background: url('../assets/pictures/new_york_bg.png') center/cover no-repeat;
+  background: url('../assets/pictures/new_york.jpg') center/cover no-repeat;
+}
+
+.dashboard-wrapper[data-city="Moscow"]::before {
+  background: url('../assets/pictures/moscow.jpg') center/cover no-repeat;
+}
+
+.dashboard-wrapper[data-city="Rome"]::before {
+  background: url('../assets/pictures/rome.jpg') center/cover no-repeat;
+}
+
+.dashboard-wrapper[data-city="Mexico City"]::before {
+  background: url('../assets/pictures/mexico_city.jpg') center/cover no-repeat;
 }
 
 /* Dark vignette overlay */
@@ -3073,13 +3085,29 @@ button {
 
 .travel-city-card {
   padding: 14px 16px;
-  background: var(--bg-card);
+  background-color: var(--bg-card);
+  background-size: cover;
+  background-position: center;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-med);
   position: relative;
   overflow: hidden;
+  z-index: 1;
+}
+
+.travel-city-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: -1;
+  transition: background var(--transition-fast);
+}
+
+.travel-city-card:hover::after {
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .travel-city-card::before {
@@ -3096,12 +3124,12 @@ button {
 
 .travel-city-card:hover {
   border-color: rgba(91, 147, 176, 0.25);
-  background: var(--bg-panel-hover);
+  background-color: var(--bg-panel-hover);
 }
 
 .travel-city-card.selected {
   border-color: rgba(91, 147, 176, 0.4);
-  background: rgba(91, 147, 176, 0.06);
+  background-color: rgba(91, 147, 176, 0.06);
   box-shadow: var(--glow-cyan);
 }
 
@@ -3133,7 +3161,89 @@ button {
 .travel-city-time {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: #d0d8e4;
+}
+
+/* Travel Modal Styles */
+.travel-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.travel-modal-content {
+  background: var(--bg-panel);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), var(--glow-cyan);
+}
+
+.travel-modal-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.travel-modal-checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.travel-modal-checkbox-container input {
+  cursor: pointer;
+}
+
+.travel-modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.travel-modal-buttons button {
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: all var(--transition-fast);
+}
+
+.travel-modal-btn-cancel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.travel-modal-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.travel-modal-btn-confirm {
+  background: linear-gradient(135deg, var(--accent-cyan-dim), var(--accent-cyan));
+  border: none;
+  color: var(--bg-deep);
+}
+
+.travel-modal-btn-confirm:hover {
+  filter: brightness(1.15);
+  box-shadow: var(--glow-cyan);
 }
 
 /* ── Airplane Cards Grid ── */

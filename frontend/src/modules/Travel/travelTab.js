@@ -7,6 +7,19 @@ import airplaneCorvus from 'assets/pictures/airplanes/airplane_corvus.png'
 import airplaneMachIv from 'assets/pictures/airplanes/airplane_mach_iv.png'
 import airplaneSentinelle from 'assets/pictures/airplanes/airplane_sentinelle.png'
 
+// City images
+import newYorkImg from 'assets/pictures/new_york.jpg'
+import moscowImg from 'assets/pictures/moscow.jpg'
+import romeImg from 'assets/pictures/rome.jpg'
+import mexicoCityImg from 'assets/pictures/mexico_city.jpg'
+
+const CITY_IMAGES = {
+    'New York': newYorkImg,
+    'Moscow': moscowImg,
+    'Rome': romeImg,
+    'Mexico City': mexicoCityImg,
+}
+
 const AIRPLANE_IMAGES = {
     corvus: airplaneCorvus,
     mach_iv: airplaneMachIv,
@@ -41,6 +54,9 @@ function TravelTab() {
     const [error, setError] = useState(null)
     const [arrivalCountdown, setArrivalCountdown] = useState(0)
     const [cooldownCountdown, setCooldownCountdown] = useState(0)
+    
+    const [showWarningModal, setShowWarningModal] = useState(false)
+    const [hideWarningCheckbox, setHideWarningCheckbox] = useState(false)
 
     const { updateUserPreviewData } = useContext(UserPreviewCtx)
 
@@ -87,8 +103,29 @@ function TravelTab() {
         return () => clearInterval(interval)
     }, [arrivalCountdown, cooldownCountdown, loadTravelData, updateUserPreviewData])
 
-    const handleTravel = () => {
+    const handleTravelClick = () => {
         if (!selectedCity || !selectedAirplane || isSubmitting) return
+        
+        if (localStorage.getItem('hide_travel_warning') === 'true') {
+            executeTravel()
+        } else {
+            setShowWarningModal(true)
+        }
+    }
+
+    const confirmTravelModal = () => {
+        if (hideWarningCheckbox) {
+            localStorage.setItem('hide_travel_warning', 'true')
+        }
+        setShowWarningModal(false)
+        executeTravel()
+    }
+
+    const cancelTravelModal = () => {
+        setShowWarningModal(false)
+    }
+
+    const executeTravel = () => {
         setError(null)
         setIsSubmitting(true)
 
@@ -196,14 +233,15 @@ function TravelTab() {
                                         key={city}
                                         className={`travel-city-card ${selectedCity === city ? 'selected' : ''}`}
                                         onClick={() => setSelectedCity(city)}
+                                        style={CITY_IMAGES[city] ? { backgroundImage: `url(${CITY_IMAGES[city]})` } : {}}
                                     >
                                         <div className="travel-city-name">{city}</div>
                                         <div className="travel-city-meta">
                                             <span className="travel-city-cost">
-                                                from {formatMoney(route.cost)}
+                                                {formatMoney(route.cost)}
                                             </span>
                                             <span className="travel-city-time">
-                                                ≈ {formatMinutes(route.time_minutes / TRAVEL_TIME_REDUCER)}
+                                                {formatMinutes(route.time_minutes / TRAVEL_TIME_REDUCER)}
                                             </span>
                                         </div>
                                     </div>
@@ -278,11 +316,37 @@ function TravelTab() {
                     <button
                         className="btn-primary-action"
                         disabled={!selectedCity || !selectedAirplane || isSubmitting}
-                        onClick={handleTravel}
+                        onClick={handleTravelClick}
                     >
                         {isSubmitting ? 'INITIATING...' : '✈ DEPART'}
                     </button>
                 </>
+            )}
+
+            {showWarningModal && flightPreview && (
+                <div className="travel-modal-overlay">
+                    <div className="travel-modal-content">
+                        <div className="travel-modal-text">
+                            Throughout the travel time ({flightPreview.flightTime}) you won't be able to do missions, buy items or use any other tab, apart from messaging. Note that you will chat in the current city, not the destination city. Are you sure you want to travel?
+                        </div>
+                        <label className="travel-modal-checkbox-container">
+                            <input 
+                                type="checkbox" 
+                                checked={hideWarningCheckbox}
+                                onChange={(e) => setHideWarningCheckbox(e.target.checked)} 
+                            />
+                            Do not show this again
+                        </label>
+                        <div className="travel-modal-buttons">
+                            <button className="travel-modal-btn-cancel" onClick={cancelTravelModal}>
+                                Cancel
+                            </button>
+                            <button className="travel-modal-btn-confirm" onClick={confirmTravelModal}>
+                                Yes, Travel
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     )
