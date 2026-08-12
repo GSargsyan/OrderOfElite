@@ -26,7 +26,11 @@ function Homepage() {
 
             <div className="homepage-content">
                 <div className="homepage-intro">
-                    <h1 className="homepage-tagline">An exclusive society for the world's most accomplished assassins.</h1>
+                    <div className="homepage-dev-banner">
+                        <span className="dev-pulse-dot"></span>
+                        <span className="dev-banner-title">IN DEVELOPMENT</span>
+                    </div>
+                    <h1 className="homepage-tagline">JOIN THE UNDERWORLD IN A TEXT-BASED, PERSISTENT, BROWSER-BASED ASSASSIN GAME.</h1>
                 </div>
                 
                 <div className="homepage-grid">
