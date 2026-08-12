@@ -40,8 +40,8 @@ export function ChatBoard({ chatRoomId, name }) {
 
     // Auto-scroll to bottom when initial messages load
     useEffect(() => {
-        if (initialLoadDone && messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView()
+        if (initialLoadDone && messagesAreaRef.current) {
+            messagesAreaRef.current.scrollTop = messagesAreaRef.current.scrollHeight
         }
     }, [initialLoadDone])
 
@@ -81,8 +81,11 @@ export function ChatBoard({ chatRoomId, name }) {
 
     // Auto-scroll on new messages (if user hasn't scrolled up)
     useEffect(() => {
-        if (shouldAutoScroll.current && messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+        if (shouldAutoScroll.current && messagesAreaRef.current) {
+            messagesAreaRef.current.scrollTo({
+                top: messagesAreaRef.current.scrollHeight,
+                behavior: 'smooth'
+            })
         }
     }, [messages])
 
@@ -297,8 +300,8 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
 
             // Scroll to bottom
             setTimeout(() => {
-                if (messagesEndRef.current) {
-                    messagesEndRef.current.scrollIntoView()
+                if (messagesAreaRef.current) {
+                    messagesAreaRef.current.scrollTop = messagesAreaRef.current.scrollHeight
                 }
             }, 50)
         }).catch(() => {
@@ -352,8 +355,11 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
 
     // Auto-scroll on new messages
     useEffect(() => {
-        if (shouldAutoScroll.current && messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+        if (shouldAutoScroll.current && messagesAreaRef.current) {
+            messagesAreaRef.current.scrollTo({
+                top: messagesAreaRef.current.scrollHeight,
+                behavior: 'smooth'
+            })
         }
     }, [dmMessages])
 
@@ -553,7 +559,6 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
                         onKeyDown={handleKeyDown}
                         placeholder="Compose secure message..."
                         maxLength={500}
-                        autoFocus
                     />
                     <button
                         className="chat-send-btn"

@@ -7,6 +7,7 @@ import SkillsTab from 'modules/Skills/skillsTab.js'
 import BlackMarketTab from 'modules/BlackMarket/blackMarketTab.js'
 import ItemsTab from 'modules/Items/itemsTab.js'
 import NetworkingTab from 'modules/Networking/networkingTab.js'
+import ProfileTab from 'modules/Profile/profileTab.js'
 import TravelTab from 'modules/Travel/travelTab.js'
 import FlightOverlay from 'modules/Travel/flightOverlay.js'
 import CitadelTab from 'modules/Citadel/citadelTab.js'
@@ -53,6 +54,11 @@ function Dashboard() {
         'dashboard': {
             'component': DashboardTab,
             'label': 'Dashboard',
+            'props': {}
+        },
+        'profile': {
+            'component': ProfileTab,
+            'label': 'Profile',
             'props': {}
         },
         'missions': {
@@ -293,6 +299,159 @@ const AnimatedMoney = ({ value }) => {
 
 
 /**
+ * AnimatedSkill — shows the effective skill value with a floating +N diff
+ * whenever the value changes (e.g. after training or equipping an item).
+ */
+const AnimatedSkill = ({ value }) => {
+    const [displayValue, setDisplayValue] = useState(value)
+    const [diffs, setDiffs] = useState([])
+    const prevValueRef = useRef(value)
+
+    useEffect(() => {
+        if (value !== prevValueRef.current) {
+            const diff = value - prevValueRef.current
+            if (diff !== 0) {
+                const newDiff = { id: Date.now() + Math.random(), amount: diff }
+                setDiffs(prev => [...prev, newDiff])
+                setTimeout(() => {
+                    setDiffs(prev => prev.filter(d => d.id !== newDiff.id))
+                }, 2000)
+            }
+
+            const startValue = prevValueRef.current
+            const endValue = value
+            const duration = 300
+            const startTime = performance.now()
+            const animate = (currentTime) => {
+                const elapsed = currentTime - startTime
+                const progress = Math.min(elapsed / duration, 1)
+                setDisplayValue(Math.round(startValue + (endValue - startValue) * progress))
+                if (progress < 1) requestAnimationFrame(animate)
+                else setDisplayValue(endValue)
+            }
+            requestAnimationFrame(animate)
+            prevValueRef.current = value
+        }
+    }, [value])
+
+    return (
+        <span className="animated-skill-container">
+            <span className="skill-diffs-container">
+                {diffs.map(d => (
+                    <span
+                        key={d.id}
+                        className={`skill-diff ${d.amount >= 0 ? 'diff-positive' : 'diff-negative'}`}
+                    >
+                        {d.amount >= 0 ? '+' : ''}{d.amount}
+                    </span>
+                ))}
+            </span>
+            <span>{displayValue}</span>
+        </span>
+    )
+}
+
+
+/**
+ * SkillTooltip — glass card showing base pts, per-source multipliers, and final total.
+ */
+function SkillTooltip({ skillKey, basePoints, effectivePoints, multiplier, sources }) {
+    const SOURCE_LABELS = {
+        citadel: 'Citadel',
+        house:   'House',
+        car:     'Car',
+        gun:     'Gun',
+    }
+
+    const relevantSources = Object.entries(sources || {}).filter(([, data]) => {
+        const v = data[skillKey]
+        return v && v !== 1.0
+    })
+
+    return (
+        <div className="skill-tooltip">
+            <div className="skill-tooltip-title">{skillKey.charAt(0).toUpperCase() + skillKey.slice(1)}</div>
+            <div className="skill-tooltip-row">
+                <span className="skill-tooltip-label">Base</span>
+                <span className="skill-tooltip-value">{basePoints}</span>
+            </div>
+            {relevantSources.map(([source, data]) => {
+                const mx = data[skillKey]
+                const label = data.name || SOURCE_LABELS[source] || source
+                return (
+                    <div className="skill-tooltip-row skill-tooltip-multiplier" key={source}>
+                        <span className="skill-tooltip-label">{label}</span>
+                        <span className="skill-tooltip-value skill-tooltip-mult-value">{mx}x</span>
+                    </div>
+                )
+            })}
+            <div className="skill-tooltip-divider" />
+            <div className="skill-tooltip-row skill-tooltip-total">
+                <span className="skill-tooltip-label">Total</span>
+                <span className="skill-tooltip-value">{effectivePoints}</span>
+            </div>
+        </div>
+    )
+}
+
+
+/**
+ * Milliseconds until the next Elite Coins reset (Monday 00:00 UTC).
+ */
+function msUntilNextEliteCoinReset() {
+    const now = new Date()
+    const day = now.getUTCDay() // Sun=0 ... Mon=1 ... Sat=6
+    let daysUntilMonday = (1 - day + 7) % 7
+    if (daysUntilMonday === 0) daysUntilMonday = 7
+    const next = Date.UTC(
+        now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysUntilMonday, 0, 0, 0
+    )
+    return Math.max(0, next - now.getTime())
+}
+
+function formatEliteCoinCountdown(ms) {
+    const totalMinutes = Math.floor(ms / 60000)
+    const days = Math.floor(totalMinutes / 1440)
+    const hours = Math.floor((totalMinutes % 1440) / 60)
+    const minutes = totalMinutes % 60
+    if (days > 0) return `${days}d ${hours}h`
+    if (hours > 0) return `${hours}h ${minutes}m`
+    return `${minutes}m`
+}
+
+/**
+ * EliteCoinTooltip — glass card explaining the weekly reset, shared
+ * visual language with SkillTooltip (same CSS classes).
+ */
+function EliteCoinTooltip({ eliteCoins }) {
+    const [countdown, setCountdown] = useState(msUntilNextEliteCoinReset())
+
+    useEffect(() => {
+        const interval = setInterval(() => setCountdown(msUntilNextEliteCoinReset()), 30000)
+        return () => clearInterval(interval)
+    }, [])
+
+    return (
+        <div className="skill-tooltip">
+            <div className="skill-tooltip-title">Elite Coins</div>
+            <div className="skill-tooltip-row">
+                <span className="skill-tooltip-label">Balance</span>
+                <span className="skill-tooltip-value">{eliteCoins}</span>
+            </div>
+            <div className="skill-tooltip-divider" />
+            <div className="skill-tooltip-row">
+                <span className="skill-tooltip-label">Resets to 10 every Monday, 00:00 UTC</span>
+            </div>
+            <div className="skill-tooltip-row skill-tooltip-total">
+                <span className="skill-tooltip-label">Next reset in</span>
+                <span className="skill-tooltip-value">{formatEliteCoinCountdown(countdown)}</span>
+            </div>
+        </div>
+    )
+}
+
+
+/**
  * FlightRouteIndicator
  * Shows: OriginCity ...●...●...● DestinationCity
  * with a progress-based animated dots line and an ETA label on top (hours/minutes, no seconds).
@@ -358,7 +517,22 @@ function FlightRouteIndicator({ flightData }) {
 }
 
 
+function healthTier(health) {
+    if (health <= 50) return 'low'
+    if (health <= 99) return 'mid'
+    return 'full'
+}
+
 const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel }) => {
+    const [tooltipSkill, setTooltipSkill] = useState(null)
+    const [showEliteCoinTooltip, setShowEliteCoinTooltip] = useState(false)
+
+    const SKILL_DEFS = [
+        { key: 'attack',  icon: '⚔',  pointsKey: 'attack_points',  baseKey: 'base_attack_points',  multKey: 'attack_multiplier' },
+        { key: 'defense', icon: '🛡', pointsKey: 'defense_points', baseKey: 'base_defense_points', multKey: 'defense_multiplier' },
+        { key: 'driving', icon: '🏎', pointsKey: 'driving_points', baseKey: 'base_driving_points', multKey: 'driving_multiplier' },
+    ]
+
     return (
         <div className="user-preview-bar glass-panel">
             {userPreviewData ? (
@@ -387,7 +561,24 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                             </span>
                         )}
 
-                        <span className="user-preview-money"><AnimatedMoney value={userPreviewData.money_cash} /></span>
+                        <span className="user-preview-resources">
+                            <span className={`user-preview-hp user-preview-hp--${healthTier(userPreviewData.health)}`}>
+                                <span className="up-stat-label">HP</span> {userPreviewData.health}%
+                            </span>
+
+                            <span
+                                className="user-preview-elite-coins"
+                                onMouseEnter={() => setShowEliteCoinTooltip(true)}
+                                onMouseLeave={() => setShowEliteCoinTooltip(false)}
+                            >
+                                🪙 <AnimatedSkill value={userPreviewData.elite_coins} />
+                                {showEliteCoinTooltip && (
+                                    <EliteCoinTooltip eliteCoins={userPreviewData.elite_coins} />
+                                )}
+                            </span>
+
+                            <span className="user-preview-money"><AnimatedMoney value={userPreviewData.money_cash} /></span>
+                        </span>
                     </div>
 
                     <div className="progress-bar-track">
@@ -404,18 +595,36 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                             <span className="up-stat-progress">({Math.floor(userPreviewData.rank_progress)}%)</span>
                         </span>
                         <span className="up-stat-sep">|</span>
-                        <span className="up-skill-stat" title="Attack">
-                            <span className="up-skill-icon">⚔</span>
-                            <span className="up-skill-value">{userPreviewData.attack_points}</span>
-                        </span>
-                        <span className="up-skill-stat" title="Defense">
-                            <span className="up-skill-icon">🛡</span>
-                            <span className="up-skill-value">{userPreviewData.defense_points}</span>
-                        </span>
-                        <span className="up-skill-stat" title="Driving">
-                            <span className="up-skill-icon">🏎</span>
-                            <span className="up-skill-value">{userPreviewData.driving_points}</span>
-                        </span>
+
+                        {SKILL_DEFS.map(({ key, icon, pointsKey, baseKey, multKey }) => {
+                            const effective = userPreviewData[pointsKey]
+                            const base = userPreviewData[baseKey] ?? effective
+                            const multiplier = userPreviewData[multKey] ?? 1.0
+                            const isOpen = tooltipSkill === key
+
+                            return (
+                                <span
+                                    key={key}
+                                    className="up-skill-stat"
+                                    onMouseEnter={() => setTooltipSkill(key)}
+                                    onMouseLeave={() => setTooltipSkill(null)}
+                                >
+                                    <span className="up-skill-icon">{icon}</span>
+                                    <span className="up-skill-value">
+                                        <AnimatedSkill value={effective} />
+                                    </span>
+                                    {isOpen && (
+                                        <SkillTooltip
+                                            skillKey={key}
+                                            basePoints={base}
+                                            effectivePoints={effective}
+                                            multiplier={multiplier}
+                                            sources={userPreviewData.skill_multipliers || {}}
+                                        />
+                                    )}
+                                </span>
+                            )
+                        })}
                     </div>
                 </>
             ) : (

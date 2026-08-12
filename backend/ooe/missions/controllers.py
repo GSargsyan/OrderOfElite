@@ -372,6 +372,10 @@ class ExtractionController:
             else:
                 car.delete()
 
+                # Auto-equip the driver's next best car in this city
+                from ooe.items.controllers import ItemsController
+                ItemsController._auto_equip_best_car(mission.driver)
+
                 reward = MISSIONS['extraction']['reward']
                 exp_reward = MISSIONS['extraction']['exp_reward']
 

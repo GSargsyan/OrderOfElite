@@ -14,7 +14,7 @@ from ooe.base.utils import auth_by_token, blocked_in_citadel
 
 from ooe.base.exceptions import OOEException
 from ooe.users.models import User
-from ooe.users.controllers import SkillsController, UserReviewsController
+from ooe.users.controllers import SkillsController, UserReviewsController, HealthController
 from ooe.users.constants import \
     USERNAME_REGEX, \
     USERNAME_LEN_MAX, \
@@ -123,6 +123,20 @@ def start_skill_practice(request, skill_name):
         return Response(
             SkillsController(request.user).start_practice(skill_name),
             status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def heal(request):
+    try:
+        return Response(HealthController(request.user).heal(), status=200)
     except OOEException as e:
         return Response({
             'status': 'error',

@@ -56,6 +56,41 @@ def sell_house(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def equip_house(request):
+    try:
+        return Response(
+            ItemsController().equip_house(
+                user=request.user,
+                house_name=request.data['house_name'],
+            ),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def unequip_house(request):
+    try:
+        return Response(
+            ItemsController().unequip_house(user=request.user),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
 def get_user_cars(request):
     return Response(
         ItemsController().get_user_cars(user=request.user),
@@ -92,6 +127,41 @@ def sell_car(request):
                 user=request.user,
                 car_name=request.data['car_name'],
             ),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def equip_car(request):
+    try:
+        return Response(
+            ItemsController().equip_car(
+                user=request.user,
+                car_name=request.data['car_name'],
+            ),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def unequip_car(request):
+    try:
+        return Response(
+            ItemsController().unequip_car(user=request.user),
             status=200)
     except OOEException as e:
         return Response({
@@ -148,6 +218,41 @@ def sell_gun(request):
 
 @api_view(['POST'])
 @auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def equip_gun(request):
+    try:
+        return Response(
+            ItemsController().equip_gun(
+                user=request.user,
+                gun_name=request.data['gun_name'],
+            ),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
+@blocked_in_citadel
+@transaction.atomic
+def unequip_gun(request):
+    try:
+        return Response(
+            ItemsController().unequip_gun(user=request.user),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
 def get_user_airplanes(request):
     return Response(
         ItemsController().get_user_airplanes(user=request.user),
@@ -190,5 +295,3 @@ def sell_airplane(request):
             'status': 'error',
             'message': str(e),
         }, status=400)
-
-

@@ -1,6 +1,6 @@
 from django.urls import path
-# from .views import get_dashboard_params
+from .views import get_profile_tab_data
 
 urlpatterns = [
-    # path('api/get_dashboard_params', get_dashboard_params, name='get_dashboard_params'),
+    path('api/dashboard/get_profile_tab_data', get_profile_tab_data, name='get_profile_tab_data'),
 ]

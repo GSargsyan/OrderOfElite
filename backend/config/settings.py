@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'ooe.travel',
     'ooe.citadel',
     'ooe.seals',
+    'ooe.assassination',
     'django_celery_beat',
 ]
 
@@ -236,6 +237,8 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+from celery.schedules import crontab
+
 # ── Celery Configuration ──────────────────────────────────────
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
@@ -260,6 +263,14 @@ CELERY_BEAT_SCHEDULE = {
     'check-seal-deadlines': {
         'task': 'ooe.seals.tasks.check_seal_deadlines',
         'schedule': 60.0,  # every 60 seconds
+    },
+    'charge-house-maintenance': {
+        'task': 'ooe.items.tasks.charge_house_maintenance',
+        'schedule': 60.0,  # every 60 seconds (charges 1/1440th of daily cost)
+    },
+    'reset-elite-coins': {
+        'task': 'ooe.users.tasks.reset_elite_coins',
+        'schedule': crontab(hour=0, minute=0, day_of_week=1),  # every Monday 00:00 UTC
     },
 }
 

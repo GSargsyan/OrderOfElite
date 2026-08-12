@@ -21,107 +21,122 @@ const CAR_IMAGES = {
 }
 
 function Cars() {
-    console.log('Cars rendered')
-
     const [cars, setCars] = useState(null)
-
-    const { updateUserPreviewData } = useContext(UserPreviewCtx)
+    const { userPreviewData, updateUserPreviewData } = useContext(UserPreviewCtx)
 
     useEffect(() => {
         getCarsData()
     }, [])
 
     const getCarsData = () => {
-        request({
-            'url': 'items/get_user_cars',
-            'method': 'POST',
-        })
-        .then(response => {
-            console.log(response.data)
-            setCars(response.data)
-        })
-        .catch(error => {
-            console.error("Error getting cars data: ", error)
-        })
+        request({ url: 'items/get_user_cars', method: 'POST' })
+            .then(response => setCars(response.data))
+            .catch(error => console.error('Error getting cars data:', error))
     }
 
     const buyCar = (carKey) => {
-        request({
-            'url': 'items/buy_car',
-            'method': 'POST',
-            'data': {
-                'car_name': carKey
-            }
-        })
-        .then(response => {
-            console.log(response.data)
-            alert('Car purchased successfully')
-            updateUserPreviewData()
-            getCarsData()
-        })
-        .catch(error => {
-            alert(error.response.data.message)
-        })
+        request({ url: 'items/buy_car', method: 'POST', data: { car_name: carKey } })
+            .then(() => {
+                alert('Car purchased successfully')
+                updateUserPreviewData()
+                getCarsData()
+            })
+            .catch(error => alert(error.response.data.message))
     }
 
     const sellCar = (carKey) => {
-        request({
-            'url': 'items/sell_car',
-            'method': 'POST',
-            'data': {
-                'car_name': carKey
-            }
-        })
-        .then(response => {
-            console.log(response.data)
-            alert('Car sold successfully')
-            updateUserPreviewData()
-            getCarsData()
-        })
-        .catch(error => {
-            alert(error.response.data.message)
-        })
+        request({ url: 'items/sell_car', method: 'POST', data: { car_name: carKey } })
+            .then(() => {
+                alert('Car sold successfully')
+                updateUserPreviewData()
+                getCarsData()
+            })
+            .catch(error => alert(error.response.data.message))
+    }
+
+    const equipCar = (carKey) => {
+        request({ url: 'items/equip_car', method: 'POST', data: { car_name: carKey } })
+            .then(() => {
+                updateUserPreviewData()
+                getCarsData()
+            })
+            .catch(error => alert(error.response.data.message))
+    }
+
+    const unequipCar = () => {
+        request({ url: 'items/unequip_car', method: 'POST' })
+            .then(() => {
+                updateUserPreviewData()
+                getCarsData()
+            })
+            .catch(error => alert(error.response.data.message))
     }
 
     if (cars === null) {
         return <div className="loading-text">LOADING...</div>
     }
 
+    const garage = cars['__garage'] || { capacity: 0, used: 0 }
+    const carEntries = Object.keys(cars).filter(k => k !== '__garage')
+    const cityName = userPreviewData?.city || 'current city'
+
     return (
         <div>
-            {Object.keys(cars).map(carKey => (
-                <div className="item-card" key={carKey}>
-                    <img
-                        className="car-image"
-                        src={CAR_IMAGES[carKey]}
-                        alt={cars[carKey].name}
-                    />
-                    <div className="item-info">
-                        <h2>{cars[carKey].name}</h2>
-                        <div className="item-owned-cities">
-                            <span>Owned in current city: </span>
-                            <span style={{ color: cars[carKey].count_in_current_city > 0 ? '#66bb6a' : undefined, fontWeight: 'bold' }}>
-                                {cars[carKey].count_in_current_city}
-                            </span>
-                        </div>
-                        <p>Price: <strong>{formatMoney(cars[carKey].price)}</strong></p>
-                        <p>Drive: {cars[carKey].driving_multiplier}x</p>
-                        <p>Defense: {cars[carKey].defense_multiplier}x</p>
-                        <p>Attack: {cars[carKey].attack_multiplier}x</p>
+            {/* Garage status bar */}
+            <div className="garage-status-bar">
+                <span className="garage-status-label">Garage</span>
+                <span className="garage-status-count">
+                    {garage.used} / {garage.capacity} slots used
+                </span>
+                {garage.capacity === 0 && (
+                    <span className="garage-status-hint">Equip a house to unlock your garage</span>
+                )}
+            </div>
 
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                            <button
-                                className="btn-buy"
-                                onClick={() => buyCar(carKey)}>Buy</button>
-                            {cars[carKey].count_in_current_city > 0 && (
-                                <button
-                                    className="btn-sell"
-                                    onClick={() => sellCar(carKey)}>Sell</button>
-                            )}
+            {carEntries.map(carKey => {
+                const car = cars[carKey]
+                const owned = car.count_in_current_city > 0
+                const equipped = car.is_equipped
+
+                return (
+                    <div className={`item-card ${equipped ? 'item-card--equipped' : ''}`} key={carKey}>
+                        <img className="car-image" src={CAR_IMAGES[carKey]} alt={car.name} />
+                        <div className="item-info">
+                            <h2>
+                                {car.name}
+                                {equipped && <span className="item-equipped-badge">EQUIPPED</span>}
+                            </h2>
+                            <div className="item-owned-cities">
+                                <span>Owned in {cityName}: </span>
+                                <span style={{ color: owned ? '#66bb6a' : undefined, fontWeight: 'bold' }}>
+                                    {car.count_in_current_city}
+                                </span>
+                            </div>
+                            <p>Price: <strong className="item-price-value">{formatMoney(car.price)}</strong></p>
+                            <p>Drive: {car.driving_multiplier}x</p>
+                            <p>Defense: {car.defense_multiplier}x</p>
+                            <p>Attack: {car.attack_multiplier}x</p>
+
+                            <div className="item-action-row">
+                                <button className="btn-buy" onClick={() => buyCar(carKey)}>Buy</button>
+                                {owned && !equipped && (
+                                    <button className="btn-equip" onClick={() => equipCar(carKey)}>
+                                        Equip
+                                    </button>
+                                )}
+                                {equipped && (
+                                    <button className="btn-unequip" onClick={() => unequipCar()}>
+                                        Unequip
+                                    </button>
+                                )}
+                                {owned && (
+                                    <button className="btn-sell" onClick={() => sellCar(carKey)}>Sell</button>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                )
+            })}
         </div>
     )
 }

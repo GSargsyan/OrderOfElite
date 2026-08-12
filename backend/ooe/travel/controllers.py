@@ -269,6 +269,23 @@ class TravelController:
         if new_city_room:
             new_city_room.users.add(user)
 
+        # 5. Unequip house (and parked cars) in the origin city
+        from ooe.items.models import UserHouse, UserCar
+        UserHouse.objects.filter(
+            user=user, city=flight_log.origin_city, is_equipped=True
+        ).update(is_equipped=False)
+        UserCar.objects.filter(
+            user=user, city=flight_log.origin_city, is_equipped=True
+        ).update(is_equipped=False)
+
+        # 6. Auto-equip house in destination city if user owns one
+        dest_house = UserHouse.objects.filter(
+            user=user, city=destination_city
+        ).first()
+        if dest_house:
+            dest_house.is_equipped = True
+            dest_house.save(update_fields=['is_equipped'])
+
         emit_event(
             EventTypes.TRAVELED_TO_CITY,
             actor=user,
@@ -278,3 +295,4 @@ class TravelController:
                 'airplane': flight_log.airplane,
             },
         )
+

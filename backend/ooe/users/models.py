@@ -32,6 +32,9 @@ class User(AbstractBaseUser):
     attack_points = models.IntegerField(default=0)
     defense_points = models.IntegerField(default=0)
     driving_points = models.IntegerField(default=0)
+    health = models.IntegerField(default=100)
+    elite_coins = models.IntegerField(default=10)
+    kills = models.IntegerField(default=0)
     is_premium = models.BooleanField(default=False)
     premium_since = models.DateTimeField(null=True, blank=True)
     # Persona non grata: active while png_until is in the future
@@ -54,9 +57,11 @@ class User(AbstractBaseUser):
         by appending to the sources list.
         """
         from ooe.citadel.controllers import CitadelController
+        from ooe.items.controllers import ItemsController
 
         sources = [
             CitadelController.get_stat_multipliers(self),
+            ItemsController.get_equipped_stat_multipliers(self),
         ]
 
         multipliers = {'attack': 1.0, 'defense': 1.0, 'driving': 1.0}
@@ -97,11 +102,21 @@ class User(AbstractBaseUser):
     def get_preview_data(self):
         from ooe.travel.controllers import TravelController
         from ooe.citadel.controllers import CitadelController
+        from ooe.items.controllers import ItemsController
         TravelController.check_and_complete_active_flight(self)
 
         active_stay = CitadelController.get_active_stay(self)
         effective_stats = self.get_effective_stats()
+        multipliers = self.get_stat_multipliers()
         is_png = self.is_persona_non_grata()
+
+        # Per-source multiplier breakdown for the tooltip
+        item_breakdown = ItemsController.get_equipped_multipliers_breakdown(self)
+        citadel_multipliers = CitadelController.get_stat_multipliers(self)
+        skill_multipliers = {
+            'citadel': citadel_multipliers,
+            **item_breakdown,
+        }
 
         res = {
             'username': self.username,
@@ -111,11 +126,24 @@ class User(AbstractBaseUser):
             'png_until': self.png_until.timestamp() if is_png else 0,
             'seal_breaker': self.seal_breaker,
             'money_cash': self.money_cash,
+            'health': self.health,
+            'elite_coins': self.elite_coins,
             'rank': self.rank,
             'rank_progress': self.get_rank_progress(),
+            # Effective (multiplied) stats
             'attack_points': effective_stats['attack'],
             'defense_points': effective_stats['defense'],
             'driving_points': effective_stats['driving'],
+            # Raw base stats (no multipliers)
+            'base_attack_points': self.attack_points,
+            'base_defense_points': self.defense_points,
+            'base_driving_points': self.driving_points,
+            # Combined multipliers per skill
+            'attack_multiplier': round(multipliers['attack'], 4),
+            'defense_multiplier': round(multipliers['defense'], 4),
+            'driving_multiplier': round(multipliers['driving'], 4),
+            # Per-source breakdown for tooltip
+            'skill_multipliers': skill_multipliers,
             'in_flight': False,
             'flight_data': None,
             'in_citadel': active_stay is not None,

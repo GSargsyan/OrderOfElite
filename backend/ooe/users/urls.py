@@ -10,7 +10,8 @@ from .views import \
     get_top_elites, \
     add_review, \
     subscribe_premium, \
-    cancel_premium
+    cancel_premium, \
+    heal
 
 urlpatterns = [
     path('api/users/subscribe_premium', subscribe_premium, name='subscribe_premium'),
@@ -24,4 +25,5 @@ urlpatterns = [
     path('api/users/homepage-stats', get_homepage_stats, name='homepage_stats'),
     path('api/users/top-elites', get_top_elites, name='top_elites'),
     path('api/users/add_review', add_review, name='add_review'),
+    path('api/users/heal', heal, name='heal'),
 ]

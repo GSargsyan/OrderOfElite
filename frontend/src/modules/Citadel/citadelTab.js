@@ -215,7 +215,7 @@ function CitadelTab() {
                     <div className="citadel-inside-title">SANCTUARY IN EFFECT</div>
                     <div className="citadel-inside-subtitle">
                         Within these walls, no contract may be honored.
-                        Defense ×{tabData.defense_multiplier} while the doors remain closed.
+                        Defense x{tabData.defense_multiplier} while the doors remain closed.
                     </div>
                     <div className="citadel-inside-countdown">
                         {stayCountdown > 0
@@ -306,7 +306,7 @@ function CitadelTab() {
                     <div className="citadel-terms">
                         <div className="citadel-terms-item">
                             <span className="citadel-terms-label">PROTECTION</span>
-                            <span className="citadel-terms-value">Defense ×{tabData.defense_multiplier}</span>
+                            <span className="citadel-terms-value">Defense x{tabData.defense_multiplier}</span>
                         </div>
                         <div className="citadel-terms-item">
                             <span className="citadel-terms-label">REENTRY RESTRICTION</span>

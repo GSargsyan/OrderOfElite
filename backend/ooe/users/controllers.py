@@ -7,6 +7,7 @@ from ooe.users.models import User, UserReview
 from ooe.base.exceptions import OOEException
 from ooe.base.events import emit_event, EventTypes
 from ooe.base.constants import SKILLS, SKILL_COOLDOWNS
+from ooe.users.constants import HOSPITAL_HEAL_COST_PER_POINT
 
 
 class SkillsController:
@@ -84,6 +85,33 @@ class SkillsController:
                 'points_gained': points_gained,
                 'exp_gained': skill['exp_reward'],
                 'cd_remaining': cd}
+
+
+class HealthController:
+    def __init__(self, user: User):
+        self.user = user
+
+    def heal(self):
+        if self.user.health >= 100:
+            raise OOEException('You are already at full health')
+
+        cost = (100 - self.user.health) * HOSPITAL_HEAL_COST_PER_POINT
+
+        if cost > self.user.money_cash:
+            raise OOEException('Not enough money')
+
+        User.objects.filter(id=self.user.id).update(
+            money_cash=F('money_cash') - cost,
+            health=100,
+        )
+
+        self.user.refresh_from_db()
+
+        return {
+            'health': self.user.health,
+            'money_cash': self.user.money_cash,
+            'cost': cost,
+        }
 
 
 class UserReviewsController:

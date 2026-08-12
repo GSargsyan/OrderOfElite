@@ -7,6 +7,7 @@ class UserHouse(models.Model):
     user = models.ForeignKey('users.User', related_name='houses', on_delete=models.CASCADE)
     house = models.CharField(max_length=50)
     city = models.ForeignKey('cities.City', related_name='houses', on_delete=models.CASCADE)
+    is_equipped = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -18,6 +19,7 @@ class UserCar(models.Model):
     user = models.ForeignKey('users.User', related_name='cars', on_delete=models.CASCADE)
     car = models.CharField(max_length=50)
     city = models.ForeignKey('cities.City', related_name='cars', on_delete=models.CASCADE)
+    is_equipped = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -48,7 +50,6 @@ class GunTransaction(models.Model):
 
     user = models.ForeignKey('users.User', related_name='gun_transactions', on_delete=models.CASCADE)
     gun = models.CharField(max_length=50)
-    city = models.ForeignKey('cities.City', related_name='gun_transactions', on_delete=models.CASCADE)
     action = models.CharField(max_length=4, choices=ACTION_CHOICES)
     price = models.BigIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -58,9 +59,10 @@ class GunTransaction(models.Model):
 
 
 class UserGun(models.Model):
+    """Guns travel with the player — they are NOT city-dependent."""
     user = models.ForeignKey('users.User', related_name='guns', on_delete=models.CASCADE)
     gun = models.CharField(max_length=50)
-    city = models.ForeignKey('cities.City', related_name='guns', on_delete=models.CASCADE)
+    is_equipped = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

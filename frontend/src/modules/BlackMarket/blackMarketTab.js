@@ -362,7 +362,7 @@ function BlackMarketTab() {
 
             {buyMultiplier > 1 && (
                 <div className="bm-multiplier-hint">
-                    {buyMultiplier === 100 ? 'CTRL held — bulk purchase ×100' : 'SHIFT held — bulk purchase ×5'}
+                    {buyMultiplier === 100 ? 'CTRL held — bulk purchase x100' : 'SHIFT held — bulk purchase x5'}
                 </div>
             )}
 
