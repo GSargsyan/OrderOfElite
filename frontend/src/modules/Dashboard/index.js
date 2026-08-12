@@ -135,9 +135,15 @@ function Dashboard() {
         <div className="dashboard-wrapper" data-city={userPreviewData?.city}>
             {/* ── Header Bar ─────────────────────────── */}
             <div className="header-bar">
-                <h1 className="game-title">
-                    Order <span className="accent">of</span> Elite
-                </h1>
+                <div className="game-title-group">
+                    <h1 className="game-title">
+                        Order <span className="accent">of</span> Elite
+                    </h1>
+                    <div className="dev-badge">
+                        <span className="dev-pulse-dot"></span>
+                        <span className="dev-badge-text">IN DEVELOPMENT</span>
+                    </div>
+                </div>
 
                 <UserPreview
                     userPreviewData={userPreviewData}

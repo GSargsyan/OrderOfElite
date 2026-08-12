@@ -213,6 +213,15 @@ button {
 }
 
 /* Game title */
+.game-title-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  grid-column: 1;
+  justify-self: start;
+}
+
 .game-title {
   font-family: var(--font-display);
   font-size: 1.75rem;
@@ -224,13 +233,40 @@ button {
     0 0 48px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
   flex-shrink: 0;
-  grid-column: 1;
-  justify-self: start;
 }
 
 .game-title .accent {
   color: var(--accent-gold);
   font-weight: 400;
+}
+
+.dev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(10, 30, 18, 0.75);
+  border: 1px solid #2ecc71;
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.3), inset 0 0 8px rgba(46, 204, 113, 0.12);
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  flex-shrink: 0;
+}
+
+.dev-badge .dev-pulse-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.dev-badge-text {
+  font-family: var(--font-display, inherit);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #2ecc71;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(46, 204, 113, 0.5);
+  white-space: nowrap;
 }
 
 /* Server clock */
