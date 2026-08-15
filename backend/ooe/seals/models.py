@@ -19,6 +19,10 @@ class Seal(models.Model):
     WITHDRAWN = 'withdrawn'
     ANNULLED = 'annulled'
     EXPIRED = 'expired'
+    # A party died with this Seal still in play. Distinct from ANNULLED
+    # (mutual consent) and EXPIRED (deadline) — permadeath makes the
+    # underlying promise moot rather than resolved either way.
+    OBSOLETED = 'obsoleted'
 
     STATUS_CHOICES = [
         (DRAFT, 'Draft'),
@@ -30,9 +34,13 @@ class Seal(models.Model):
         (WITHDRAWN, 'Withdrawn'),
         (ANNULLED, 'Annulled'),
         (EXPIRED, 'Expired'),
+        (OBSOLETED, 'Obsoleted'),
     ]
 
-    RESOLVED_STATUSES = [FULFILLED, BREACHED, DECLINED, WITHDRAWN, ANNULLED, EXPIRED]
+    # A Seal is still "in play" while in one of these statuses.
+    ACTIVE_STATUSES = [DRAFT, PENDING_SIGNATURE, ACTIVE]
+
+    RESOLVED_STATUSES = [FULFILLED, BREACHED, DECLINED, WITHDRAWN, ANNULLED, EXPIRED, OBSOLETED]
 
     creator = models.ForeignKey(
         'users.User', on_delete=models.CASCADE, related_name='seals_created')

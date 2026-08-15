@@ -30,3 +30,34 @@ def initiate_search(request):
             'status': 'error',
             'message': str(e),
         }, status=400)
+
+
+@api_view(['POST'])
+@auth_by_token
+def get_attack_panel_data(request):
+    target_username = request.data.get('username')
+    return Response(
+        AssassinationController(request.user).get_attack_panel_data(target_username),
+        status=200)
+
+
+@api_view(['POST'])
+@auth_by_token
+@blocked_in_citadel
+def attempt_assassination(request):
+    # No @transaction.atomic here on purpose — the controller manages its
+    # own atomic block internally so the Redis publish (below the block,
+    # inside the controller) only fires once the kill has truly committed.
+    target_username = request.data.get('username')
+    budget = request.data.get('budget')
+    attack_type = request.data.get('attack_type')
+
+    try:
+        return Response(
+            AssassinationController(request.user).attempt_assassination(target_username, budget, attack_type),
+            status=200)
+    except OOEException as e:
+        return Response({
+            'status': 'error',
+            'message': str(e),
+        }, status=400)

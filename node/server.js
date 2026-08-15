@@ -140,6 +140,23 @@ async function initRedis() {
         }
     });
 
+    // ── Elimination subscriptions ──
+    // Subscribe to player_eliminated:* — push to the eliminated user's own
+    // notification room so their dashboard can animate in real time if
+    // they're online. Reuses the same personal room DMs already use.
+    await redisSub.pSubscribe('player_eliminated:*', (message, channel) => {
+        try {
+            const data = JSON.parse(message);
+            const userId = channel.split(':')[1];
+
+            if (notifNamespace) {
+                notifNamespace.to(`user_${userId}`).emit('player_eliminated', data);
+            }
+        } catch (e) {
+            console.error('Error handling player_eliminated:', e);
+        }
+    });
+
     console.log('Connected to Redis Pub/Sub!');
 }
 

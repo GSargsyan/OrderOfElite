@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useContext } from 'react'
 import socketIOClient from "socket.io-client"
 import { CHAT_SOCKET_PATH, chatSocketUrl } from 'modules/Base/constants.js'
 import { request } from 'modules/Base'
+import { UserPreviewCtx } from 'modules/Dashboard'
 
 
 /**
@@ -199,7 +200,9 @@ export function ChatBoard({ chatRoomId, name }) {
                                 </div>
                             )}
                             <div className="chat-message">
-                                <span className="chat-msg-username">{msg.username}</span>
+                                <span className="chat-msg-username">
+                                    {msg.username}{msg.dead && <span className="dead-mark" title="Deceased"> †</span>}
+                                </span>
                                 <span className="chat-msg-separator">: </span>
                                 <span className="chat-msg-text">{msg.message}</span>
                                 {msg.created_at && (
@@ -242,6 +245,8 @@ export function ChatBoard({ chatRoomId, name }) {
  * Two views: conversation list and conversation detail (message history).
  */
 export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }) {
+    const { userPreviewData } = useContext(UserPreviewCtx)
+    const ownDead = Boolean(userPreviewData?.died_at)
     const [conversations, setConversations] = useState([])
     const [selectedUser, setSelectedUser] = useState(null)
     const [dmMessages, setDmMessages] = useState([])
@@ -406,8 +411,11 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
         })
     }, [selectedUser, loadingMessages, hasMoreHistory, dmMessages])
 
+    const selectedConv = conversations.find(c => c.username === selectedUser)
+    const conversationDisabled = ownDead || Boolean(selectedConv?.other_dead)
+
     const handleSendDm = () => {
-        if (!currentMessage.trim() || !selectedUser || sendingMessage) return
+        if (!currentMessage.trim() || !selectedUser || sendingMessage || conversationDisabled) return
 
         setSendingMessage(true)
         request({
@@ -496,7 +504,10 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
                     <button className="dm-back-btn" onClick={handleBackClick}>
                         ← Back
                     </button>
-                    <span className="dm-conversation-title">{selectedUser}</span>
+                    <span className="dm-conversation-title">
+                        {selectedUser}
+                        {selectedConv?.other_dead && <span className="dead-mark" title="Deceased"> †</span>}
+                    </span>
                 </div>
 
                 <div
@@ -559,11 +570,12 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
                         onKeyDown={handleKeyDown}
                         placeholder="Compose secure message..."
                         maxLength={500}
+                        disabled={conversationDisabled}
                     />
                     <button
                         className="chat-send-btn"
                         onClick={handleSendDm}
-                        disabled={!currentMessage.trim() || sendingMessage}
+                        disabled={!currentMessage.trim() || sendingMessage || conversationDisabled}
                     >Send</button>
                 </div>
             </>
@@ -594,7 +606,10 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
                     onClick={() => setSelectedUser(conv.username)}
                 >
                     <div className="dm-conv-top-row">
-                        <span className="dm-conv-username">{conv.username}</span>
+                        <span className="dm-conv-username">
+                            {conv.username}
+                            {conv.other_dead && <span className="dead-mark" title="Deceased"> †</span>}
+                        </span>
                         <span className="dm-conv-time">
                             {formatRelativeTime(conv.last_message_time)}
                         </span>

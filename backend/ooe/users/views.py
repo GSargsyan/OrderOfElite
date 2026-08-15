@@ -236,7 +236,7 @@ def get_homepage_stats(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_top_elites(request):
-    top_users = User.objects.order_by('-rank', '-exp')[:10]
+    top_users = User.objects.filter(died_at__isnull=True).order_by('-rank', '-exp')[:10]
     data = []
     for user in top_users:
         data.append({
@@ -245,3 +245,37 @@ def get_top_elites(request):
             'exp': user.exp,
         })
     return Response({'top_elites': data}, status=200)
+
+
+EMAIL_REGEX = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+
+@api_view(['POST'])
+@auth_by_token
+def get_settings_tab_data(request):
+    user = request.user
+    return Response({
+        'email': user.email or '',
+    }, status=200)
+
+@api_view(['POST'])
+@auth_by_token
+def update_settings(request):
+    user = request.user
+    raw_email = request.data.get('email', '')
+    email = raw_email.strip() if isinstance(raw_email, str) else ''
+
+    if email:
+        if not re.match(EMAIL_REGEX, email):
+            return Response({'error': 'Please enter a valid email address.'}, status=400)
+        user.email = email
+    else:
+        user.email = None
+
+    user.save(update_fields=['email'])
+
+    return Response({
+        'status': 'success',
+        'message': 'Settings updated successfully.',
+        'email': user.email or '',
+    }, status=200)
+

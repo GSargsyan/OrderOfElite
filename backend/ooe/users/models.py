@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=30, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     last_login_time = models.DateTimeField(null=True, blank=True)
@@ -41,6 +41,9 @@ class User(AbstractBaseUser):
     png_until = models.DateTimeField(null=True, blank=True)
     # Permanent dossier mark: has broken a Seal at least once
     seal_breaker = models.BooleanField(default=False)
+    # Permadeath: set once and never cleared. A user can only die once, so
+    # this doubles as the boolean "is dead" flag and the death timestamp.
+    died_at = models.DateTimeField(null=True, blank=True, default=None)
 
     objects = UserManager()
 
@@ -85,6 +88,9 @@ class User(AbstractBaseUser):
         from django.utils import timezone
         return self.png_until is not None and self.png_until > timezone.now()
 
+    def is_dead(self):
+        return self.died_at is not None
+
     def get_rank_progress(self):
         if self.rank + 1 not in RANK_EXPS:
             return 100.0
@@ -128,6 +134,8 @@ class User(AbstractBaseUser):
             'money_cash': self.money_cash,
             'health': self.health,
             'elite_coins': self.elite_coins,
+            'kills': self.kills,
+            'died_at': self.died_at.timestamp() if self.died_at else None,
             'rank': self.rank,
             'rank_progress': self.get_rank_progress(),
             # Effective (multiplied) stats
@@ -216,6 +224,8 @@ class User(AbstractBaseUser):
             'cooldown_seconds': cooldown_seconds,
             'persona_non_grata': self.is_persona_non_grata(),
             'seal_breaker': self.seal_breaker,
+            'is_dead': self.is_dead(),
+            'kills': self.kills,
         }
 
         return res

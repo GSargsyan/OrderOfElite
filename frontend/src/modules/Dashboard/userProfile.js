@@ -123,7 +123,10 @@ function UserProfileModal({ userProfileData, onClose, onMessageClick }) {
                 
                 <div className="profile-content">
                     <div className="profile-stats-card">
-                        <p><strong>Username:</strong> {profileData.username}</p>
+                        <p>
+                            <strong>Username:</strong> {profileData.username}
+                            {profileData.is_dead && <span className="dead-mark" title="Deceased"> †</span>}
+                        </p>
                         <p><strong>Rank:</strong> {profileData.rank}</p>
                         {(profileData.persona_non_grata || profileData.seal_breaker) && (
                             <p className="profile-marks">

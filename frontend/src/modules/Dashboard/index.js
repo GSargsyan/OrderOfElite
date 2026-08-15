@@ -1,6 +1,8 @@
 // import axios from 'axios'
 import React, { createContext, useState, useEffect, memo, useRef, useCallback } from 'react'
+import socketIOClient from "socket.io-client"
 
+import { CHAT_SOCKET_PATH, chatSocketUrl } from 'modules/Base/constants'
 import ChatContainer from 'modules/Chat/chatContainer.js'
 import MissionsTab from 'modules/Missions/missionsTab.js'
 import SkillsTab from 'modules/Skills/skillsTab.js'
@@ -16,8 +18,11 @@ import AssassinationTab from 'modules/Assassination/assassinationTab.js'
 import GrandCouncilTab from 'modules/GrandCouncil/grandCouncilTab.js'
 import SealsTab from 'modules/Seals/sealsTab.js'
 import PremiumTab from 'modules/Premium/premiumTab.js'
+import SettingsTab from 'modules/Settings/settingsTab.js'
 import UserProfileModal from 'modules/Dashboard/userProfile.js'
+import { EliminatedOverlay, EliminatedModal } from 'modules/Dashboard/eliminatedOverlay.js'
 import { request, formatMoney } from 'modules/Base'
+import { HeaderRightNav } from 'modules/Home/header'
 import Footer from 'modules/Home/footer'
 import 'styles/dashboard.css'
 
@@ -30,11 +35,16 @@ const FLIGHT_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items', 'ass
 // Tabs that are blocked while the user is inside the Citadel
 const CITADEL_BLOCKED_TABS = ['missions', 'skills', 'black_market', 'items', 'travel', 'assassination']
 
+// The only tab a deceased player can still reach.
+const DEAD_ALLOWED_TAB = 'settings'
+
 function Dashboard() {
     const [activeTab, setActiveTab] = useState('dashboard')
     const [userPreviewData, setUserPreviewData] = useState(null)
     const [userProfileData, setUserProfileData] = useState(null)
     const [showUserProfileModal, setShowUserProfileModal] = useState(false)
+    const [eliminating, setEliminating] = useState(false)
+    const [showEliminatedModal, setShowEliminatedModal] = useState(false)
 
     // chat states
     const [messageUser, setMessageUser] = useState(null)
@@ -49,6 +59,29 @@ function Dashboard() {
                 setUserPreviewData(response.data)
             })
     }, [])
+
+    // Real-time elimination push — reuses the notifications namespace's
+    // per-user room (same one DMs use). Own connection, same pattern as
+    // ChatContainer's notification socket: cheap, self-contained, no
+    // shared-state entanglement with chat.
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        const socket = socketIOClient(chatSocketUrl('/notifications'), {
+            path: CHAT_SOCKET_PATH,
+            query: { token },
+            forceNew: true,
+        })
+
+        socket.on('player_eliminated', () => {
+            setEliminating(true)
+            updateUserPreviewData()
+            setTimeout(() => setShowEliminatedModal(true), 1500)
+        })
+
+        return () => socket.disconnect()
+    }, [updateUserPreviewData])
+
+    const isDead = Boolean(userPreviewData?.died_at) || eliminating
 
     const tabComponents = {
         'dashboard': {
@@ -121,6 +154,11 @@ function Dashboard() {
                 'setShowUserProfileModal': setShowUserProfileModal,
             }
         },
+        'settings': {
+            'component': SettingsTab,
+            'label': 'Settings',
+            'props': {}
+        },
     }
 
     useEffect(() => {
@@ -151,11 +189,13 @@ function Dashboard() {
                     flightData={flightData}
                     isInCitadel={isInCitadel}
                 />
+
+                <HeaderRightNav onSelectTab={setActiveTab} />
             </div>
 
             {/* ── Center Layout ──────────────────────── */}
             <UserPreviewCtx.Provider value={{ userPreviewData, updateUserPreviewData }}>
-                <div className="center-layout">
+                <div className={`center-layout ${isDead ? 'center-layout--dead' : ''}`}>
                     <ChatContainer messageUser={messageUser} />
 
                     <GameDash
@@ -164,6 +204,7 @@ function Dashboard() {
                         isInFlight={isInFlight}
                         flightData={flightData}
                         isInCitadel={isInCitadel}
+                        isDead={isDead}
                         setUserProfileData={setUserProfileData}
                     />
 
@@ -172,6 +213,7 @@ function Dashboard() {
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}
                         isInFlight={isInFlight}
+                        isDead={isDead}
                     />
                 </div>
 
@@ -185,21 +227,26 @@ function Dashboard() {
                         }}
                     />
                 )}
+
+                {showEliminatedModal && (
+                    <EliminatedModal onClose={() => setShowEliminatedModal(false)} />
+                )}
             </UserPreviewCtx.Provider>
             <Footer />
         </div>
     )
 }
 
-function MenuItems({ tabComponents, activeTab, setActiveTab, isInFlight }) {
+function MenuItems({ tabComponents, activeTab, setActiveTab, isInFlight, isDead }) {
     return (
         <div className="menu-panel glass-panel">
             {Object.keys(tabComponents).map(tabKey => {
+                const blockedByDeath = isDead && tabKey !== DEAD_ALLOWED_TAB
                 return (
                     <button
-                        className={`menu-btn ${activeTab === tabKey ? 'active' : ''}`}
+                        className={`menu-btn ${activeTab === tabKey ? 'active' : ''} ${blockedByDeath ? 'menu-btn--dead-blocked' : ''}`}
                         key={tabKey}
-                        onClick={() => setActiveTab(tabKey)}
+                        onClick={() => { if (!blockedByDeath) setActiveTab(tabKey) }}
                     >
                         {tabComponents[tabKey].label}
                     </button>
@@ -215,21 +262,26 @@ function GameDash({
     isInFlight,
     flightData,
     isInCitadel,
+    isDead,
     setUserProfileData,
     setShowUserProfileModal
 }) {
-    const isBlockedByFlight = isInFlight && FLIGHT_BLOCKED_TABS.includes(activeTab)
-    const isBlockedByCitadel = isInCitadel && CITADEL_BLOCKED_TABS.includes(activeTab)
+    const isBlockedByDeath = isDead && activeTab !== DEAD_ALLOWED_TAB
+    const isBlockedByFlight = !isBlockedByDeath && isInFlight && FLIGHT_BLOCKED_TABS.includes(activeTab)
+    const isBlockedByCitadel = !isBlockedByDeath && isInCitadel && CITADEL_BLOCKED_TABS.includes(activeTab)
 
     return (
         <div
-            key={isBlockedByFlight ? 'flight-overlay'
+            key={isBlockedByDeath ? 'eliminated-overlay'
+                : isBlockedByFlight ? 'flight-overlay'
                 : isBlockedByCitadel ? 'citadel-overlay'
                 : activeTab}
             className='central-panel glass-panel'
             style={{ position: 'relative' }}
         >
-            {isBlockedByFlight ? (
+            {isBlockedByDeath ? (
+                <EliminatedOverlay />
+            ) : isBlockedByFlight ? (
                 <FlightOverlay />
             ) : isBlockedByCitadel ? (
                 <CitadelOverlay />
@@ -572,17 +624,6 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                                 <span className="up-stat-label">HP</span> {userPreviewData.health}%
                             </span>
 
-                            <span
-                                className="user-preview-elite-coins"
-                                onMouseEnter={() => setShowEliteCoinTooltip(true)}
-                                onMouseLeave={() => setShowEliteCoinTooltip(false)}
-                            >
-                                🪙 <AnimatedSkill value={userPreviewData.elite_coins} />
-                                {showEliteCoinTooltip && (
-                                    <EliteCoinTooltip eliteCoins={userPreviewData.elite_coins} />
-                                )}
-                            </span>
-
                             <span className="user-preview-money"><AnimatedMoney value={userPreviewData.money_cash} /></span>
                         </span>
                     </div>
@@ -599,6 +640,18 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                             <span className="up-stat-label">RANK</span>
                             <span className="up-stat-value">{userPreviewData.rank}</span>
                             <span className="up-stat-progress">({Math.floor(userPreviewData.rank_progress)}%)</span>
+                        </span>
+                        <span className="up-stat-sep">|</span>
+
+                        <span
+                            className="user-preview-elite-coins"
+                            onMouseEnter={() => setShowEliteCoinTooltip(true)}
+                            onMouseLeave={() => setShowEliteCoinTooltip(false)}
+                        >
+                            <span className="up-stat-label">COINS</span> <AnimatedSkill value={userPreviewData.elite_coins} />
+                            {showEliteCoinTooltip && (
+                                <EliteCoinTooltip eliteCoins={userPreviewData.elite_coins} />
+                            )}
                         </span>
                         <span className="up-stat-sep">|</span>
 

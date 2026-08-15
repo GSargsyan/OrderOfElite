@@ -11,7 +11,9 @@ from .views import \
     add_review, \
     subscribe_premium, \
     cancel_premium, \
-    heal
+    heal, \
+    get_settings_tab_data, \
+    update_settings
 
 urlpatterns = [
     path('api/users/subscribe_premium', subscribe_premium, name='subscribe_premium'),
@@ -26,4 +28,7 @@ urlpatterns = [
     path('api/users/top-elites', get_top_elites, name='top_elites'),
     path('api/users/add_review', add_review, name='add_review'),
     path('api/users/heal', heal, name='heal'),
+    path('api/users/get_settings_tab_data', get_settings_tab_data, name='get_settings_tab_data'),
+    path('api/users/update_settings', update_settings, name='update_settings'),
 ]
+

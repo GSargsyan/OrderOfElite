@@ -1,9 +1,27 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
-import { request, formatSeconds } from 'modules/Base'
+import { request, formatSeconds, formatMoney } from 'modules/Base'
 import { UserPreviewCtx } from 'modules/Dashboard'
 
 const SEARCH_COST_CITY = 1
 const SEARCH_COST_GLOBAL = 5
+
+const ATTACK_TYPES = [
+    {
+        key: 'regular',
+        label: 'Regular',
+        description: 'Direct engagement. Highest chance of a decisive outcome, for both parties.',
+    },
+    {
+        key: 'driveby',
+        label: 'Drive-by',
+        description: 'Reduced exposure. Reduced effect, for both parties.',
+    },
+    {
+        key: 'sniping',
+        label: 'Long Range Sniping',
+        description: 'Minimal exposure. Requires a significant advantage to secure an elimination.',
+    },
+]
 
 function formatResult(entry) {
     if (!entry.found) {
@@ -75,7 +93,8 @@ function SearchSection() {
                 Locate a target before attempting an assassination. A City search reports
                 whether the target is currently in your city; a Global search locates them
                 in any city. Results take 20 minutes to come through and reflect the
-                target's status at the moment the search was made.
+                target's status at the moment the search was made. A successful search
+                remains valid grounds for an attempt for 20 minutes after it resolves.
             </p>
 
             <div className="assassination-form search-form">
@@ -146,47 +165,229 @@ function SearchSection() {
     )
 }
 
-function AssassinationTab() {
-    const [eliteName, setEliteName] = useState('')
-    const [operationalBudget, setOperationalBudget] = useState('')
+function GearInfoRow({ label, gun, car }) {
+    return (
+        <div className="attack-gear-row">
+            <span className="attack-gear-label">{label}</span>
+            <span className="attack-gear-value">{gun || 'No firearm equipped'}</span>
+            <span className="attack-gear-value">{car || 'No vehicle equipped'}</span>
+        </div>
+    )
+}
 
+function AttackSection() {
+    const { updateUserPreviewData } = useContext(UserPreviewCtx)
+
+    const [targetName, setTargetName] = useState('')
+    const [operationalBudget, setOperationalBudget] = useState('')
+    const [attackType, setAttackType] = useState('regular')
+    const [panelData, setPanelData] = useState(null)
+    const [loadingPanel, setLoadingPanel] = useState(false)
+    const [submitError, setSubmitError] = useState(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [result, setResult] = useState(null)
+    const [now, setNow] = useState(() => Math.floor(Date.now() / 1000))
+
+    useEffect(() => {
+        const interval = setInterval(() => setNow(Math.floor(Date.now() / 1000)), 1000)
+        return () => clearInterval(interval)
+    }, [])
+
+    // Debounced lookup — refetches on every keystroke, including the
+    // initial empty value (which still returns the attacker's own gear
+    // and cooldown status).
+    useEffect(() => {
+        setLoadingPanel(true)
+        const handle = setTimeout(() => {
+            request({
+                url: 'assassination/get_attack_panel_data',
+                method: 'POST',
+                data: { username: targetName.trim() },
+            })
+                .then(res => {
+                    setPanelData(res.data)
+                    setLoadingPanel(false)
+                })
+                .catch(() => setLoadingPanel(false))
+        }, 400)
+        return () => clearTimeout(handle)
+    }, [targetName])
+
+    const cooldownRemaining = panelData?.cooldown_until
+        ? Math.max(0, Math.round(panelData.cooldown_until - now))
+        : 0
+    const searchExpired = panelData?.search_expires_at
+        ? panelData.search_expires_at - now <= 0
+        : false
+    const hasValidSearch = Boolean(panelData?.has_valid_search) && !searchExpired
+    const budgetNum = parseInt(operationalBudget, 10)
+
+    const canAttack = Boolean(
+        targetName.trim() &&
+        budgetNum > 0 &&
+        hasValidSearch &&
+        !panelData?.target?.is_dead &&
+        cooldownRemaining <= 0 &&
+        !isSubmitting
+    )
+
+    const handleAttack = () => {
+        if (!canAttack) return
+
+        setSubmitError(null)
+        setIsSubmitting(true)
+        request({
+            url: 'assassination/attempt',
+            method: 'POST',
+            data: {
+                username: targetName.trim(),
+                budget: budgetNum,
+                attack_type: attackType,
+            },
+        })
+            .then(res => {
+                setResult(res.data)
+                setIsSubmitting(false)
+                updateUserPreviewData()
+                request({
+                    url: 'assassination/get_attack_panel_data',
+                    method: 'POST',
+                    data: { username: targetName.trim() },
+                }).then(r => setPanelData(r.data))
+            })
+            .catch(err => {
+                setSubmitError(err.response?.data?.message || 'The operation failed.')
+                setIsSubmitting(false)
+            })
+    }
+
+    let targetNote = null
+    if (targetName.trim() && !loadingPanel) {
+        if (panelData?.target?.is_dead) {
+            targetNote = 'This operative is already deceased.'
+        } else if (!hasValidSearch) {
+            targetNote = 'No current intelligence on this target. Conduct a search first.'
+        }
+    }
+
+    return (
+        <div className="attack-section">
+            <div className="profile-section-title">Engage</div>
+
+            <div className="attack-gear-panel">
+                <GearInfoRow
+                    label="You"
+                    gun={panelData?.attacker?.gun}
+                    car={panelData?.attacker?.car}
+                />
+                {panelData?.target && (
+                    <GearInfoRow
+                        label="Target"
+                        gun={panelData.target.gun}
+                        car={panelData.target.car}
+                    />
+                )}
+            </div>
+
+            <div className="assassination-form">
+                <div className="assassination-field">
+                    <label className="assassination-label">Target Name</label>
+                    <input
+                        type="text"
+                        className="assassination-input"
+                        placeholder="Enter target's name"
+                        value={targetName}
+                        onChange={e => { setTargetName(e.target.value); setResult(null) }}
+                        disabled={isSubmitting}
+                    />
+                </div>
+
+                <div className="assassination-field">
+                    <label className="assassination-label">Operational Budget</label>
+                    <input
+                        type="number"
+                        className="assassination-input"
+                        placeholder="$0"
+                        min="0"
+                        value={operationalBudget}
+                        onChange={e => setOperationalBudget(e.target.value)}
+                        disabled={isSubmitting}
+                    />
+                </div>
+
+                <div className="assassination-field">
+                    <label className="assassination-label">Attack Type</label>
+                    <div className="attack-type-options">
+                        {ATTACK_TYPES.map(t => (
+                            <button
+                                key={t.key}
+                                type="button"
+                                className={`attack-type-option ${attackType === t.key ? 'selected' : ''}`}
+                                onClick={() => setAttackType(t.key)}
+                                disabled={isSubmitting}
+                            >
+                                <span className="attack-type-option-label">{t.label}</span>
+                                <span className="attack-type-option-desc">{t.description}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {targetNote && <div className="profile-error">{targetNote}</div>}
+                {cooldownRemaining > 0 && (
+                    <div className="profile-error">
+                        Recovering from your last operation. Available in {formatSeconds(cooldownRemaining)}
+                    </div>
+                )}
+                {submitError && <div className="profile-error">{submitError}</div>}
+
+                <button
+                    className="btn-assassination"
+                    disabled={!canAttack}
+                    onClick={handleAttack}
+                >
+                    {isSubmitting ? 'ENGAGING...' : 'ATTEMPT ASSASSINATION'}
+                </button>
+            </div>
+
+            {result && (
+                <div className="attack-result-panel">
+                    <div className="attack-result-row">
+                        <span className="attack-result-label">Your Health</span>
+                        <span className="attack-result-value">{result.attacker_health}%</span>
+                    </div>
+                    <div className="attack-result-row">
+                        <span className="attack-result-label">Target's Health</span>
+                        <span className="attack-result-value">{result.defender_health}%</span>
+                    </div>
+
+                    {result.target_eliminated ? (
+                        <div className="attack-result-banner">
+                            TARGET ELIMINATED
+                            {result.money_looted > 0 && (
+                                <div className="attack-result-loot">
+                                    {formatMoney(result.money_looted)} recovered from the target
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="attack-result-outcome">
+                            {result.outcome === 'backfire'
+                                ? 'The operation was repelled.'
+                                : 'The target survived the encounter.'}
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    )
+}
+
+function AssassinationTab() {
     return (
         <div className="assassination-tab">
             <SearchSection />
-
-            <div className="not-implemented-tab">
-                <div className="not-implemented-icon">🎯</div>
-                <h2 className="not-implemented-title">NOT IMPLEMENTED</h2>
-
-                <div className="assassination-form">
-                    <div className="assassination-field">
-                        <label className="assassination-label">ELITE NAME</label>
-                        <input
-                            type="text"
-                            className="assassination-input"
-                            placeholder="Enter target's name"
-                            value={eliteName}
-                            onChange={e => setEliteName(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="assassination-field">
-                        <label className="assassination-label">OPERATIONAL BUDGET</label>
-                        <input
-                            type="number"
-                            className="assassination-input"
-                            placeholder="$0"
-                            min="0"
-                            value={operationalBudget}
-                            onChange={e => setOperationalBudget(e.target.value)}
-                        />
-                    </div>
-
-                    <button className="btn-assassination" disabled>
-                        ATTEMPT ASSASSINATION
-                    </button>
-                </div>
-            </div>
+            <AttackSection />
         </div>
     )
 }

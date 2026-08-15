@@ -8,7 +8,8 @@ class EventTypes:
     ITEM_BOUGHT = 'item_bought'
     ITEM_SOLD = 'item_sold'
     SKILL_TRAINED = 'skill_trained'
-    # Future: 'player_killed', 'money_sent', 'mission_completed', ...
+    PLAYER_KILLED = 'player_killed'
+    # Future: 'money_sent', 'mission_completed', ...
 
 
 def emit_event(event_type, actor, target=None, city=None, metadata=None):

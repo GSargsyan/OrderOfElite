@@ -85,6 +85,7 @@ class ChatRoom(models.Model):
                 'last_message_time': last_msg.created_at.isoformat(),
                 'is_mine': last_msg.user_id == user.id,
                 'unread_count': unread_count,
+                'other_dead': other_user.died_at is not None,
             })
 
         return conversations
@@ -129,6 +130,7 @@ class Message(models.Model):
             'message': msg.message,
             'is_mine': msg.user_id == user1.id,
             'created_at': msg.created_at.isoformat(),
+            'dead': msg.user.died_at is not None,
         } for msg in messages]
 
     @staticmethod
@@ -151,4 +153,5 @@ class Message(models.Model):
             'username': msg.user.username,
             'message': msg.message,
             'created_at': msg.created_at.isoformat(),
+            'dead': msg.user.died_at is not None,
         } for msg in messages]

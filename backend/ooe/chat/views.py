@@ -72,6 +72,9 @@ def send_dm(request):
     if recipient.id == request.user.id:
         return Response({'error': 'Cannot message yourself'}, status=400)
 
+    if request.user.is_dead() or recipient.is_dead():
+        return Response({'error': 'This conversation is no longer active'}, status=400)
+
     # Find or create the DM room
     room = ChatRoom.get_or_create_dm_room(request.user, recipient)
 
