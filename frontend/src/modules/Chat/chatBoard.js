@@ -226,7 +226,7 @@ export function ChatBoard({ chatRoomId, name }) {
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Transmit to operatives..."
+                    placeholder="Type a message"
                     maxLength={100}
                 />
                 <button
@@ -558,7 +558,7 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
 
                 {dmMessages.length === 0 && !loadingMessages && (
                     <div className="chat-empty-state">
-                        No messages yet. Send the first transmission.
+                        No messages yet.
                     </div>
                 )}
 
@@ -568,7 +568,7 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Compose secure message..."
+                        placeholder="Type a message"
                         maxLength={500}
                         disabled={conversationDisabled}
                     />
@@ -591,10 +591,10 @@ export function MessagesBoard({ messageUser, onMessageUserHandled, notifSocket }
 
             {!loadingConversations && conversations.length === 0 && (
                 <div className="chat-empty-state">
-                    No transmissions yet.
+                    No conversations yet.
                     <br />
                     <span className="chat-empty-hint">
-                        Visit a player's profile to initiate contact.
+                        Visit a player's profile to start a conversation.
                     </span>
                 </div>
             )}

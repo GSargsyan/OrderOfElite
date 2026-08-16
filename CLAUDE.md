@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Order of Elites is an online text-based PBBG (Persistent Browser-Based Game) — a John Wick-inspired assassins' universe. Players earn money via missions and drug/alcohol production, kill each other (permadeath), chat, and send DMs. The draft game design/rules live in `README.md` (ranks, missions, black market economy formulas, weapons/cars/houses pricing, travel times, etc.). It might not match with what I actually have coded, because
+Order of Elite is an online text-based PBBG (Persistent Browser-Based Game) — a John Wick-inspired assassins' universe. Players earn money via missions and drug/alcohol production, kill each other (permadeath), chat, and send DMs. The draft game design/rules live in `README.md` (ranks, missions, black market economy formulas, weapons/cars/houses pricing, travel times, etc.). It might not match with what I actually have coded, because
 I sometimes forget to update the README.md, so don't rely on that unless I tell you that
 specific part is finilized.
 I'm building this with the help of AI, especially for the UI/UX, because I'm bad at
@@ -14,6 +14,7 @@ Think of it as an informative website rather than a game, when generating a text
 E.g. Don't write: High altitude, zero grid. No contracts, no training, no market until you land.
 Instead write: During the duration of a flight, Missions, Skills and Black Market will be unavailable.
 
+Order of Elite reads as a serious operational tool, not a game. The target player is an adult, working professional. Even though the premise (assassins, permadeath) is high-stakes and can produce real adrenaline in the moment, the UI itself should feel closer to a secure terminal, a trading dashboard, or an internal ops console than to a typical browser game. No cartoonish elements, no playful iconography, no "reward" visual language (bright badges, particle effects, celebratory colors, glowing loot-style borders).
 
 ## Architecture
 
@@ -28,7 +29,7 @@ Four services, orchestrated via `docker-compose.yml`, communicating over Redis p
 
 Django views never push over WebSockets directly. Instead:
 1. A Django view/controller mutates state and calls `redis_client.publish(channel, json_payload)`.
-2. Channels used: `city_message:<room_id>`, `dm_message:<user_id>`, `user_market_update:<user_id>`, `prices_updated`.
+2. Channels used: `city_message:<room_id>`, `dm_message:<user_id>`, `user_market_update:<user_id>`, `prices_updated`, `player_eliminated:<user_id>`, `notification:<user_id>` (generic bell/toast push — see `ooe.notifications.controllers.push`).
 3. `node/server.js` subscribes to these channels (`redisSub.pSubscribe`/`subscribe`) and re-emits over the matching Socket.IO namespace (`/chat-<room_id>`, the DM notifications namespace, `/black-market`) to connected frontend clients.
 
 ### Game logic pattern (controllers)

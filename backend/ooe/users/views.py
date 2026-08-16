@@ -49,7 +49,7 @@ def subscribe_premium(request):
 
     return Response({
         'status': 'success',
-        'message': 'Membership confirmed. The privileges of the Order are now yours.',
+        'message': 'Membership confirmed. Premium features are now active.',
         'is_premium': True,
     }, status=200)
 

@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.db import transaction
-from django.db.models import Q
 from django.utils import timezone
 
 from ooe.base.exceptions import OOEException
@@ -109,8 +108,6 @@ class CitadelController:
     def enter(user, minutes):
         from ooe.travel.controllers import TravelController
         from ooe.travel.models import FlightLog
-        from ooe.missions.models import ExtractionMission
-
         try:
             minutes = int(minutes)
         except (TypeError, ValueError):
@@ -137,12 +134,10 @@ class CitadelController:
         if FlightLog.objects.filter(user=user, arrived_at__isnull=True).exists():
             raise OOEException('Sanctuary cannot be sought mid-flight.')
 
-        # Entering the Citadel abandons any Extraction mission the user is
-        # part of - same policy as traveling.
-        ExtractionMission.objects.filter(
-            Q(initiator=user, status__in=ExtractionMission.ACTIVE_STATUSES) |
-            Q(driver=user, status__in=ExtractionMission.JOINED_STATUSES)
-        ).update(status=ExtractionMission.CANCELLED, updated_at=timezone.now())
+        # Entering the Citadel disrupts any party mission the user is part
+        # of - same policy as traveling.
+        from ooe.missions.controllers import fail_or_cancel_party_missions_for
+        fail_or_cancel_party_missions_for(user)
 
         now = timezone.now()
         CitadelStay.objects.create(

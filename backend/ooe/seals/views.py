@@ -15,7 +15,7 @@ def premium_required(view_func):
         if not request.user.is_premium:
             return Response({
                 'status': 'error',
-                'message': 'Seals are reserved for members of standing.',
+                'message': 'Seals are available to Premium members only.',
             }, status=403)
         return view_func(request, *args, **kwargs)
 

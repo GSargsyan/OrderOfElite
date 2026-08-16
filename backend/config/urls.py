@@ -13,9 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', include('ooe.users.urls')),
     path('', include('ooe.chat.urls')),
     path('', include('ooe.dashboard.urls')),
@@ -26,5 +28,7 @@ urlpatterns = [
     path('', include('ooe.citadel.urls')),
     path('', include('ooe.seals.urls')),
     path('', include('ooe.assassination.urls')),
+    path('', include('ooe.grand_council.urls')),
+    path('', include('ooe.notifications.urls')),
     # path('', include('ooe.cities.urls')),
 ]

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { NotificationBell } from 'components/NotificationBell';
 
 export function HeaderRightNav({ onSelectTab }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -30,17 +31,7 @@ export function HeaderRightNav({ onSelectTab }) {
 
   return (
     <div className="header-right-nav">
-      {/* Grey Filled Bell Icon */}
-      <div className="header-nav-item bell-item" title="Notifications">
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          viewBox="0 0 24 24" 
-          fill="currentColor" 
-          className="bell-svg"
-        >
-          <path d="M12 22a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22zm7-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C8.64 5.36 7 7.92 7 11v5l-2 2v1h14v-1l-2-2z" />
-        </svg>
-      </div>
+      <NotificationBell />
 
       {/* My Account Section with Dropdown */}
       <div className="account-dropdown-wrapper" ref={dropdownRef}>
@@ -112,7 +103,6 @@ function Header() {
           Order <span className="accent">of</span> Elite
         </h1>
       </div>
-      <HeaderRightNav />
     </header>
   );
 }

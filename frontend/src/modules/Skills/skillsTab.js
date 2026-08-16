@@ -1,21 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { request, formatSeconds, formatMoney, secondsRemaining } from 'modules/Base'
 import { UserPreviewCtx } from 'modules/Dashboard'
+import { CrosshairIcon, ShieldIcon, SteeringWheelIcon } from 'components/icons'
 
 const SKILL_CONFIG = {
     attack: {
         label: 'Attack',
-        icon: '⚔',
+        icon: CrosshairIcon,
         description: 'Increases your chances of a successful backfire and assassination against other players and NPCs during missions.',
     },
     defense: {
         label: 'Defense',
-        icon: '🛡',
+        icon: ShieldIcon,
         description: 'Improves your chances of survival when other players make an assassination attempt on your life.',
     },
     driving: {
         label: 'Driving',
-        icon: '🏎',
+        icon: SteeringWheelIcon,
         description: 'Vastly improves mission outcomes when you\'re behind the wheel, and slightly tips assassination odds in your favor.',
     },
 }
@@ -43,18 +44,21 @@ function TrainingPanel({ title, tier, selected, onSelect, cost, points, cooldown
             </div>
 
             <div className="skill-selector">
-                {SKILL_NAMES.map(key => (
-                    <button
-                        key={key}
-                        type="button"
-                        className={`skill-select-btn ${tier} ${selected === key ? 'active' : ''}`}
-                        onClick={() => onSelect(key)}
-                    >
-                        <span className="skill-select-icon">{SKILL_CONFIG[key].icon}</span>
-                        <span className="skill-select-label">{SKILL_CONFIG[key].label}</span>
-                        <span className="skill-select-value">{currentStats?.[`${key}_points`] ?? '—'}</span>
-                    </button>
-                ))}
+                {SKILL_NAMES.map(key => {
+                    const SkillIcon = SKILL_CONFIG[key].icon
+                    return (
+                        <button
+                            key={key}
+                            type="button"
+                            className={`skill-select-btn ${tier} ${selected === key ? 'active' : ''}`}
+                            onClick={() => onSelect(key)}
+                        >
+                            <span className="skill-select-icon"><SkillIcon /></span>
+                            <span className="skill-select-label">{SKILL_CONFIG[key].label}</span>
+                            <span className="skill-select-value">{currentStats?.[`${key}_points`] ?? '—'}</span>
+                        </button>
+                    )
+                })}
             </div>
 
             <p className="skill-description">{config.description}</p>

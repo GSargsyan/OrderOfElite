@@ -59,35 +59,26 @@ function SettingsTab() {
     }
 
     if (loading) {
-        return <div className="settings-loading">Loading configuration...</div>
+        return <div className="settings-loading">Loading...</div>
     }
 
     return (
         <div className="settings-tab-panel">
-            <div className="settings-header">
-                <h2 className="settings-title">SYSTEM CONFIGURATION</h2>
-                <span className="settings-badge">ACCOUNT PREFERENCES</span>
-            </div>
-
-            <p className="settings-intro-text">
-                Manage your account communication options. Email address is optional and not required for gameplay.
-            </p>
+            <h2 className="settings-title">Account Settings</h2>
 
             <form onSubmit={handleSave} className="settings-form">
                 <div className="settings-field-group">
-                    <label htmlFor="settings-email" className="settings-label">
-                        EMAIL ADDRESS <span className="settings-optional-tag">(OPTIONAL)</span>
-                    </label>
+                    <label htmlFor="settings-email" className="settings-label">Email</label>
                     <input
                         id="settings-email"
                         type="text"
                         className="settings-input"
-                        placeholder="e.g. operative@domain.com"
+                        placeholder="name@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <span className="settings-field-hint">
-                        No confirmation email will be sent. Used strictly for account notifications.
+                        Used only for account notifications.
                     </span>
                 </div>
 
@@ -100,7 +91,7 @@ function SettingsTab() {
                         className="btn-save-settings"
                         disabled={submitting}
                     >
-                        {submitting ? 'SAVING...' : 'SAVE CONFIGURATION'}
+                        {submitting ? 'Saving...' : 'Save'}
                     </button>
                 </div>
             </form>

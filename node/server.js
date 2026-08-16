@@ -157,6 +157,23 @@ async function initRedis() {
         }
     });
 
+    // ── General notification subscriptions ──
+    // Subscribe to notification:* — the generic bell/toast channel any app
+    // can push through (ooe.notifications.controllers.push). Same personal
+    // room as DMs/eliminations, different event name.
+    await redisSub.pSubscribe('notification:*', (message, channel) => {
+        try {
+            const data = JSON.parse(message);
+            const userId = channel.split(':')[1];
+
+            if (notifNamespace) {
+                notifNamespace.to(`user_${userId}`).emit('new_notification', data);
+            }
+        } catch (e) {
+            console.error('Error handling notification:', e);
+        }
+    });
+
     console.log('Connected to Redis Pub/Sub!');
 }
 

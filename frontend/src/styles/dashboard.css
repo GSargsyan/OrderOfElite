@@ -109,6 +109,23 @@ button {
   opacity: 0.35;
   z-index: 0;
   pointer-events: none;
+  transition: filter 1.5s ease, opacity 1.5s ease;
+}
+
+/* DEATH SCREEN TREATMENT — the city photo drains of color and dims along
+   with the rest of the screen, so the whole viewport (not just the game
+   panels) gradually settles into the same washed-out, inert state. The
+   EliminatedModal is a sibling of .center-layout, not a descendant, so it
+   is untouched and reads in full color against this background. */
+.dashboard-wrapper--dead::before {
+  filter: grayscale(1) brightness(0.6);
+  opacity: 0.22;
+}
+
+.dashboard-wrapper--dead::after {
+  background:
+    radial-gradient(ellipse at center, rgba(20, 22, 26, 0.35), rgba(6, 7, 9, 0.88) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(10, 11, 13, 0.35) 15%, rgba(10, 11, 13, 0.35) 85%, rgba(0, 0, 0, 0.7) 100%);
 }
 
 .dashboard-wrapper[data-city="New York"]::before {
@@ -137,6 +154,7 @@ button {
     linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 15%, transparent 85%, rgba(0, 0, 0, 0.5) 100%);
   z-index: 0;
   pointer-events: none;
+  transition: background 1.5s ease;
 }
 
 
@@ -211,6 +229,12 @@ button {
   align-items: center;
   padding: 16px 28px;
   gap: 20px;
+  transition: filter 1.5s ease;
+}
+
+/* DEATH SCREEN TREATMENT — see .center-layout--dead */
+.header-bar--dead {
+  filter: grayscale(1) brightness(0.72) contrast(0.94);
 }
 
 /* ── Homepage Header Container ── */
@@ -440,6 +464,12 @@ button {
   cursor: default;
 }
 
+.up-stat-coins-icon {
+  align-self: center;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+}
+
 .user-preview-elite-coins .animated-skill-container {
   font-family: var(--font-mono);
   font-size: 0.86rem;
@@ -521,6 +551,12 @@ button {
   white-space: nowrap;
 }
 
+.up-stat-rank-icon {
+  align-self: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 .up-stat-label {
   color: var(--text-secondary);
   font-weight: 600;
@@ -564,6 +600,8 @@ button {
 }
 
 .up-skill-icon {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.95rem;
   line-height: 1;
   opacity: 0.75;
@@ -760,11 +798,14 @@ button {
   transition: filter 1.5s ease;
 }
 
-/* Deceased player — visual only (grayscale), never pointer-events: none
-   here, since Settings must stay usable. Per-tab/per-button blocking is
-   handled separately (EliminatedOverlay, .menu-btn--dead-blocked). */
+/* Deceased player — visual only (grayscale + dim), never pointer-events:
+   none here, since Settings must stay usable. Per-tab/per-button blocking
+   is handled separately (EliminatedOverlay, .menu-btn--dead-blocked).
+   Mirrored on .header-bar--dead / .homepage-footer--dead /
+   .dashboard-wrapper--dead so the whole screen settles into the same
+   washed-out, inert state at once — see DEATH SCREEN TREATMENT below. */
 .center-layout--dead {
-  filter: grayscale(1);
+  filter: grayscale(1) brightness(0.72) contrast(0.94);
 }
 
 
@@ -1383,23 +1424,23 @@ button {
   border-color: rgba(140, 165, 185, 0.12);
 }
 
-/* Extraction mission (2-player, wider card) */
-.mission-card-extraction {
+/* Exfiltration mission (2-player, wider card) */
+.mission-card-exfiltration {
   flex: 1 1 100%;
   max-width: 100%;
 }
 
-.extraction-sections {
+.exfiltration-sections {
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
 }
 
-.extraction-section {
+.exfiltration-section {
   flex: 1 1 280px;
 }
 
-.extraction-section h4 {
+.exfiltration-section h4 {
   margin: 0 0 8px;
   font-family: var(--font-display);
   font-size: 0.82rem;
@@ -1408,7 +1449,7 @@ button {
   text-transform: uppercase;
 }
 
-.extraction-note {
+.exfiltration-note {
   font-family: var(--font-body);
   font-size: 0.78rem;
   color: var(--text-secondary);
@@ -1416,18 +1457,18 @@ button {
   margin-bottom: 10px;
 }
 
-.extraction-highlight {
+.exfiltration-highlight {
   color: var(--accent-cyan);
 }
 
-.extraction-invite-row {
+.exfiltration-invite-row {
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
 
-.extraction-input {
+.exfiltration-input {
   flex: 1 1 180px;
   max-width: 260px;
   padding: 8px 12px;
@@ -1441,16 +1482,16 @@ button {
   transition: border-color var(--transition-med);
 }
 
-.extraction-input:focus {
+.exfiltration-input:focus {
   border-color: var(--accent-cyan);
 }
 
-.extraction-input option {
+.exfiltration-input option {
   background: #101822;
   color: var(--text-primary);
 }
 
-.extraction-invitation-row {
+.exfiltration-invitation-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1462,18 +1503,18 @@ button {
   border-radius: var(--radius-md);
 }
 
-.extraction-invitation-name {
+.exfiltration-invitation-name {
   font-family: var(--font-ui);
   font-size: 0.85rem;
   color: var(--text-primary);
 }
 
-.extraction-invitation-actions {
+.exfiltration-invitation-actions {
   display: flex;
   gap: 8px;
 }
 
-.btn-extraction-small {
+.btn-exfiltration-small {
   padding: 5px 14px;
   font-family: var(--font-ui);
   font-size: 0.72rem;
@@ -1488,28 +1529,28 @@ button {
   transition: all var(--transition-med);
 }
 
-.btn-extraction-small:hover {
+.btn-exfiltration-small:hover {
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
 }
 
-.btn-extraction-danger {
+.btn-exfiltration-danger {
   border-color: rgba(184, 56, 58, 0.35);
 }
 
-.btn-extraction-danger:hover {
+.btn-exfiltration-danger:hover {
   border-color: var(--accent-red);
   color: var(--accent-red);
 }
 
-.extraction-roster {
+.exfiltration-roster {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 14px;
 }
 
-.extraction-roster-row {
+.exfiltration-roster-row {
   display: flex;
   gap: 12px;
   font-family: var(--font-ui);
@@ -1517,7 +1558,7 @@ button {
   color: var(--text-primary);
 }
 
-.extraction-label {
+.exfiltration-label {
   width: 90px;
   flex-shrink: 0;
   color: var(--text-secondary);
@@ -1527,7 +1568,7 @@ button {
   padding-top: 2px;
 }
 
-.extraction-actions {
+.exfiltration-actions {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -2152,6 +2193,9 @@ button {
 }
 
 .skill-select-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.1rem;
   line-height: 1;
 }
@@ -2744,6 +2788,12 @@ button {
   letter-spacing: 1.5px;
   color: rgba(140, 150, 170, 0.5);
   margin-top: auto;
+  transition: filter 1.5s ease;
+}
+
+/* DEATH SCREEN TREATMENT — see .center-layout--dead */
+.homepage-footer--dead {
+  filter: grayscale(1) brightness(0.72) contrast(0.94);
 }
 
 /* ── Content Area ────────────────────────────────────────── */
@@ -2925,6 +2975,21 @@ button {
   width: 100%;
   border-collapse: collapse;
   font-family: var(--font-ui);
+}
+
+.elites-table-skill-icon {
+  display: inline-block;
+  vertical-align: -0.15em;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ── Inline coin icon (Elite Coins cost readouts) ── */
+.inline-coin-icon {
+  display: inline-block;
+  vertical-align: -0.15em;
+  font-size: 0.95em;
+  color: var(--accent-gold);
 }
 
 .elites-table th,
@@ -5284,6 +5349,160 @@ button {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   GRAND COUNCIL
+   ═══════════════════════════════════════════════════════════ */
+
+.council-tab {
+  padding-bottom: 10px;
+}
+
+.council-section {
+  margin-bottom: 28px;
+}
+
+.council-section-title {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.council-note {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.council-empty-state {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ── Roster ── */
+.council-roster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.council-member-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(212, 168, 75, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  min-width: 200px;
+}
+
+.council-member-name {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.council-member-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* ── Order of Elite document / conditions ── */
+.condition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(212, 168, 75, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.condition-card-title {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 1.2px;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.condition-card-content {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.condition-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: var(--accent-gold-dim);
+}
+
+.condition-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.condition-badge--rule {
+  color: var(--accent-red);
+  border-color: rgba(184, 56, 58, 0.4);
+}
+
+/* ── Draft / approval ── */
+.council-draft-panel,
+.council-draft-form {
+  background: rgba(140, 165, 185, 0.04);
+  border-left: 2px solid rgba(212, 168, 75, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+
+.council-approval-tally {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: var(--accent-gold-dim);
+  margin-bottom: 14px;
+}
+
+.council-draft-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.condition-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 620px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════
    NOT IMPLEMENTED PLACEHOLDER TABS (Assassination, Grand Council)
    ═══════════════════════════════════════════════════════════ */
 .not-implemented-tab {
@@ -5922,110 +6141,283 @@ button {
 
 
 /* ═══════════════════════════════════════════════════════════
-   SETTINGS TAB (Out-of-Game Mechanics System UI)
+   NOTIFICATIONS (Bell + Toast — Out-of-Game System UI)
+   ═══════════════════════════════════════════════════════════ */
+.notification-bell-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-bell-wrapper .bell-item {
+  position: relative;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.notification-bell-wrapper .bell-item:hover,
+.notification-bell-wrapper .bell-item.active {
+  color: #e2e8f0;
+  background: rgba(160, 175, 200, 0.1);
+}
+
+.notification-bell-wrapper .bell-item:hover .bell-svg,
+.notification-bell-wrapper .bell-item.active .bell-svg {
+  fill: #e2e8f0;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--bg-deep);
+  background: var(--accent-cyan);
+  border-radius: 8px;
+}
+
+.notification-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 320px;
+  max-width: 90vw;
+  background: rgba(14, 18, 26, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(160, 175, 200, 0.22);
+  border-radius: var(--radius-md);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(160, 175, 200, 0.08);
+  padding: 10px;
+  z-index: 2000;
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+.notification-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px 10px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 6px;
+}
+
+.notification-mark-all {
+  background: transparent;
+  border: none;
+  color: var(--accent-cyan);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.notification-mark-all:hover {
+  color: #e2e8f0;
+}
+
+.notification-empty {
+  padding: 14px 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.notification-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.notification-row:hover {
+  background: rgba(30, 40, 60, 0.7);
+}
+
+.notification-row--unread {
+  background: rgba(91, 147, 176, 0.08);
+}
+
+.notification-message {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.notification-time {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Toast stack — top-right, restrained (no celebratory motion or color) */
+.notification-toast-stack {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 320px;
+  max-width: calc(100vw - 40px);
+}
+
+.notification-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(14, 18, 26, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-left: 2px solid var(--accent-gold-dim);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  animation: toastSlideIn var(--transition-slow);
+}
+
+.notification-toast--leaving {
+  animation: toastSlideOut 360ms ease-in forwards;
+}
+
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastSlideOut {
+  from { transform: translateX(0); }
+  to   { transform: translateX(120%); }
+}
+
+.notification-toast-message {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.notification-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  margin: -2px -4px 0 0;
+  border-radius: var(--radius-sm);
+}
+
+.notification-toast-close:hover {
+  color: var(--text-primary);
+  background: rgba(160, 175, 200, 0.1);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   SETTINGS TAB (Account & preferences — deliberately plainer
+   than the gameplay tabs: no display font, no gameplay chrome.
+   Reached only via My Account → Settings, not the gameplay menu.)
    ═══════════════════════════════════════════════════════════ */
 .settings-tab-panel {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 24px 28px;
-  background: rgba(12, 16, 24, 0.82);
-  border: 1px solid rgba(160, 175, 200, 0.18);
-  border-left: 3px solid rgba(160, 175, 200, 0.5);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-
-.settings-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  border-bottom: 1px solid rgba(160, 175, 200, 0.12);
-  padding-bottom: 14px;
+  gap: 24px;
+  max-width: 440px;
 }
 
 .settings-title {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #e2e8f0;
-  margin: 0;
-}
-
-.settings-badge {
   font-family: var(--font-ui);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #94a3b8;
-  background: rgba(148, 163, 184, 0.1);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  padding: 3px 10px;
-  border-radius: 12px;
-  text-transform: uppercase;
-}
-
-.settings-intro-text {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  color: #94a3b8;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text-primary);
   margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .settings-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 480px;
 }
 
 .settings-field-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .settings-label {
   font-family: var(--font-ui);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #cbd5e1;
-}
-
-.settings-optional-tag {
-  font-size: 0.72rem;
-  color: #64748b;
-  font-weight: 500;
-  margin-left: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .settings-input {
   width: 100%;
-  padding: 11px 14px;
-  background: rgba(15, 22, 34, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  color: #f1f5f9;
+  color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   outline: none;
-  transition: all var(--transition-fast);
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.settings-input::placeholder {
+  color: var(--text-muted);
 }
 
 .settings-input:focus {
-  border-color: rgba(148, 163, 184, 0.6);
-  box-shadow: 0 0 12px rgba(148, 163, 184, 0.15);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
 }
 
 .settings-field-hint {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.4;
 }
 
@@ -6054,24 +6446,22 @@ button {
 }
 
 .btn-save-settings {
-  padding: 11px 24px;
+  padding: 9px 20px;
   font-family: var(--font-ui);
   font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #f8fafc;
-  background: linear-gradient(135deg, #334155, #475569);
-  border: 1px solid rgba(148, 163, 184, 0.3);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .btn-save-settings:hover:not(:disabled) {
-  background: linear-gradient(135deg, #475569, #64748b);
-  border-color: rgba(148, 163, 184, 0.5);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(200, 210, 230, 0.3);
 }
 
 .btn-save-settings:disabled {
@@ -6082,7 +6472,6 @@ button {
 .settings-loading {
   font-family: var(--font-ui);
   font-size: 0.9rem;
-  color: #94a3b8;
-  letter-spacing: 1px;
+  color: var(--text-muted);
   padding: 20px;
 }

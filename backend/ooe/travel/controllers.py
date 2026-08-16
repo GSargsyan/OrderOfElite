@@ -176,20 +176,17 @@ class TravelController:
         arrival_time = now + timedelta(seconds=actual_seconds)
 
         # Deduct money
-        from django.db.models import F, Q
+        from django.db.models import F
         from ooe.users.models import User as UserModel
         UserModel.objects.filter(id=user.id).update(
             money_cash=F('money_cash') - ticket_cost
         )
 
-        # Traveling abandons any Extraction mission the user is part of.
-        # Pending incoming invitations are left alone - the driver never
-        # joined those, and they are city-filtered and expire on their own.
-        from ooe.missions.models import ExtractionMission
-        ExtractionMission.objects.filter(
-            Q(initiator=user, status__in=ExtractionMission.ACTIVE_STATUSES) |
-            Q(driver=user, status__in=ExtractionMission.JOINED_STATUSES)
-        ).update(status=ExtractionMission.CANCELLED, updated_at=timezone.now())
+        # Traveling disrupts any party mission the user is part of. Pending
+        # incoming invitations are left alone - they were never joined, and
+        # they are city-filtered and expire on their own.
+        from ooe.missions.controllers import fail_or_cancel_party_missions_for
+        fail_or_cancel_party_missions_for(user)
 
         # Create flight log
         flight_log = FlightLog.objects.create(

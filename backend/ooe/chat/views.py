@@ -151,7 +151,7 @@ def send_city_message(request):
     except ChatRoom.DoesNotExist:
         return Response({'error': 'Not authorized'}, status=403)
 
-    if room.chat_type != 'city':
+    if room.chat_type not in ('city', 'grand_council'):
         return Response({'error': 'Not a city chat room'}, status=400)
 
     # Save the message

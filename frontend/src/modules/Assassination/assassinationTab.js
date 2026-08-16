@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { request, formatSeconds, formatMoney } from 'modules/Base'
 import { UserPreviewCtx } from 'modules/Dashboard'
+import { CoinsIcon } from 'components/icons'
 
 const SEARCH_COST_CITY = 1
 const SEARCH_COST_GLOBAL = 5
@@ -118,14 +119,14 @@ function SearchSection() {
                         disabled={isSubmitting || eliteCoins < SEARCH_COST_CITY || !targetName.trim()}
                         onClick={() => handleSearch('city')}
                     >
-                        Search City (1 🪙)
+                        Search City (1 <CoinsIcon className="inline-coin-icon" />)
                     </button>
                     <button
                         className="btn-search"
                         disabled={isSubmitting || eliteCoins < SEARCH_COST_GLOBAL || !targetName.trim()}
                         onClick={() => handleSearch('global')}
                     >
-                        Search Global (5 🪙)
+                        Search Global (5 <CoinsIcon className="inline-coin-icon" />)
                     </button>
                 </div>
             </div>
@@ -143,7 +144,7 @@ function SearchSection() {
                         return (
                             <tr key={entry.id}>
                                 <td>{entry.target}</td>
-                                <td>{entry.search_type === 'global' ? 'Global' : 'City'} ({entry.cost} 🪙)</td>
+                                <td>{entry.search_type === 'global' ? 'Global' : 'City'} ({entry.cost} <CoinsIcon className="inline-coin-icon" />)</td>
                                 <td>
                                     {entry.ready ? (
                                         formatResult(entry)
@@ -220,12 +221,14 @@ function AttackSection() {
         ? panelData.search_expires_at - now <= 0
         : false
     const hasValidSearch = Boolean(panelData?.has_valid_search) && !searchExpired
+    const onSharedMission = Boolean(panelData?.on_shared_mission)
+    const canEngage = hasValidSearch || onSharedMission
     const budgetNum = parseInt(operationalBudget, 10)
 
     const canAttack = Boolean(
         targetName.trim() &&
         budgetNum > 0 &&
-        hasValidSearch &&
+        canEngage &&
         !panelData?.target?.is_dead &&
         cooldownRemaining <= 0 &&
         !isSubmitting
@@ -265,6 +268,8 @@ function AttackSection() {
     if (targetName.trim() && !loadingPanel) {
         if (panelData?.target?.is_dead) {
             targetNote = 'This operative is already deceased.'
+        } else if (onSharedMission) {
+            targetNote = 'No search required — you are on an active operation together.'
         } else if (!hasValidSearch) {
             targetNote = 'No current intelligence on this target. Conduct a search first.'
         }

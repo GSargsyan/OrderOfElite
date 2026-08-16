@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -61,6 +62,8 @@ INSTALLED_APPS = [
     'ooe.citadel',
     'ooe.seals',
     'ooe.assassination',
+    'ooe.grand_council',
+    'ooe.notifications',
     'django_celery_beat',
 ]
 
@@ -256,9 +259,13 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'ooe.black_market.tasks.cleanup_sale_records',
         'schedule': 600.0,  # every 10 minutes
     },
-    'expire-extraction-invitations': {
-        'task': 'ooe.missions.tasks.expire_extraction_invitations',
+    'expire-party-mission-invitations': {
+        'task': 'ooe.missions.tasks.expire_party_mission_invitations',
         'schedule': 60.0,  # every 60 seconds
+    },
+    'resolve-party-missions': {
+        'task': 'ooe.missions.tasks.resolve_party_missions',
+        'schedule': 15.0,  # every 15 seconds — this is the mission timer's real resolution
     },
     'check-seal-deadlines': {
         'task': 'ooe.seals.tasks.check_seal_deadlines',
@@ -270,6 +277,10 @@ CELERY_BEAT_SCHEDULE = {
     },
     'reset-elite-coins': {
         'task': 'ooe.users.tasks.reset_elite_coins',
+        'schedule': crontab(hour=0, minute=0, day_of_week=1),  # every Monday 00:00 UTC
+    },
+    'rotate-grand-council': {
+        'task': 'ooe.grand_council.tasks.rotate_grand_council',
         'schedule': crontab(hour=0, minute=0, day_of_week=1),  # every Monday 00:00 UTC
     },
 }

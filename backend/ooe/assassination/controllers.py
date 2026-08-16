@@ -130,6 +130,21 @@ class AssassinationController:
             ready_at__gte=validity_cutoff,
         ).exists()
 
+    def _on_shared_active_mission(self, target):
+        """True while self.user and target are both participants on the
+        same in-progress party mission (Exfiltration, HVT) — the whole
+        point of that 5-minute window is that mission-mates can strike
+        each other without having Searched first."""
+        from ooe.missions.models import PartyMission, MissionParticipant
+
+        mission_ids = MissionParticipant.objects.filter(
+            user=self.user, mission__status=PartyMission.IN_PROGRESS,
+        ).values_list('mission_id', flat=True)
+
+        return MissionParticipant.objects.filter(
+            user=target, mission_id__in=mission_ids,
+        ).exists()
+
     def _cooldown_until(self):
         """When this user is next free to attack, or None if not on
         cooldown. Same rule attempt_assassination() enforces, factored out
@@ -165,6 +180,7 @@ class AssassinationController:
             'target': None,
             'has_valid_search': False,
             'search_expires_at': None,
+            'on_shared_mission': False,
             'cooldown_until': cooldown_until.timestamp() if cooldown_until else None,
         }
 
@@ -182,11 +198,18 @@ class AssassinationController:
             ready_at__lte=timezone.now(), ready_at__gte=validity_cutoff,
         ).order_by('-ready_at').first()
 
+        on_shared_mission = self._on_shared_active_mission(target)
+
         if valid_search:
             data['has_valid_search'] = True
             data['search_expires_at'] = (
                 valid_search.ready_at + timedelta(minutes=SEARCH_VALIDITY_MINUTES)
             ).timestamp()
+
+        if on_shared_mission:
+            data['on_shared_mission'] = True
+
+        if valid_search or on_shared_mission:
             data['target'] = {
                 **equipped_names(target),
                 'is_dead': target.is_dead(),
@@ -239,7 +262,7 @@ class AssassinationController:
         if target.city_id != attacker.city_id:
             raise OOEException('The target is not in your city')
 
-        if not self._has_valid_search(target):
+        if not self._has_valid_search(target) and not self._on_shared_active_mission(target):
             raise OOEException('You must locate this target before engaging — conduct a search first')
 
         cooldown_until = self._cooldown_until()
@@ -362,7 +385,7 @@ class AssassinationController:
         this one.
 
         Wiped (mutable, live-progress state): items, Black Market progress,
-        uncollected stash, non-DM chat membership, in-flight Extraction
+        uncollected stash, non-DM chat membership, in-flight party
         missions, in-play Seals. Kept: money_cash/money_bank (reserved for
         a future inheritance feature), DM history, every historical log
         (Kill rows, transactions, GameEvents) — those are records, not
@@ -371,7 +394,7 @@ class AssassinationController:
         from ooe.items.models import UserGun, UserCar, UserHouse, UserAirplane
         from ooe.black_market.models import PlayerDrugState
         from ooe.chat.models import ChatRoom
-        from ooe.missions.models import ExtractionMission
+        from ooe.missions.controllers import fail_or_cancel_party_missions_for
         from ooe.seals.models import Seal
 
         user.died_at = timezone.now()
@@ -387,10 +410,7 @@ class AssassinationController:
         for room in ChatRoom.objects.filter(users=user).exclude(chat_type='direct'):
             room.users.remove(user)
 
-        ExtractionMission.objects.filter(
-            Q(initiator=user, status__in=ExtractionMission.ACTIVE_STATUSES) |
-            Q(driver=user, status__in=ExtractionMission.JOINED_STATUSES)
-        ).update(status=ExtractionMission.CANCELLED, updated_at=timezone.now())
+        fail_or_cancel_party_missions_for(user)
 
         Seal.objects.filter(
             Q(creator=user) | Q(counterparty=user),

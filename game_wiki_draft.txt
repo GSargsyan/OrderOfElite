@@ -1,10 +1,27 @@
-﻿DRAFT
+﻿ORDO ELECTORVM ANTE OMNIA
 
 
-Yellow marks the ideas, features or entities that will not be implemented for the initial launch.
+DRAFT
 
 
-Tip: Set CLAUDE_CODE_USE_POWERSHELL_TOOL=1 to enable the PowerShell tool (preview)
+Pictures to be generated through Midjourney, once subscribed for 1 month: 
+* Game Logo, golden linework, blood drop.
+* Police car / blue and red lights flashing.
+* Hospital scene, heart ping…
+* Revisit the images of
+   * guns.
+   * cars,
+   * airplanes,
+   * houses
+   * and city backgrounds.
+* Revisit Black market images
+* Images for businesses.
+* Elite coin or Seals image (Ordo Selectorum…)
+* Homepage background(s)
+* Citadel, Hotel scene/outside.
+* Grand Council - high table.
+* Mission Pictures (stakeout, recon-op…)
+* Icons - Skill icons, Elite coins, Rank, Kills, Message 
 
 
 Ideas:
@@ -27,56 +44,35 @@ Ideas:
 * There is also a raw idea to add Cards to the game, that players can play a specific card in general or against an elite.
 
 
-TODO List
-* Implement Traveling (separate tab).
-* Design and Implement Extraction Mission
-* Design and Implement Citadel.
-* Design and Implement the Grand Council.
-* Design and Implement Chairman of the Citadel.
-* Design and Implement Kill mechanics.
-* Design and Implement Seals.
-* Design and Implement Syndicates.
-* Design and Implement contents of the Dashboard.
-* Design and Implement High-Profile Assassination Mission.
-* Design and Implement Solo Assassination Missions.
 
 
 
 
-
-
-Order of Elites is an online text-based PBBG (Persistent Browser-Based Game). The virtual world is a John Wick inspired universe, players are elite assassins, living under strict code, can earn money through missions, can kill each other (perma-death), can chat/DM each other etc.. The website will be imitated in luxury, neo-noir style. 
-
-
-Key Design Features:
-Glassmorphism panels — Semi-transparent backgrounds with backdrop-filter: blur and subtle border glow on hover. Neon accents — Cyan glow on interactive elements via box-shadow and text-shadow Full-bleed background — AI-generated Continental office scene, fixed with vignette overlay Micro-animations — Fade-in, slide-up for modals; pulse for loading states; smooth hover transitions on all interactive elements Progress bar — Animated rank progress with glowing dot indicator Server clock — Live UTC clock in Orbitron font with cyan glow
+Order of Elite is an online text-based PBBG (Persistent Browser-Based Game), inspired by assassin movies like John Wick. Players are elite assassins, living under strict code, can earn money through missions, can kill each other (perma-death), can chat/DM each other etc.. The website will be imitated in luxury, neo-noir style.
 
 
 General Terms
-* Players are called Elites
-* The safehouse hotel is called The Citadel.
+* Players are Assassins.
+* The safehouse/sanctuary hotel is called The Citadel.
 * The head of the Citadel in each city is called the Chairman of the Citadel
-* Syndicates are clans of Elites with shared budgets and goals.
-* The ruling body of the Elites is the Grand Council, which consists of 5 members, rotated each month.
-* The Order of Elites is a set of rules written by the Grand Council and is enforced by the Chairmans of the Citadels.
+* Syndicates are clans of Players with shared goals and budget.
+* The ruling body of the assassins is the Grand Council, which consists of 5 members, rotated each month.
+* The Order of Elite is a set of rules written by the Grand Council and is auto-enforced by the game.
 * Chairmans of the Citadels are assigned by the Grand Council.
 * If a player breaks any rule of the Order of Elite, they are automatically Blacklisted or tagged as Persona non-grata.
-* Seals are promises between players, automatically enforced by the game.
+* Seals are sharable promises between players, automatically enforced by the game.
 
 
 Grand Council
 * The Grand Council consists of 5 members serving a term.
 * The Grand Council members.
-   * Can chat in separate chat dedicated for them and the Chairman of the Citadel
-   * Do not have cooldown entering/leaving the Citadel
-   * Cannot do missions
-   * Cannot assassinate players
-   * Assign the Chairman of the Citadels
-   * Get protection skills boost
-   * Can Blacklist players or tag them as Persona non-grata
-* Members of the Grand Council are rotated every week, 00:00 UTC
-* Members create and publish the Order of the Elites - a message and ruleset for all players
-* Order of the Elites is written and sent to review by one of the members, and needs to be accepted by at least 3 other members.
+   * Can chat in separate chat dedicated for them and the Chairmen of the Citadels
+   * Do not have a cooldown entering/leaving the Citadel.
+   * Assign the Chairmen of the Citadels
+   * Get protection skills boost.
+   * Create The Order of Elite - the ruleset for the whole game population.
+* Members of the Grand Council are rotated every week, 00:00 UTC Monday
+* Order of Elite is written and sent to review by one of the members, and needs to be accepted by at least 3 other members.
 
 
 Chairman of the Citadel
@@ -102,55 +98,56 @@ Syndicate
 
 Citadel
 * When a Player is inside the Citadel they get 10x defense boost, so it’s practically impossible for others to kill them, unless the attacker is very high ranked and extremely more powerful.
-* Maximum time player can stay in Citadel is 12 hours
+* Maximum time player can stay in Citadel is 12 hours.
 * Leaving the Citadel sets a 2 hour cooldown before it can be reentered.
 * If in the Citadel, a player is unable to do actions other than messaging and chatting.
 * Citadel has a global budget called the Treasury, which is filled by all players paying x% commission fee on any transaction.
-* Chairman can tag Players as Persona Non Grata, increasing the cooldown of Citadel reentering by 6 hours (total 8 hours) and reducing the time player can stay in the Citadel by 4 hours (total 8 hours).
+* Chairman can tag Players as Persona Non Grata, increasing the cooldown of Citadel reentering by 6 hours (total 8 hours) and reducing the time player can stay in the Citadel by 4 hours (total 8 hours), barely covering real life sleep time.
 
 
 Signup
-* Players are required to fill the following fields to sign up:
+* Players fill the following fields to sign up:
    * Unique username of consisting of letters and underscores
    * Password
-   * Email address for account recovery
-* Players may also choose Play as a Guest option, which automatically assigns a username starting with “guest_”. Guests will have limited functionality allowed.
-* Players spawn in a random city.
-* If they had previous account that has been killed, they can re-register from the dead account to gain the following advantages:
+   * City to spawn in. Near each city we will show the current population of the city based on the last 48 hours active status. 
+   * Optionally: Email address for account recovery and new account boost after death.
+* Players may also choose Play as a Guest option, which automatically assigns a username starting with “guest_”. Guests will have limited functionality.
+* * If they had previous account that has been killed, they can re-register from the dead account using their email address to gain the following advantages:
    * They may set their old nickname to be visible on their new profile.
-   * The experience earned is 2x multiplied until they reach the experience of their previous account.
-   * 40% of the money from their previous account is transferred to the new account.
+   * The experience earned is 2x boosted until they reach the experience of the max rank out of all their dead accounts.
+   * Skill training gets a 1.5x boost until they reach the max level of the skill out of all dead/previous accounts.
+   * 35% of the money from their last account is transferred to the new account.
 Gameplay
 * When player registers in game they have
    * $0 money
-   * 0 Elite coins
+   * 10 Elite coins
    * 0 attack skills
    * 0 driving skills
    * 0 protection skills
-* Players have 3 levels of health indicator (Well, Injured, Critically hurt), but under the hood health is a 0-100 decimal.
-* Players have status of location - In Citadel, In Apartment, Driving.
-* Players can do Missions and Assassination Missions to earn money, rank and Elite coins.
+* Players have health (HP) which is an int 0-100.
+* Players have status of location - In Citadel, In Apartment, In a car.
+* Players can do Missions, produce and sell drugs on the Black Market to earn money, rank. 
 * Players can train any of their skills for free and with a paid service.
-* Players can send money to other players paying a 1% transaction fee to the Treasury.
+* Players can send money to other players paying a 1% transaction fee to the Citadel’s Treasury of the city.
 * Players can attempt a kill on another player (9 hours cooldown if succeeded, otherwise 3 hours).
 * Players can rate other players 1 to 5 stars and leave a review.
-* Players can travel to other countries - travel times being realistic considering the distance, but scaled down.
+* Players can travel to other countries - travel times being realistic relative to the distance, but scaled down.
 Messaging
 * Public chat will accessible by all players which is per city, messages in the chat will be visible to all those who are in the same city
-* Players can DM each other
+* Players can DM each other.
 Kill
+* To make assassination attempt a player must first Search the target, unless the two (the attacker and the target) are on the same multiplayer mission together (Extraction, High-Profile Assassination).
 * Player can search another player location and status using Elite coins with the following prices:
-   * 1 Elite Coin - Check if player is in the same city you are.
-   * 1 Elite Coin - Get the status of the player in the current city (Driving/Inside Citadel/In the House, on the Airplane).
-   * 5 Elite Coins - Find the city the player is in.
-* Players may also do a blind assassination attempt by guessing the other player’s city and status.
+   * 1 Elite Coin - Search the player and their status in the current city (Inside Citadel, on the Airplane or In city “regular”).
+   * 5 Elite Coins - Globally search the player and their status in all cities.
 * Players can get shot/killed at any rank, but for the attacker there is a minimum rank requirement.
 * If the attack is successful and the other player is killed:
    * 5% of their money is transferred to the killer
    * 35% of their money is transferred to their new account.
 * If the attack is not successful and the other player survives:
-   * The attacked player will lose $10,000 for each percent of health they lost.
-   * Both the attacker and survivor may lose health, their equipped weapons and cars.
+   * Both players lose $10,000 for each percent of health they lost (manually done from the Hospital page)
+   * Equipped guns and cars for both players are consumed.
+   * If the players have another of the same gun/car it’s automatically equipped, if not the system will check the next available one in descending order of the price, and automatically equip it.
 * There are 3 ways in which Elites can make an attempt on another’s life.
    * Regular Assassination attempt
       * Offers the highest chance of succeeding among the 3 types, but also the attacker has significant risk of getting backfired and shot themselves.
@@ -158,39 +155,31 @@ Kill
       * Moderate chances of killing with moderate chances of getting killed
    * Sniping attempt
       * Low chances of killing with low chances of getting killed.
-      * Can be used by multiple attackers to gradually lower the health of the target, eventually taking out either by Sniping itself or by the other 2 types of attempts.
+      * Sniping (or Drive-by) can be used by multiple attackers to gradually lower the health of the target, eventually taking out either by Sniping itself or by the other 2 types of attempts.
 * The following factors affect the outcome of the attempt:
-   * Operational Budget - money amount dedicated, chosen by the attacker. The more money the better their chances.
-   * The attackers Attack skill points
-   * The defenders Defending skill points.
+   * Current HP’s of both Attacker and the Defender.
+   * Operational Budget chosen by the attacker. The more money is dedicated, the better their chances.
+   * The attackers Attack points
+   * The defenders Defense points.
    * If the Defender is in the Citadel they get a big protection boost.
    * The currently equipped gun and car of the attacker.
    * The currently equipped house and car of the defender.
-* The formula by which the success is decided:
-   * Total Defense Score = Defense Score * House Defense Multiplier * Car Defense Multiplier * Citadel Multiplier (if in Citadel)
-   * Total Defense Score = Attack Score * Gun Attack Multiplier * Car Attack Multiplier 
-   * Rank Factor = 1.15 ^ (Attacker Rank - Defender Rank) 
-   * Budget Factor = 1 + ( Operational Budget / (Operational Budget + 250,000) ) 
-   * Success Chance % = (Rank Factor * Budget Factor) * Attack Score / (Attack Score + Defense Score) 
-* Once the attack is over and the target survives, the roles are reversed and the backfire process happens, with the same factor and formulas, except the chances of killing are lower in this case.
+   * Random noise swings the results a little.
+* Once the attack is over and the target survives, the roles are reversed and the backfire process happens, with the same factors and formulas, except the chances of killing are lowered in this case.
+
+
 Seal
-* Available to pro players only
 * A Seal is a sharable contract (a promise) between 2 players
-* A player writes the conditions in a free text field, mentioning what they do for the player, and what the other player will do for them.
-* The Seal is then sent to the 2nd player to sign. 
+* A player writes the conditions in a free text field, mentioning what they do for the other player, and what that player will do for them in the future or immediately.
+* The Seal conditions are first analyzed by an LLM, mapping the conditions in English to predefined predicates.
+* If parsed successfully by the LLM, the Seal is then sent to the 2nd player to sign. 
 * Once the Seal is signed, it’s bound, the 2nd player is obliged to do whatever the set by player 1 is.
 * LLM API call will take game logs of the 2 players and verify if the conditions are satisfied.
-
-
-Bank
-* Players can deposit money into bank with the following benefits:
-   * Upon death 35% of the bank money is lost, 65% is saved to be sent to their new account, as opposed to cash money where 100% of the money is lost.
-   * Players get .5% compound interest bonus each day money is kept in the bank
-* Doing Bank action (depositing, cashing out) will set a 12 hour cooldown, before they can do another action.
+* Available to all players, but subscribed players will get higher rate limits.
 
 
 Missions
-* There are 4 types of main missions
+* There are 5 types of main missions
    * Stakeout
       * Solo basic mission available from Rank 1
    * Recon Op
@@ -208,9 +197,8 @@ Missions
       * 1 of the players must have required amount of Driving skills 
       * Initiator earns a random amount of money ranging $500,000 - $2,000,000 and should share with the other players.
       * The amount of money earned depends on required skills of the players
-* Players can also take Solo Assassination Missions (cross city) that may involve traveling to 1 or more countries.
-   * Players can choose from number of missions each with different price tags and city of mission
-   * Upon successfully killing they will earn the money, Rank experience, assassination skill but kill count will not increase.
+   * Solo Assassination Missions
+      * …
 Mission
 	Cooldown
 	Exp
@@ -276,7 +264,7 @@ Mission
 
 	
 
-	Assassination MIssion / Elite Assassination
+	Assassination MIssion
 	9h / 3h
 	500
 	$100,000
@@ -452,14 +440,17 @@ Businesses:
    * $65,000
    * $70,000
    * $75,000
+   * (Closest 5000)
    * …
+   * $130,000
+   * $140,000
    * $150,000
-   * $200,000
-   * $250,000
+   * (Closest 10,000) 
    * …
-   * $1,000,000
-   * $1,500,000
-   * $2,000,000
+   * $1,100,000
+   * $1,200,000
+   * $2,400,000
+   * (Closest 100,000)
 Skills
 * There are 3 skills players can improve of theirs:
    * Attack
@@ -920,3 +911,177 @@ From City
 	10
 	15
 	10250
+	
+
+
+
+
+
+============================================================================================
+  ORDER OF ELITE -- Kill Simulator | Scenario Matrix (v3)
+============================================================================================
+--------------------------------------------------------------------------------------------
+  SCENARIO: Perfectly even match  [regular]
+    Attacker: rank=12 skill=1000 hp=100% budget=$100,000
+    Defender: rank=12 skill=1000 hp=100% citadel=No
+    Advantage: skill +0.00 | rank +0.00 | budget +0.17 | citadel -0.00  ->  A=+0.17
+    Analytic (regular): target dies 18.5% | attacker dies 4.4% | avg dmg -> target 36 hp, attacker 24 hp
+    Monte-Carlo (2000x): killed 17.5% | backfired 3.5% | both die 0.7% | both survive 78.2%   (survivors avg HP: attacker 76%, target 66%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Both at zero stats  [regular]
+    Attacker: rank=1 skill=0 hp=100% budget=$0
+    Defender: rank=1 skill=0 hp=100% citadel=No
+    Advantage: skill +0.00 | rank +0.00 | budget -1.50 | citadel -0.00  ->  A=-1.50
+    Analytic (regular): target dies 3.1% | attacker dies 1.1% | avg dmg -> target 11 hp, attacker 11 hp
+    Monte-Carlo (2000x): killed 2.5% | backfired 1.4% | both die 0.1% | both survive 96.0%   (survivors avg HP: attacker 89%, target 90%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Overwhelming attacker vs bare defender  [sniping]
+    Attacker: rank=30 skill=50000 hp=100% budget=$1,000,000,000
+    Defender: rank=5 skill=0 hp=100% citadel=No
+    Advantage: skill +8.56 | rank +4.50 | budget +1.00 | citadel -0.00  ->  A=+14.06
+    Analytic (sniping): target dies 98.5% | attacker dies 0.0% | avg dmg -> target 43 hp, attacker 1 hp
+    Monte-Carlo (2000x): killed 98.2% | backfired 0.0% | both die 0.1% | both survive 1.7%   (survivors avg HP: attacker 99%, target 60%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Bare attacker vs citadel titan  [regular]
+    Attacker: rank=5 skill=0 hp=100% budget=$0
+    Defender: rank=30 skill=50000 hp=100% citadel=YES
+    Advantage: skill -8.56 | rank -4.50 | budget -1.50 | citadel -3.00  ->  A=-17.56
+    Analytic (regular): target dies 0.1% | attacker dies 98.1% | avg dmg -> target 3 hp, attacker 95 hp
+    Monte-Carlo (2000x): killed 0.0% | backfired 98.2% | both die 0.1% | both survive 1.7%   (survivors avg HP: attacker 37%, target 97%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Both at 1 HP (near-death duel)  [driveby]
+    Attacker: rank=15 skill=2000 hp=1% budget=$500,000
+    Defender: rank=15 skill=2000 hp=1% citadel=No
+    Advantage: skill +0.00 | rank +0.00 | budget +0.41 | citadel -0.00  ->  A=+0.41
+    Analytic (driveby): target dies 100.0% | attacker dies 99.8% | avg dmg -> target 12 hp, attacker 5 hp        
+    Monte-Carlo (2000x): killed 0.1% | backfired 0.0% | both die 100.0% | both survive 0.0%
+--------------------------------------------------------------------------------------------
+  SCENARIO: Finishing blow on 1-HP target  [regular]
+    Attacker: rank=14 skill=1800 hp=100% budget=$300,000
+    Defender: rank=13 skill=1600 hp=1% citadel=No
+    Advantage: skill +0.13 | rank +0.18 | budget +0.34 | citadel -0.00  ->  A=+0.65
+    Analytic (regular): target dies 100.0% | attacker dies 1.7% | avg dmg -> target 48 hp, attacker 7 hp
+    Monte-Carlo (2000x): killed 98.4% | backfired 0.0% | both die 1.6% | both survive 0.0%
+--------------------------------------------------------------------------------------------
+  SCENARIO: Desperate 1-HP attacker vs full-HP target  [regular]
+    Attacker: rank=14 skill=1800 hp=1% budget=$300,000
+    Defender: rank=13 skill=1600 hp=100% citadel=No
+    Advantage: skill +0.13 | rank +0.18 | budget +0.34 | citadel -0.00  ->  A=+0.65
+    Analytic (regular): target dies 5.2% | attacker dies 100.0% | avg dmg -> target 17 hp, attacker 19 hp        
+    Monte-Carlo (2000x): killed 0.0% | backfired 93.9% | both die 6.1% | both survive 0.0%
+--------------------------------------------------------------------------------------------
+  SCENARIO: Extreme rank gap, low attacking high  [sniping]
+    Attacker: rank=1 skill=500 hp=100% budget=$100,000
+    Defender: rank=30 skill=500 hp=100% citadel=No
+    Advantage: skill +0.00 | rank -5.22 | budget +1.03 | citadel -0.00  ->  A=-4.19
+    Analytic (sniping): target dies 0.6% | attacker dies 39.1% | avg dmg -> target 2 hp, attacker 24 hp
+    Monte-Carlo (2000x): killed 0.1% | backfired 38.3% | both die 0.1% | both survive 61.4%   (survivors avg HP: attacker 76%, target 98%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Extreme rank gap, high attacking low  [regular]
+    Attacker: rank=30 skill=500 hp=100% budget=$100,000
+    Defender: rank=1 skill=500 hp=100% citadel=No
+    Advantage: skill +0.00 | rank +5.22 | budget -1.49 | citadel -0.00  ->  A=+3.73
+    Analytic (regular): target dies 97.9% | attacker dies 0.1% | avg dmg -> target 92 hp, attacker 3 hp
+    Monte-Carlo (2000x): killed 97.7% | backfired 0.0% | both die 0.0% | both survive 2.3%   (survivors avg HP: attacker 97%, target 35%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Budget saturation: $10B vs broke  [regular]
+    Attacker: rank=18 skill=5000 hp=100% budget=$10,000,000,000
+    Defender: rank=18 skill=5000 hp=100% citadel=No
+    Advantage: skill +0.00 | rank +0.00 | budget +1.05 | citadel -0.00  ->  A=+1.05
+    Analytic (regular): target dies 54.2% | attacker dies 4.4% | avg dmg -> target 58 hp, attacker 24 hp
+    Monte-Carlo (2000x): killed 51.9% | backfired 1.9% | both die 1.4% | both survive 44.8%   (survivors avg HP: attacker 76%, target 50%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Citadel-only difference  [driveby]
+    Attacker: rank=20 skill=8000 hp=100% budget=$2,000,000
+    Defender: rank=20 skill=8000 hp=100% citadel=YES
+    Advantage: skill +0.00 | rank +0.00 | budget +0.26 | citadel -3.00  ->  A=-2.74
+    Analytic (driveby): target dies 1.4% | attacker dies 34.7% | avg dmg -> target 4 hp, attacker 39 hp
+    Monte-Carlo (2000x): killed 1.2% | backfired 35.5% | both die 0.2% | both survive 63.0%   (survivors avg HP: attacker 63%, target 96%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: New player probing (rank 3 vs 5)  [regular]
+    Attacker: rank=3 skill=150 hp=100% budget=$5,000
+    Defender: rank=5 skill=200 hp=100% citadel=No
+    Advantage: skill -0.28 | rank -0.36 | budget +0.22 | citadel -0.00  ->  A=-0.42
+    Analytic (regular): target dies 8.2% | attacker dies 10.4% | avg dmg -> target 24 hp, attacker 38 hp
+    Monte-Carlo (2000x): killed 7.5% | backfired 9.3% | both die 0.9% | both survive 82.2%   (survivors avg HP: attacker 64%, target 76%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Early-game skirmish  [driveby]
+    Attacker: rank=7 skill=400 hp=100% budget=$40,000
+    Defender: rank=6 skill=350 hp=100% citadel=No
+    Advantage: skill +0.14 | rank +0.18 | budget +0.52 | citadel -0.00  ->  A=+0.84
+    Analytic (driveby): target dies 25.7% | attacker dies 2.6% | avg dmg -> target 45 hp, attacker 11 hp
+    Monte-Carlo (2000x): killed 25.8% | backfired 2.0% | both die 0.7% | both survive 71.5%   (survivors avg HP: attacker 88%, target 58%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Mid-game rivalry, close skill  [driveby]
+    Attacker: rank=15 skill=3000 hp=100% budget=$800,000
+    Defender: rank=16 skill=2800 hp=100% citadel=No
+    Advantage: skill +0.08 | rank -0.18 | budget +0.60 | citadel -0.00  ->  A=+0.50
+    Analytic (driveby): target dies 16.0% | attacker dies 3.4% | avg dmg -> target 37 hp, attacker 16 hp
+    Monte-Carlo (2000x): killed 14.1% | backfired 2.9% | both die 0.7% | both survive 82.3%   (survivors avg HP: attacker 84%, target 64%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Gang war retaliation strike  [regular]
+    Attacker: rank=20 skill=8000 hp=100% budget=$2,000,000
+    Defender: rank=18 skill=6000 hp=100% citadel=No
+    Advantage: skill +0.33 | rank +0.36 | budget +0.26 | citadel -0.00  ->  A=+0.95
+    Analytic (regular): target dies 49.5% | attacker dies 2.7% | avg dmg -> target 55 hp, attacker 14 hp
+    Monte-Carlo (2000x): killed 47.1% | backfired 1.2% | both die 1.0% | both survive 50.6%   (survivors avg HP: attacker 86%, target 49%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Underdog upset attempt  [sniping]
+    Attacker: rank=8 skill=500 hp=100% budget=$50,000
+    Defender: rank=22 skill=15000 hp=100% citadel=No
+    Advantage: skill -3.86 | rank -2.52 | budget +0.46 | citadel -0.00  ->  A=-5.92
+    Analytic (sniping): target dies 0.3% | attacker dies 39.5% | avg dmg -> target 1 hp, attacker 24 hp
+    Monte-Carlo (2000x): killed 0.2% | backfired 37.9% | both die 0.0% | both survive 61.9%   (survivors avg HP: attacker 77%, target 99%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Deep pockets vs skill grinder  [regular]
+    Attacker: rank=25 skill=5000 hp=100% budget=$50,000,000
+    Defender: rank=25 skill=20000 hp=100% citadel=No
+    Advantage: skill -1.59 | rank +0.00 | budget +0.81 | citadel -0.00  ->  A=-0.78
+    Analytic (regular): target dies 5.5% | attacker dies 44.7% | avg dmg -> target 18 hp, attacker 61 hp
+    Monte-Carlo (2000x): killed 3.1% | backfired 42.7% | both die 2.6% | both survive 51.5%   (survivors avg HP: attacker 48%, target 82%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Top-rank endgame duel  [sniping]
+    Attacker: rank=30 skill=20000 hp=100% budget=$300,000,000
+    Defender: rank=29 skill=19000 hp=100% citadel=No
+    Advantage: skill +0.06 | rank +0.18 | budget +0.83 | citadel -0.00  ->  A=+1.07
+    Analytic (sniping): target dies 17.4% | attacker dies 1.0% | avg dmg -> target 26 hp, attacker 5 hp
+    Monte-Carlo (2000x): killed 15.8% | backfired 0.9% | both die 0.1% | both survive 83.2%   (survivors avg HP: attacker 95%, target 74%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Wounded rival, opportunistic driveby  [driveby]
+    Attacker: rank=17 skill=4000 hp=100% budget=$900,000
+    Defender: rank=17 skill=4200 hp=20% citadel=No
+    Advantage: skill -0.06 | rank +0.00 | budget +0.37 | citadel -0.00  ->  A=+0.31
+    Analytic (driveby): target dies 82.3% | attacker dies 1.9% | avg dmg -> target 33 hp, attacker 7 hp
+    Monte-Carlo (2000x): killed 79.9% | backfired 0.2% | both die 1.6% | both survive 18.2%   (survivors avg HP: attacker 93%, target 5%)
+--------------------------------------------------------------------------------------------
+  SCENARIO: Broke attacker, average defender  [driveby]
+    Attacker: rank=11 skill=1200 hp=100% budget=$1,000
+    Defender: rank=13 skill=900 hp=100% citadel=No
+    Advantage: skill +0.32 | rank -0.36 | budget -1.45 | citadel -0.00  ->  A=-1.49
+    Analytic (driveby): target dies 2.4% | attacker dies 0.9% | avg dmg -> target 9 hp, attacker 7 hp
+    Monte-Carlo (2000x): killed 1.6% | backfired 0.4% | both die 0.0% | both survive 98.0%   (survivors avg HP: attacker 93%, target 91%)
+
+
+
+
+============================================================================================
+  TUNING DEMOS
+============================================================================================
+--------------------------------------------------------------------------------------------
+  HP SENSITIVITY -- Even match (rank 12)  [regular]
+    (same matchup, only the listed side's starting HP changes)
+    Defender HP:            100%       75%       50%       35%       20%       10%        1%
+    P(target dies):        18.5     24.9     39.5     58.7     87.4     99.2    100.0
+    Attacker HP:            100%       75%       50%       35%       20%       10%        1%
+    P(attacker dies):       4.4      5.6     10.2     21.8     58.0     93.5    100.0
+--------------------------------------------------------------------------------------------
+  GAUNTLET -- Even match (rank 12)  [regular]
+    Fresh identical attackers strike the same target until it dies.
+    Attempts until death: median 3, 25th pct 2, 75th pct 3 (capped at 25)
+    Sample HP trajectory: 100 -> 74 -> 47 -> 0
+--------------------------------------------------------------------------------------------
+  GAUNTLET -- Outmatched attackers grinding a stronger target  [regular]
+    Fresh identical attackers strike the same target until it dies.
+    Attempts until death: median 6, 25th pct 5, 75th pct 7 (capped at 25)
+    Sample HP trajectory: 100 -> 87 -> 69 -> 61 -> 54 -> 0
+--------------------------------------------------------------------------------------------

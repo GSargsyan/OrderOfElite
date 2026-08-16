@@ -22,6 +22,8 @@ import SettingsTab from 'modules/Settings/settingsTab.js'
 import UserProfileModal from 'modules/Dashboard/userProfile.js'
 import { EliminatedOverlay, EliminatedModal } from 'modules/Dashboard/eliminatedOverlay.js'
 import { request, formatMoney } from 'modules/Base'
+import { CrosshairIcon, ShieldIcon, SteeringWheelIcon, ChevronsUpIcon, CoinsIcon } from 'components/icons'
+import { NotificationToast } from 'components/NotificationToast'
 import { HeaderRightNav } from 'modules/Home/header'
 import Footer from 'modules/Home/footer'
 import 'styles/dashboard.css'
@@ -170,9 +172,11 @@ function Dashboard() {
     const isInCitadel = userPreviewData?.in_citadel || false
 
     return (
-        <div className="dashboard-wrapper" data-city={userPreviewData?.city}>
+        <div className={`dashboard-wrapper ${isDead ? 'dashboard-wrapper--dead' : ''}`} data-city={userPreviewData?.city}>
+            <NotificationToast />
+
             {/* ── Header Bar ─────────────────────────── */}
-            <div className="header-bar">
+            <div className={`header-bar ${isDead ? 'header-bar--dead' : ''}`}>
                 <div className="game-title-group">
                     <h1 className="game-title">
                         Order <span className="accent">of</span> Elite
@@ -232,15 +236,20 @@ function Dashboard() {
                     <EliminatedModal onClose={() => setShowEliminatedModal(false)} />
                 )}
             </UserPreviewCtx.Provider>
-            <Footer />
+            <Footer dead={isDead} />
         </div>
     )
 }
 
+// Settings has its own entry point via the My Account dropdown (see
+// HeaderRightNav) since it's account/preferences, not a game mechanic — so
+// it's excluded from the gameplay tab menu here.
+const MENU_HIDDEN_TABS = ['settings']
+
 function MenuItems({ tabComponents, activeTab, setActiveTab, isInFlight, isDead }) {
     return (
         <div className="menu-panel glass-panel">
-            {Object.keys(tabComponents).map(tabKey => {
+            {Object.keys(tabComponents).filter(tabKey => !MENU_HIDDEN_TABS.includes(tabKey)).map(tabKey => {
                 const blockedByDeath = isDead && tabKey !== DEAD_ALLOWED_TAB
                 return (
                     <button
@@ -586,9 +595,9 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
     const [showEliteCoinTooltip, setShowEliteCoinTooltip] = useState(false)
 
     const SKILL_DEFS = [
-        { key: 'attack',  icon: '⚔',  pointsKey: 'attack_points',  baseKey: 'base_attack_points',  multKey: 'attack_multiplier' },
-        { key: 'defense', icon: '🛡', pointsKey: 'defense_points', baseKey: 'base_defense_points', multKey: 'defense_multiplier' },
-        { key: 'driving', icon: '🏎', pointsKey: 'driving_points', baseKey: 'base_driving_points', multKey: 'driving_multiplier' },
+        { key: 'attack',  icon: CrosshairIcon,     pointsKey: 'attack_points',  baseKey: 'base_attack_points',  multKey: 'attack_multiplier' },
+        { key: 'defense', icon: ShieldIcon,        pointsKey: 'defense_points', baseKey: 'base_defense_points', multKey: 'defense_multiplier' },
+        { key: 'driving', icon: SteeringWheelIcon, pointsKey: 'driving_points', baseKey: 'base_driving_points', multKey: 'driving_multiplier' },
     ]
 
     return (
@@ -620,8 +629,16 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                         )}
 
                         <span className="user-preview-resources">
-                            <span className={`user-preview-hp user-preview-hp--${healthTier(userPreviewData.health)}`}>
-                                <span className="up-stat-label">HP</span> {userPreviewData.health}%
+                            <span
+                                className="user-preview-elite-coins"
+                                onMouseEnter={() => setShowEliteCoinTooltip(true)}
+                                onMouseLeave={() => setShowEliteCoinTooltip(false)}
+                            >
+                                <CoinsIcon className="up-stat-coins-icon" />
+                                <AnimatedSkill value={userPreviewData.elite_coins} />
+                                {showEliteCoinTooltip && (
+                                    <EliteCoinTooltip eliteCoins={userPreviewData.elite_coins} />
+                                )}
                             </span>
 
                             <span className="user-preview-money"><AnimatedMoney value={userPreviewData.money_cash} /></span>
@@ -637,25 +654,18 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
 
                     <div className="user-preview-stats" style={{ marginTop: '6px' }}>
                         <span className="up-stat-rank">
-                            <span className="up-stat-label">RANK</span>
+                            <ChevronsUpIcon className="up-stat-rank-icon" />
                             <span className="up-stat-value">{userPreviewData.rank}</span>
                             <span className="up-stat-progress">({Math.floor(userPreviewData.rank_progress)}%)</span>
                         </span>
                         <span className="up-stat-sep">|</span>
 
-                        <span
-                            className="user-preview-elite-coins"
-                            onMouseEnter={() => setShowEliteCoinTooltip(true)}
-                            onMouseLeave={() => setShowEliteCoinTooltip(false)}
-                        >
-                            <span className="up-stat-label">COINS</span> <AnimatedSkill value={userPreviewData.elite_coins} />
-                            {showEliteCoinTooltip && (
-                                <EliteCoinTooltip eliteCoins={userPreviewData.elite_coins} />
-                            )}
+                        <span className={`user-preview-hp user-preview-hp--${healthTier(userPreviewData.health)}`}>
+                            <span className="up-stat-label">HP</span> {userPreviewData.health}%
                         </span>
                         <span className="up-stat-sep">|</span>
 
-                        {SKILL_DEFS.map(({ key, icon, pointsKey, baseKey, multKey }) => {
+                        {SKILL_DEFS.map(({ key, icon: SkillIcon, pointsKey, baseKey, multKey }) => {
                             const effective = userPreviewData[pointsKey]
                             const base = userPreviewData[baseKey] ?? effective
                             const multiplier = userPreviewData[multKey] ?? 1.0
@@ -668,7 +678,7 @@ const UserPreview = memo(({ userPreviewData, isInFlight, flightData, isInCitadel
                                     onMouseEnter={() => setTooltipSkill(key)}
                                     onMouseLeave={() => setTooltipSkill(null)}
                                 >
-                                    <span className="up-skill-icon">{icon}</span>
+                                    <span className="up-skill-icon"><SkillIcon /></span>
                                     <span className="up-skill-value">
                                         <AnimatedSkill value={effective} />
                                     </span>

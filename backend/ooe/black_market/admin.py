@@ -4,7 +4,7 @@ from ooe.black_market.models import PlayerDrugState, Professional, SaleRecord, D
 
 @admin.register(PlayerDrugState)
 class PlayerDrugStateAdmin(admin.ModelAdmin):
-    list_display = ('user', 'city', 'drug_type', 'precursor_qty', 'pending_money')
+    list_display = ('user', 'city', 'drug_type', 'precursor_qty', 'stash_qty')
     list_filter = ('drug_type', 'city')
 
 

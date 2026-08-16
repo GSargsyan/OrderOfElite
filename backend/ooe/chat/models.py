@@ -9,6 +9,7 @@ class ChatRoom(models.Model):
         ('group', 'Group Chat'),
         ('city', 'City Chat'),
         ('syndicate', 'Syndicate Chat'),
+        ('grand_council', 'Grand Council Chat'),
     ]
 
     name = models.CharField(max_length=30)

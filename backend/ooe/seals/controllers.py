@@ -105,11 +105,10 @@ class SealsController:
         try:
             counterparty = User.objects.get(username=counterparty_username)
         except User.DoesNotExist:
-            raise OOEException('No such Elite is known to the Order.')
+            raise OOEException('No player found with that username.')
 
         if counterparty.id == user.id:
-            raise OOEException('A Seal binds two parties. You cannot seal '
-                'a promise with yourself.')
+            raise OOEException('You cannot create a Seal with yourself.')
 
         SealsController._check_caps(user)
 
@@ -117,7 +116,7 @@ class SealsController:
         rate_key = f'user_{user.id}_seal_compiles'
         compile_count = cache.get(rate_key) or 0
         if compile_count >= SEAL_COMPILE_RATE_LIMIT:
-            raise OOEException('The scribes require rest. Return within the hour.')
+            raise OOEException('Too many Seals compiled recently. Try again in an hour.')
         cache.set(rate_key, compile_count + 1, timeout=3600)
 
         # Discard any previous unsent draft toward this or another party
@@ -161,14 +160,14 @@ class SealsController:
         pending_sent = Seal.objects.filter(
             creator=user, status=Seal.PENDING_SIGNATURE).count()
         if pending_sent >= SEAL_MAX_PENDING_SENT:
-            raise OOEException('Too many Seals await signatures. '
-                'Withdraw one or await a response.')
+            raise OOEException('Too many Seals are awaiting signatures. '
+                'Withdraw one or wait for a response.')
 
         active_count = Seal.objects.filter(
             Q(creator=user) | Q(counterparty=user),
             status=Seal.ACTIVE).count()
         if active_count >= SEAL_MAX_ACTIVE_PER_USER:
-            raise OOEException('You are bound by too many Seals already.')
+            raise OOEException('You already have the maximum number of active Seals.')
 
     # ── State transitions ────────────────────────────────────
 
@@ -179,7 +178,7 @@ class SealsController:
             seal = Seal.objects.select_for_update().get(
                 id=seal_id, creator=user, status=Seal.DRAFT)
         except Seal.DoesNotExist:
-            raise OOEException('This Seal is no longer at hand. Draft it anew.')
+            raise OOEException('This Seal is no longer available. Create a new one.')
 
         SealsController._check_caps(user)
 
@@ -187,7 +186,7 @@ class SealsController:
         seal.save(update_fields=['status'])
 
         return {'status': 'success',
-                'message': f'The Seal has been presented to {seal.counterparty.username}.'}
+                'message': f'The Seal has been sent to {seal.counterparty.username} for signature.'}
 
     @staticmethod
     @transaction.atomic
@@ -217,8 +216,7 @@ class SealsController:
             seal = Seal.objects.select_for_update().get(
                 id=seal_id, counterparty=user, status=Seal.PENDING_SIGNATURE)
         except Seal.DoesNotExist:
-            raise OOEException('This Seal is not yours to sign, '
-                'or it is no longer offered.')
+            raise OOEException('This Seal is not available for you to sign.')
 
         SealsController._check_caps(user)
 
@@ -229,7 +227,7 @@ class SealsController:
         activate_seal(seal)
 
         return {'status': 'success',
-                'message': 'The Seal is bound. Honor it.'}
+                'message': 'The Seal is now active.'}
 
     @staticmethod
     @transaction.atomic
@@ -258,13 +256,13 @@ class SealsController:
                 Q(creator=user) | Q(counterparty=user),
                 id=seal_id, status=Seal.ACTIVE)
         except Seal.DoesNotExist:
-            raise OOEException('No such binding Seal.')
+            raise OOEException('No active Seal found.')
 
         if seal.annul_requested_by is None:
             seal.annul_requested_by = user
             seal.save(update_fields=['annul_requested_by'])
             return {'status': 'success',
-                    'message': 'Annulment requested. The Seal remains bound '
+                    'message': 'Annulment requested. The Seal remains active '
                                'until the other party consents.'}
 
         if seal.annul_requested_by_id == user.id:

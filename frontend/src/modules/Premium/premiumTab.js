@@ -3,9 +3,9 @@ import { request } from 'modules/Base'
 import { UserPreviewCtx } from 'modules/Dashboard'
 
 const MEMBER_PRIVILEGES = [
-    'Forge Seals — binding contracts between Elites, enforced by the Order',
-    'Sign Seals presented to you by other members',
-    'Early access to privileges yet to be unveiled',
+    'Create Seals — binding contracts between Elites, automatically enforced by the game',
+    'Sign Seals sent to you by other Premium members',
+    'Early access to future features',
 ]
 
 function PremiumTab() {
@@ -50,7 +50,7 @@ function PremiumTab() {
                 <div className="premium-card-crest">✦</div>
                 <h2 className="premium-card-title">MEMBERSHIP</h2>
                 <p className="premium-card-subtitle">
-                    Certain privileges of the Order are extended only to members of standing.
+                    Certain features are available only to Premium members.
                 </p>
 
                 <div className="premium-price-line">

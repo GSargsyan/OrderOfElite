@@ -4,9 +4,9 @@ import { UserPreviewCtx } from 'modules/Dashboard'
 
 const STATUS_LABELS = {
     'pending_signature': 'AWAITING SIGNATURE',
-    'active': 'BOUND',
-    'fulfilled': 'HONORED',
-    'breached': 'BROKEN',
+    'active': 'ACTIVE',
+    'fulfilled': 'FULFILLED',
+    'breached': 'BREACHED',
     'declined': 'DECLINED',
     'withdrawn': 'WITHDRAWN',
     'annulled': 'ANNULLED',
@@ -14,10 +14,10 @@ const STATUS_LABELS = {
 }
 
 const CLAUSE_STATUS_LABELS = {
-    'waiting_trigger': 'DORMANT',
+    'waiting_trigger': 'PENDING',
     'armed': 'IN EFFECT',
-    'fulfilled': 'HONORED',
-    'breached': 'BROKEN',
+    'fulfilled': 'FULFILLED',
+    'breached': 'BREACHED',
     'lapsed': 'LAPSED',
 }
 
@@ -56,11 +56,12 @@ function LockedSeals() {
     return (
         <div className="seals-locked-wrapper">
             <div className="seals-locked-backdrop">
-                <div className="seals-section-title">FORGE A SEAL</div>
+                <div className="seals-section-title">CREATE A SEAL</div>
                 <p className="seals-note">
-                    Inspired by John Wick's Markers, Seals are sacred blood oaths between two Elites.
-                    State the terms, present it, and once signed it is bound by the High Table —
-                    breach renders the offender Persona Non Grata and permanently marks their record.
+                    Seals are binding written contracts between two players. Once both
+                    parties sign, the game automatically tracks and enforces the agreed
+                    terms — breach marks the offending player as Persona Non Grata and
+                    permanently records the breach.
                 </p>
                 <div className="seal-card">
                     <div className="seal-card-parties">SIGNED — TWO PARTIES BOUND</div>
@@ -81,8 +82,8 @@ function LockedSeals() {
                 <div className="seals-locked-icon">🔒</div>
                 <div className="seals-locked-title">RESERVED FOR MEMBERS</div>
                 <div className="seals-locked-text">
-                    Seals are the instruments of members of standing.
-                    Membership is arranged through the Premium section.
+                    Seals are available to Premium members. Membership can be
+                    purchased in the Premium section.
                 </div>
             </div>
         </div>
@@ -208,7 +209,7 @@ function SealsTab() {
     }
 
     if (!tabData) {
-        return <div className="loading-text">CONSULTING THE ARCHIVES...</div>
+        return <div className="loading-text">LOADING...</div>
     }
 
     const handleCompile = () => {
@@ -263,9 +264,9 @@ function SealsTab() {
 
     return (
         <div className="seals-tab">
-            {/* ── Forge ── */}
+            {/* ── Create ── */}
             <div className="seals-section">
-                <div className="seals-section-title">FORGE A SEAL</div>
+                <div className="seals-section-title">CREATE A SEAL</div>
 
                 {preview ? (
                     <div className="seal-preview-panel">
@@ -291,9 +292,9 @@ function SealsTab() {
                                 <p key={i}>{line}</p>
                             ))}
                             <div className="seals-note" style={{ marginTop: '8px', marginBottom: 0 }}>
-                                Verify this reading reflects your intent — it is how the
-                                Order will enforce the Seal. Only you see it; the other
-                                party sees your written terms above.
+                                Confirm this reading matches your intent — it is how the
+                                system will enforce the Seal. Only you can see this; the
+                                other party sees only your written terms above.
                             </div>
                         </div>
                         <div className="seal-card-actions">
@@ -302,7 +303,7 @@ function SealsTab() {
                                 disabled={busy}
                                 onClick={() => handleAction('send', preview.seal_id)}
                             >
-                                PRESENT FOR SIGNATURE
+                                SEND FOR SIGNATURE
                             </button>
                             <button
                                 className="btn-seal-secondary"
@@ -317,10 +318,10 @@ function SealsTab() {
                     <>
                         <div className="seals-informal-desc">
                             <p>
-                                <strong>What are Seals?</strong> Seals are inspired by John Wick's Markers — binding contracts between two players. Once signed, the game automatically tracks and enforces the terms. If someone breaks a Seal, they get tagged as Persona Non Grata and permanently marked as a Seal-breaker.
+                                <strong>What are Seals?</strong> Seals are binding contracts between two players. Once signed, the game automatically tracks and enforces the terms. Breaching a Seal marks the offending player as Persona Non Grata and permanently marks them as a Seal-breaker.
                             </p>
                             <p>
-                                <strong>What can you write right now?</strong> Currently, the compiler supports actions around the <strong>Citadel</strong> (entering/leaving), <strong>City Travel & Bans</strong> (e.g. travel to a city or avoid a city), <strong>Items</strong> (buying/selling cars, houses, airplanes), and <strong>Skills</strong> (reaching target attack/defense/driving points).
+                                <strong>What can you write?</strong> The compiler currently supports actions involving the <strong>Citadel</strong> (entering/leaving), <strong>City Travel & Bans</strong> (e.g. travel to a city or avoid a city), <strong>Items</strong> (buying/selling cars, houses, airplanes), and <strong>Skills</strong> (reaching target attack/defense/driving points).
                             </p>
                             <p>
                                 <strong>Examples of what you can write (click to fill):</strong>
@@ -340,7 +341,7 @@ function SealsTab() {
                                 </li>
                             </ul>
                             <p className="seals-informal-note">
-                                <em>(Note for testing: Combat/kills, extraction missions, and cash transfers will be supported once those features are wired into the game events).</em>
+                                <em>(Note for testing: Combat/kills, exfiltration missions, and cash transfers will be supported once those features are wired into the game events).</em>
                             </p>
                         </div>
 
@@ -350,7 +351,7 @@ function SealsTab() {
                                 <input
                                     className="seals-input"
                                     type="text"
-                                    placeholder="Name of the Elite to be bound"
+                                    placeholder="Username of the other Elite"
                                     autoComplete="new-password"
                                     value={counterparty}
                                     onChange={e => setCounterparty(e.target.value)}
@@ -407,7 +408,7 @@ function SealsTab() {
                                 disabled={busy || !counterparty.trim() || !rawText.trim()}
                                 onClick={handleCompile}
                             >
-                                {busy ? 'SETTING THE TERMS...' : 'DRAFT THE SEAL'}
+                                {busy ? 'PROCESSING...' : 'PREVIEW SEAL'}
                             </button>
                         </div>
                     </>

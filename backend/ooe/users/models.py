@@ -26,7 +26,7 @@ class User(AbstractBaseUser):
     last_login_time = models.DateTimeField(null=True, blank=True)
     money_cash = models.IntegerField(default=0)
     money_bank = models.IntegerField(default=0)
-    city = models.ForeignKey('cities.City', on_delete=models.CASCADE, default=1)
+    city = models.ForeignKey('cities.City', on_delete=models.CASCADE, default=5)
     exp = models.IntegerField(default=0)
     rank = models.IntegerField(default=1)
     attack_points = models.IntegerField(default=0)

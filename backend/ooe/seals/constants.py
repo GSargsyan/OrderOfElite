@@ -59,9 +59,9 @@ COMPILE_ERROR_MESSAGES = {
 }
 
 SEAL_HELP_TEXT = (
-    'Inspired by John Wick\'s Markers, Seals are sacred blood oaths between two Elites. '
-    'Once signed, a Seal is bound by honor and enforced deterministically by the Order. '
-    'Failure to fulfill a bound Seal renders the offender Persona Non Grata and '
-    'permanently marks their record as a Seal-breaker.'
+    'Seals are binding contracts between two Elites. Once signed, a Seal is '
+    'enforced automatically by the game. Failure to fulfill an active Seal '
+    'marks the offender as Persona Non Grata and permanently records them '
+    'as a Seal-breaker.'
 )
 

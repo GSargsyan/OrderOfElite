@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import { request, formatMoney, formatSeconds } from 'modules/Base'
 import { UserPreviewCtx } from 'modules/Dashboard'
+import { CrosshairIcon, ShieldIcon, SteeringWheelIcon } from 'components/icons'
 
 const SKILL_LABELS = {
-    attack: { label: 'Attack', icon: '⚔' },
-    defense: { label: 'Defense', icon: '🛡' },
-    driving: { label: 'Driving', icon: '🏎' },
+    attack: { label: 'Attack', icon: CrosshairIcon },
+    defense: { label: 'Defense', icon: ShieldIcon },
+    driving: { label: 'Driving', icon: SteeringWheelIcon },
 }
 
 function healthTier(health) {
@@ -114,8 +115,10 @@ function CooldownRows({ missions, skillsCooldowns }) {
             <tbody>
                 {renderRow('stakeout', 'Stakeout', missions.stakeout.allowed, missions.stakeout.cd_remaining)}
                 {renderRow('recon_op', 'Recon Op', missions.recon_op.allowed, missions.recon_op.cd_remaining)}
-                {renderRow('extraction', 'Extraction', missions.extraction.allowed, missions.extraction.cd_remaining,
-                    missions.extraction.mode === 'active' ? 'In progress' : null)}
+                {renderRow('exfiltration', 'Exfiltration', missions.exfiltration.allowed, missions.exfiltration.cd_remaining,
+                    missions.exfiltration.mode !== 'idle' ? 'In progress' : null)}
+                {renderRow('hvt', 'High-Profile Target Operation', missions.hvt.allowed, missions.hvt.cd_remaining,
+                    missions.hvt.mode !== 'idle' ? 'In progress' : null)}
                 {renderRow('free_training', 'Free Training', true, skillsCooldowns.attack_free_cd)}
                 {renderRow('pro_training', 'Professional Training', true, skillsCooldowns.attack_pro_cd)}
             </tbody>
@@ -180,14 +183,17 @@ function ProfileTab() {
                         <tr><th>Skill</th><th>Base</th><th>Multiplier</th><th>Effective</th></tr>
                     </thead>
                     <tbody>
-                        {Object.keys(SKILL_LABELS).map(key => (
-                            <tr key={key}>
-                                <td>{SKILL_LABELS[key].icon} {SKILL_LABELS[key].label}</td>
-                                <td>{profileData[`base_${key}_points`]}</td>
-                                <td>{profileData[`${key}_multiplier`]}x</td>
-                                <td>{profileData[`${key}_points`]}</td>
-                            </tr>
-                        ))}
+                        {Object.keys(SKILL_LABELS).map(key => {
+                            const SkillIcon = SKILL_LABELS[key].icon
+                            return (
+                                <tr key={key}>
+                                    <td><SkillIcon className="elites-table-skill-icon" /> {SKILL_LABELS[key].label}</td>
+                                    <td>{profileData[`base_${key}_points`]}</td>
+                                    <td>{profileData[`${key}_multiplier`]}x</td>
+                                    <td>{profileData[`${key}_points`]}</td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
